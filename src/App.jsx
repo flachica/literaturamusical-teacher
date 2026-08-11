@@ -28,6 +28,18 @@ export default function App() {
   const [modoPrincipal, setModoPrincipal] = useState('detective'); // 'detective' | 'admin' | 'diccionario'
   const [cancionActual, setCancionActual] = useState(() => canciones[0] || null);
 
+  // Unified Playback State (Synchronized across PlayerWidget and WaveformScrubber)
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [posicion, setPosicion] = useState(0); // 0 to 100%
+  const [localAudioSrc, setLocalAudioSrc] = useState(null);
+
+  // Reset playback position on song change
+  useEffect(() => {
+    setIsPlaying(false);
+    setPosicion(0);
+    setLocalAudioSrc(null);
+  }, [cancionActual?.id]);
+
   // Sync user progress to LocalStorage when changed
   useEffect(() => {
     saveUserProgress(progreso);
@@ -182,14 +194,28 @@ export default function App() {
             })}
           </div>
 
-          {/* Agnostic Audio Player */}
-          {cancionActual && <PlayerWidget cancion={cancionActual} />}
+          {/* Synchronized Main Audio Player Widget */}
+          {cancionActual && (
+            <PlayerWidget
+              cancion={cancionActual}
+              isPlaying={isPlaying}
+              setIsPlaying={setIsPlaying}
+              posicion={posicion}
+              setPosicion={setPosicion}
+              localAudioSrc={localAudioSrc}
+              setLocalAudioSrc={setLocalAudioSrc}
+            />
+          )}
 
           {/* Guided Detective Experience (Meaning first, then Figure labeling + RAE) */}
           {cancionActual && (
             <ModoDetectiveGuiado
               cancion={cancionActual}
               onGanarPuntos={handleSumarPuntos}
+              isPlaying={isPlaying}
+              setIsPlaying={setIsPlaying}
+              posicion={posicion}
+              setPosicion={setPosicion}
             />
           )}
         </div>
@@ -222,7 +248,7 @@ export default function App() {
         </p>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px', fontSize: '0.8rem' }}>
           <a href="#" style={{ color: '#c084fc', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-            <FileText size={12} /> BACKLOG.md (v0.2.0)
+            <FileText size={12} /> BACKLOG.md
           </a>
           <span>•</span>
           <a href="#" style={{ color: '#38bdf8', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>

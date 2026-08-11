@@ -134,9 +134,9 @@ export const CANCIONES = [
     album: "Revolcón (2000)",
     temaId: "amor",
     temaNombre: "Amor y Valentía",
-    spotifyTrackId: "2nLdbGg6Cg0L3lKzXpZ9P7",
+    spotifyTrackId: "4jV6vG6q8m5p2Jk1P8qJ85",
     youtubeId: "RkP-v2m50bA",
-    audioPreviewUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+    audioPreviewUrl: "",
     resumen_didactico: "Una canción preciosa sobre un corazón sensible que sabe resistir los golpes de la vida.",
     versos: [
       {
@@ -178,9 +178,9 @@ export const CANCIONES = [
     album: "Romancero Gitano",
     temaId: "naturaleza",
     temaNombre: "Naturaleza y Sueños",
-    spotifyTrackId: "7qJ96iXWz7N4l5A",
+    spotifyTrackId: "4jVl2N4w1T2459Dq8B237X",
     youtubeId: "kYJv8Z1kK8U",
-    audioPreviewUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
+    audioPreviewUrl: "",
     resumen_didactico: "Un poema místico donde la luna cobra vida y visita un taller de noche.",
     versos: [
       {
@@ -207,9 +207,9 @@ export const CANCIONES = [
     album: "Un Día en el Mundo (2008)",
     temaId: "reflexion",
     temaNombre: "Reflexión y Misterio",
-    spotifyTrackId: "6r0O8v5eF9aP1W",
+    spotifyTrackId: "3d74yP3g7D8vH4L60u6X5S",
     youtubeId: "R234w7R314w",
-    audioPreviewUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3",
+    audioPreviewUrl: "",
     resumen_didactico: "Una canción icónica sobre dejarse llevar por los acontecimientos de la vida como una banda-educativa.",
     versos: [
       {

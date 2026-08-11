@@ -4,7 +4,14 @@ import WaveformScrubber from './WaveformScrubber';
 import { DICCIONARIO_RAE, FIGURAS_LITERARIAS } from '../data/mockData';
 import { Disc, HelpCircle, Book, CheckCircle, ArrowRight, Sparkles, Trophy, RotateCcw } from 'lucide-react';
 
-export default function ModoDetectiveGuiado({ cancion, onGanarPuntos }) {
+export default function ModoDetectiveGuiado({
+  cancion,
+  onGanarPuntos,
+  isPlaying,
+  setIsPlaying,
+  posicion,
+  setPosicion
+}) {
   const [paso, setPaso] = useState(1); // 1: Lectura + RAE, 2: Comprensión del Significado, 3: Identificar Figura, 4: ¡Éxito!
   const [versoActual, setVersoActual] = useState(cancion.versos[0]);
   const [palabraRaeActiva, setPalabraRaeActiva] = useState(null);
@@ -19,7 +26,6 @@ export default function ModoDetectiveGuiado({ cancion, onGanarPuntos }) {
       setOpcionFigura(null);
     }
   };
-
 
   const handleResponderComprension = (opcion) => {
     setOpcionComprension(opcion);
@@ -59,207 +65,284 @@ export default function ModoDetectiveGuiado({ cancion, onGanarPuntos }) {
           </div>
         </div>
 
-        {/* Step dots */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <span className={`badge ${paso >= 1 ? 'badge-purple' : ''}`} style={{ fontSize: '0.75rem' }}>1. Leer</span>
-          <span style={{ color: 'var(--text-muted)' }}>→</span>
-          <span className={`badge ${paso >= 2 ? 'badge-gold' : ''}`} style={{ fontSize: '0.75rem' }}>2. Significado</span>
-          <span style={{ color: 'var(--text-muted)' }}>→</span>
-          <span className={`badge ${paso >= 3 ? 'badge-cyan' : ''}`} style={{ fontSize: '0.75rem' }}>3. Figura</span>
+        <div style={{ display: 'flex', gap: '6px' }}>
+          {[1, 2, 3, 4].map((stepNum) => {
+            const isCompleted = paso > stepNum;
+            const isCurrent = paso === stepNum;
+            return (
+              <div
+                key={stepNum}
+                style={{
+                  width: '28px',
+                  height: '28px',
+                  borderRadius: '50%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontWeight: 800,
+                  fontSize: '0.8rem',
+                  background: isCompleted ? '#10b981' : isCurrent ? 'var(--primary)' : 'rgba(255,255,255,0.1)',
+                  color: '#ffffff',
+                  boxShadow: isCurrent ? '0 0 10px var(--primary)' : 'none'
+                }}
+              >
+                {isCompleted ? '✓' : stepNum}
+              </div>
+            );
+          })}
         </div>
       </div>
 
-      {/* Main Mission Container */}
-      <div className="glass-panel glass-panel-glow" style={{ padding: '32px', textAlign: 'center' }}>
+      {/* Synchronized Waveform Scrubber Component */}
+      <WaveformScrubber
+        cancion={cancion}
+        isPlaying={isPlaying}
+        setIsPlaying={setIsPlaying}
+        posicion={posicion}
+        setPosicion={setPosicion}
+        onSeleccionarVersoPorTiempo={handleSeleccionarVersoPorTiempo}
+      />
+
+      {/* STEP 1: LECTURA DE ESTROFA Y DICCIONARIO RAE DIDÁCTICO */}
+      <div className="glass-panel" style={{ padding: '24px', marginBottom: '24px' }}>
         
-        {/* Interactive Audio Waveform Scrubber Timeline */}
-        <WaveformScrubber
-          cancion={cancion}
-          onSeleccionarVersoPorTiempo={handleSeleccionarVersoPorTiempo}
-        />
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
+          <span className="badge badge-purple">Paso 1: Escuchar y Leer el Verso Activo</span>
+          <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Verso {versoActual.linea} de {cancion.versos.length}</span>
+        </div>
 
-        {/* SONG VERSE BOX */}
-        <div style={{ background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(6, 182, 212, 0.2))', padding: '24px', borderRadius: '20px', border: '1px solid rgba(139, 92, 246, 0.3)', marginBottom: '24px' }}>
-
-          <span className="badge badge-purple" style={{ marginBottom: '10px' }}>
-            <Disc size={14} /> Verso a Investigar
-          </span>
-          <h2 style={{ fontSize: '1.5rem', fontWeight: 900, color: '#ffffff', fontStyle: 'italic', margin: '8px 0 12px' }}>
-            «{versoActual.texto}»
-          </h2>
-          
-          {/* RAE Word clickers */}
-          {versoActual.palabrasDificiles && versoActual.palabrasDificiles.length > 0 && (
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', flexWrap: 'wrap' }}>
-              <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                <Book size={12} /> Palabras clave (Toca para ver RAE):
-              </span>
-              {versoActual.palabrasDificiles.map((p) => {
-                const info = DICCIONARIO_RAE[p.toLowerCase()];
+        {/* Verse display box */}
+        <div style={{ background: 'rgba(15, 23, 42, 0.9)', padding: '20px', borderRadius: '14px', border: '1px solid rgba(139, 92, 246, 0.3)', marginBottom: '16px', textAlign: 'center' }}>
+          <p style={{ fontSize: '1.25rem', fontWeight: 800, color: '#f8fafc', lineHeight: 1.5, letterSpacing: '0.01em' }}>
+            «{versoActual.texto.split(' ').map((palabra, i) => {
+              const limpia = palabra.toLowerCase().replace(/[.,/#!$%^&*;:{}=\-_`~()]/g, "");
+              const esDificil = versoActual.palabrasDificiles && versoActual.palabrasDificiles.includes(limpia);
+              if (esDificil) {
                 return (
-                  <button
-                    key={p}
-                    onClick={() => setPalabraRaeActiva(palabraRaeActiva === p ? null : p)}
+                  <span
+                    key={i}
+                    onClick={() => setPalabraRaeActiva(DICCIONARIO_RAE[limpia] || { palabra: limpia, definicion: 'Palabra destacada de la canción.' })}
                     style={{
-                      background: palabraRaeActiva === p ? '#f59e0b' : 'rgba(245, 158, 11, 0.2)',
-                      color: palabraRaeActiva === p ? '#000000' : '#fbbf24',
-                      padding: '4px 10px',
-                      borderRadius: '8px',
-                      fontSize: '0.8rem',
-                      fontWeight: 800,
-                      border: '1px solid #f59e0b'
+                      color: '#fbbf24',
+                      textDecoration: 'underline dotted #fbbf24',
+                      cursor: 'pointer',
+                      background: 'rgba(245, 158, 11, 0.2)',
+                      padding: '2px 6px',
+                      borderRadius: '6px',
+                      margin: '0 2px'
                     }}
+                    title="Haz clic para ver la definición RAE infantil"
                   >
-                    📖 {info ? info.palabra : p}
-                  </button>
+                    {palabra}{' '}
+                  </span>
                 );
-              })}
+              }
+              return palabra + ' ';
+            })}»
+          </p>
+
+          {versoActual.palabrasDificiles && versoActual.palabrasDificiles.length > 0 && (
+            <div style={{ marginTop: '12px', fontSize: '0.8rem', color: '#fbbf24', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px' }}>
+              <Book size={14} /> Toca sobre la palabra subrayada para desplegar su diccionario didáctico
             </div>
           )}
         </div>
 
-        {/* RAE Popup Card if active */}
-        {palabraRaeActiva && DICCIONARIO_RAE[palabraRaeActiva.toLowerCase()] && (
-          <div style={{ background: 'rgba(245, 158, 11, 0.15)', padding: '16px', borderRadius: '16px', border: '1px solid #f59e0b', marginBottom: '24px', textAlign: 'left' }}>
-            <h4 style={{ fontSize: '0.95rem', fontWeight: 800, color: '#fbbf24', display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '4px' }}>
-              <Book size={16} /> Diccionario RAE Didáctico: {DICCIONARIO_RAE[palabraRaeActiva.toLowerCase()].palabra}
-            </h4>
-            <p style={{ fontSize: '0.9rem', color: '#fef08a' }}>
-              {DICCIONARIO_RAE[palabraRaeActiva.toLowerCase()].definicion}
+        {/* RAE Word modal popup if clicked */}
+        {palabraRaeActiva && (
+          <div style={{ background: 'linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(15, 23, 42, 0.95))', padding: '16px', borderRadius: '12px', border: '1px solid #f59e0b', marginBottom: '16px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '6px' }}>
+              <h4 style={{ color: '#fbbf24', fontWeight: 800, fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                📖 Diccionario Didáctico: {palabraRaeActiva.palabra}
+              </h4>
+              <button onClick={() => setPalabraRaeActiva(null)} style={{ background: 'none', border: 'none', color: '#fbbf24', fontWeight: 800, cursor: 'pointer' }}>✕ Cerrar</button>
+            </div>
+            <p style={{ fontSize: '0.88rem', color: '#f8fafc', lineHeight: 1.4, marginBottom: '6px' }}>
+              {palabraRaeActiva.definicion}
             </p>
+            {palabraRaeActiva.ejemplo && (
+              <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', italic: 'true' }}>
+                Ejemplo: "{palabraRaeActiva.ejemplo}"
+              </span>
+            )}
           </div>
         )}
 
-        {/* STEP 1: LECTURA Y ESCUCHA */}
         {paso === 1 && (
-          <div>
-            <h3 style={{ fontSize: '1.2rem', fontWeight: 800, marginBottom: '8px' }}>
-              Paso 1: Lee el verso con atención y comprende las palabras
-            </h3>
-            <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)', marginBottom: '20px' }}>
-              Escucha el tema y asegúrate de saber qué significa cada palabra antes de avanzar.
-            </p>
-            <button
-              onClick={() => setPaso(2)}
-              style={{
-                padding: '14px 28px',
-                borderRadius: '14px',
-                background: 'linear-gradient(135deg, #8b5cf6, #ec4899)',
-                color: '#ffffff',
-                fontWeight: 800,
-                fontSize: '1rem',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '8px'
-              }}
-            >
-              ¡Entiendo el verso! Ir al Reto de Significado <ArrowRight size={18} />
-            </button>
-          </div>
+          <button
+            onClick={() => setPaso(2)}
+            style={{
+              width: '100%',
+              padding: '12px',
+              borderRadius: '12px',
+              background: 'linear-gradient(135deg, #8b5cf6, #ec4899)',
+              color: '#ffffff',
+              fontWeight: 800,
+              fontSize: '0.95rem',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '8px',
+              border: 'none',
+              cursor: 'pointer'
+            }}
+          >
+            <span>He entendido el verso → Pasar al Reto de Comprensión</span> <ArrowRight size={18} />
+          </button>
         )}
+      </div>
 
-        {/* STEP 2: RETO DE COMPRENSIÓN LÍRICA (¡LO MÁS IMPORTANTE!) */}
-        {paso === 2 && (
-          <div>
-            <span className="badge badge-gold" style={{ marginBottom: '10px' }}>
-              <HelpCircle size={14} /> Paso 2: Comprensión de la Letra
-            </span>
-            <h3 style={{ fontSize: '1.25rem', fontWeight: 800, marginBottom: '16px' }}>
-              {versoActual.preguntaComprension}
-            </h3>
-
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '20px' }}>
-              {versoActual.opcionesComprension.map((opc) => {
-                const isSelected = opcionComprension?.id === opc.id;
-                return (
-                  <button
-                    key={opc.id}
-                    onClick={() => handleResponderComprension(opc)}
-                    style={{
-                      padding: '16px 20px',
-                      borderRadius: '14px',
-                      background: isSelected ? (opc.correcta ? 'rgba(16, 185, 129, 0.2)' : 'rgba(239, 68, 68, 0.2)') : 'rgba(30, 41, 59, 0.8)',
-                      border: `2px solid ${isSelected ? (opc.correcta ? '#10b981' : '#ef4444') : 'rgba(255, 255, 255, 0.1)'}`,
-                      color: '#ffffff',
-                      fontWeight: 700,
-                      fontSize: '0.95rem',
-                      textAlign: 'left'
-                    }}
-                  >
-                    {opc.texto}
-                  </button>
-                );
-              })}
-            </div>
+      {/* STEP 2: RETO DE COMPRENSIÓN PRIMERO (didáctica de 9 años) */}
+      {paso >= 2 && (
+        <div className="glass-panel" style={{ padding: '24px', marginBottom: '24px', border: paso === 2 ? '1px solid #06b6d4' : '1px solid rgba(255,255,255,0.08)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
+            <span className="badge badge-cyan">Paso 2: ¿Qué intenta decirnos la canción aquí?</span>
+            {paso > 2 && <CheckCircle size={18} color="#10b981" />}
           </div>
-        )}
 
-        {/* STEP 3: ETIQUETAR LA FIGURA LITERARIA */}
-        {paso === 3 && (
-          <div>
-            <span className="badge badge-cyan" style={{ marginBottom: '10px' }}>
-              <Sparkles size={14} /> Paso 3: ¿Qué Figura Literaria es?
-            </span>
-            <h3 style={{ fontSize: '1.25rem', fontWeight: 800, marginBottom: '16px' }}>
-              ¡Ya sabes lo que significa! Ahora, ¿qué truco poético usó el autor?
-            </h3>
+          <h4 style={{ fontSize: '1.05rem', fontWeight: 800, color: '#ffffff', marginBottom: '14px' }}>
+            {versoActual.preguntaComprension}
+          </h4>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '12px', marginBottom: '20px' }}>
-              {FIGURAS_LITERARIAS.slice(0, 4).map((fig) => {
-                const isSelected = opcionFigura === fig.id;
-                return (
-                  <button
-                    key={fig.id}
-                    onClick={() => handleResponderFigura(fig.id)}
-                    style={{
-                      padding: '16px',
-                      borderRadius: '14px',
-                      background: isSelected ? `${fig.color}33` : 'rgba(30, 41, 59, 0.8)',
-                      border: `2px solid ${fig.color}`,
-                      color: '#ffffff',
-                      fontWeight: 800,
-                      textAlign: 'center'
-                    }}
-                  >
-                    <div style={{ fontSize: '2rem', marginBottom: '4px' }}>{fig.icono}</div>
-                    <div style={{ color: fig.color, fontSize: '1rem' }}>{fig.nombre}</div>
-                  </button>
-                );
-              })}
-            </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '14px' }}>
+            {versoActual.opcionesComprension.map((opcion) => {
+              const isSelected = opcionComprension?.id === opcion.id;
+              let bg = 'rgba(15, 23, 42, 0.6)';
+              let border = '1px solid rgba(255, 255, 255, 0.1)';
+
+              if (isSelected) {
+                if (opcion.correcta) {
+                  bg = 'rgba(16, 185, 129, 0.25)';
+                  border = '1px solid #10b981';
+                } else {
+                  bg = 'rgba(239, 68, 68, 0.25)';
+                  border = '1px solid #ef4444';
+                }
+              }
+
+              return (
+                <button
+                  key={opcion.id}
+                  onClick={() => paso === 2 && handleResponderComprension(opcion)}
+                  disabled={paso > 2}
+                  style={{
+                    padding: '12px 16px',
+                    borderRadius: '12px',
+                    textAlign: 'left',
+                    background: bg,
+                    border: border,
+                    color: '#ffffff',
+                    fontWeight: 600,
+                    fontSize: '0.9rem',
+                    cursor: paso === 2 ? 'pointer' : 'default',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between'
+                  }}
+                >
+                  <span>{opcion.texto}</span>
+                  {isSelected && opcion.correcta && <span style={{ color: '#34d399', fontWeight: 800 }}>¡Correcto! ✨</span>}
+                  {isSelected && !opcion.correcta && <span style={{ color: '#f87171', fontWeight: 800 }}>¡Piénsalo bien! 🤔</span>}
+                </button>
+              );
+            })}
           </div>
-        )}
+        </div>
+      )}
 
-        {/* STEP 4: CELEBRACIÓN Y RECOMPENSA */}
-        {paso === 4 && (
-          <div style={{ padding: '20px 0' }}>
-            <div style={{ fontSize: '4rem', marginBottom: '12px' }}>🏆</div>
-            <h2 style={{ fontSize: '1.75rem', fontWeight: 900, color: '#34d399', marginBottom: '8px' }}>
-              ¡Increíble Trabajo, Detective! 🎉
-            </h2>
-            <p style={{ fontSize: '1rem', color: '#e2e8f0', marginBottom: '20px' }}>
-              Has entendido perfectamente la letra y descubierto la <strong>{versoActual.figuraNombre}</strong>. ¡Has ganado +150 Puntos y 1 Estrella!
-            </p>
+      {/* STEP 3: ETIQUETAR LA FIGURA LITERARIA */}
+      {paso >= 3 && (
+        <div className="glass-panel" style={{ padding: '24px', marginBottom: '24px', border: paso === 3 ? '1px solid #ec4899' : '1px solid rgba(255,255,255,0.08)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
+            <span className="badge badge-pink">Paso 3: ¿Qué truco o figura literaria ha usado el artista?</span>
+            {paso > 3 && <CheckCircle size={18} color="#10b981" />}
+          </div>
 
+          <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '14px' }}>
+            Pista del detective: <em>"{versoActual.pista}"</em>
+          </p>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
+            {FIGURAS_LITERARIAS.map((fig) => {
+              const isSelected = opcionFigura === fig.id;
+              const isCorrect = fig.id === versoActual.figuraId;
+
+              let bg = 'rgba(15, 23, 42, 0.6)';
+              let border = `1px solid ${fig.color}`;
+
+              if (isSelected) {
+                bg = isCorrect ? 'rgba(16, 185, 129, 0.3)' : 'rgba(239, 68, 68, 0.3)';
+              }
+
+              return (
+                <button
+                  key={fig.id}
+                  onClick={() => paso === 3 && handleResponderFigura(fig.id)}
+                  disabled={paso > 3}
+                  style={{
+                    padding: '12px',
+                    borderRadius: '12px',
+                    background: bg,
+                    border: border,
+                    color: '#ffffff',
+                    fontWeight: 700,
+                    fontSize: '0.88rem',
+                    textAlign: 'left',
+                    cursor: paso === 3 ? 'pointer' : 'default',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px'
+                  }}
+                >
+                  <span style={{ fontSize: '1.2rem' }}>{fig.icono}</span>
+                  <div>
+                    <div style={{ color: fig.color }}>{fig.nombre}</div>
+                    <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontWeight: 400 }}>+{fig.puntos_detective} pts</div>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* STEP 4: CELEBRACIÓN Y CONCLUSIÓN DIDÁCTICA */}
+      {paso === 4 && (
+        <div className="glass-panel" style={{ padding: '24px', textAlign: 'center', background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(139, 92, 246, 0.2))', border: '2px solid #10b981' }}>
+          <div style={{ fontSize: '2.5rem', marginBottom: '8px' }}>🎉 🔮</div>
+          <h3 style={{ fontSize: '1.3rem', fontWeight: 900, color: '#ffffff', marginBottom: '6px' }}>
+            ¡Gran Trabajo, Detective Literaria!
+          </h3>
+          <p style={{ fontSize: '0.95rem', color: '#f8fafc', maxWidth: '600px', margin: '0 auto 16px', lineHeight: 1.4 }}>
+            {versoActual.explicacion}
+          </p>
+
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: '#10b981', color: '#ffffff', padding: '8px 16px', borderRadius: '9999px', fontWeight: 800, marginBottom: '16px' }}>
+            <Trophy size={18} /> +150 Puntos de Detective Añadidos
+          </div>
+
+          <div>
             <button
               onClick={handleReiniciar}
               style={{
-                padding: '12px 24px',
-                borderRadius: '12px',
-                background: 'rgba(255, 255, 255, 0.1)',
+                padding: '10px 20px',
+                borderRadius: '10px',
+                background: 'rgba(255, 255, 255, 0.15)',
                 color: '#ffffff',
+                border: '1px solid rgba(255, 255, 255, 0.3)',
                 fontWeight: 700,
+                fontSize: '0.85rem',
                 display: 'inline-flex',
                 alignItems: 'center',
-                gap: '8px'
+                gap: '6px',
+                cursor: 'pointer'
               }}
             >
-              <RotateCcw size={16} /> Probar otra canción
+              <RotateCcw size={14} /> Volver a Analizar este Verso
             </button>
           </div>
-        )}
-
-      </div>
+        </div>
+      )}
 
     </div>
   );
