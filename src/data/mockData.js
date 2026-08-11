@@ -135,7 +135,7 @@ export const CANCIONES = [
     temaId: "amor",
     temaNombre: "Amor y Valentía",
     spotifyTrackId: "2nLdbGg6Cg0L3lKzXpZ9P7",
-    youtubeId: "5qap5aO4i9A",
+    youtubeId: "RkP-v2m50bA",
     audioPreviewUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
     resumen_didactico: "Una canción preciosa sobre un corazón sensible que sabe resistir los golpes de la vida.",
     versos: [
@@ -174,12 +174,12 @@ export const CANCIONES = [
     id: "romance-luna-luna",
     titulo: "Romance de la Luna, Luna",
     artistaId: "lorca",
-    artistaNombre: "Federico García Lorca",
+    artistaNombre: "Federico García Lorca / Camarón",
     album: "Romancero Gitano",
     temaId: "naturaleza",
     temaNombre: "Naturaleza y Sueños",
     spotifyTrackId: "7qJ96iXWz7N4l5A",
-    youtubeId: "vA1Z5Q",
+    youtubeId: "kYJv8Z1kK8U",
     audioPreviewUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
     resumen_didactico: "Un poema místico donde la luna cobra vida y visita un taller de noche.",
     versos: [
@@ -196,6 +196,35 @@ export const CANCIONES = [
         figuraNombre: "Personificación",
         explicacion: "Le da a la luna cualidades humanas como caminar y vestir ropa.",
         pista: "¿La luna puede vestirse de verdad?"
+      }
+    ]
+  },
+  {
+    id: "el-rio-del-tiempo",
+    titulo: "El Río del Tiempo",
+    artistaId: "banda-educativa",
+    artistaNombre: "Banda Educativa",
+    album: "Un Día en el Mundo (2008)",
+    temaId: "reflexion",
+    temaNombre: "Reflexión y Misterio",
+    spotifyTrackId: "6r0O8v5eF9aP1W",
+    youtubeId: "R234w7R314w",
+    audioPreviewUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3",
+    resumen_didactico: "Una canción icónica sobre dejarse llevar por los acontecimientos de la vida como una banda-educativa.",
+    versos: [
+      {
+        linea: 1,
+        texto: "Se dejó llevar por la banda-educativa, a la deriva...",
+        palabrasDificiles: [],
+        preguntaComprension: "¿Qué intenta transmitir decir 'dejarse llevar por la banda-educativa'?",
+        opcionesComprension: [
+          { id: "a", texto: "Aceptar los cambios y dejarse fluir con la vida.", correcta: true },
+          { id: "b", texto: "Nadar en el mar con salvavidas.", correcta: false }
+        ],
+        figuraId: "metafora",
+        figuraNombre: "Metáfora",
+        explicacion: "Compara las circunstancias de la vida con las corrientes del mar.",
+        pista: "Pensar en dejarse fluir."
       }
     ]
   }

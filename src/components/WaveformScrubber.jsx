@@ -4,7 +4,36 @@ import { Play, Pause, Volume2, Sparkles, Music } from 'lucide-react';
 export default function WaveformScrubber({ cancion, onSeleccionarVersoPorTiempo }) {
   const [posicion, setPosicion] = useState(25); // 0 to 100%
   const [isPlaying, setIsPlaying] = useState(false);
-  const audioRef = useRef(null);
+  const audioCtxRef = useRef(null);
+
+  // Helper to play a harmonic web audio note
+  const playTone = (freq = 440, duration = 0.2) => {
+    try {
+      if (!audioCtxRef.current) {
+        audioCtxRef.current = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      const ctx = audioCtxRef.current;
+      if (ctx.state === 'suspended') {
+        ctx.resume();
+      }
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(freq, ctx.currentTime);
+
+      gain.gain.setValueAtTime(0.08, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + duration);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      osc.start();
+      osc.stop(ctx.currentTime + duration);
+    } catch (e) {
+      // Ignore audio context autoplay restriction errors gracefully
+    }
+  };
 
   // Generate 45 waveform bars with deterministic heights
   const bars = Array.from({ length: 45 }, (_, i) => {
@@ -23,7 +52,14 @@ export default function WaveformScrubber({ cancion, onSeleccionarVersoPorTiempo 
             setIsPlaying(false);
             return 0;
           }
-          return prev + 1;
+          const next = prev + 1;
+          // Play subtle tone on notes
+          const scales = [261.63, 293.66, 329.63, 349.23, 392.00, 440.00, 493.88];
+          const noteFreq = scales[next % scales.length];
+          if (next % 4 === 0) {
+            playTone(noteFreq, 0.25);
+          }
+          return next;
         });
       }, 300);
     }
@@ -44,7 +80,17 @@ export default function WaveformScrubber({ cancion, onSeleccionarVersoPorTiempo 
   }, [posicion, cancion]);
 
   const handleSliderChange = (e) => {
-    setPosicion(Number(e.target.value));
+    const val = Number(e.target.value);
+    setPosicion(val);
+    playTone(300 + val * 3, 0.1);
+  };
+
+  const togglePlay = () => {
+    const nextState = !isPlaying;
+    setIsPlaying(nextState);
+    if (nextState) {
+      playTone(523.25, 0.3); // High C note on play start
+    }
   };
 
   const formatearTiempo = (porcentaje) => {
@@ -61,25 +107,27 @@ export default function WaveformScrubber({ cancion, onSeleccionarVersoPorTiempo 
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           <button
-            onClick={() => setIsPlaying(!isPlaying)}
+            onClick={togglePlay}
             style={{
-              width: '44px',
-              height: '44px',
+              width: '46px',
+              height: '46px',
               borderRadius: '50%',
-              background: 'linear-gradient(135deg, #8b5cf6, #ec4899)',
+              background: isPlaying ? 'linear-gradient(135deg, #ec4899, #ef4444)' : 'linear-gradient(135deg, #8b5cf6, #ec4899)',
               color: '#ffffff',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              boxShadow: '0 0 15px rgba(139, 92, 246, 0.4)'
+              boxShadow: '0 0 18px rgba(139, 92, 246, 0.5)',
+              border: 'none',
+              cursor: 'pointer'
             }}
           >
-            {isPlaying ? <Pause size={20} /> : <Play size={20} style={{ marginLeft: '2px' }} />}
+            {isPlaying ? <Pause size={22} /> : <Play size={22} style={{ marginLeft: '3px' }} />}
           </button>
           <div>
             <h4 style={{ fontSize: '1rem', fontWeight: 800 }}>Ondas Musicales de «{cancion.titulo}»</h4>
             <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
-              Desplaza el cursor horizontal para navegar por la canción
+              {isPlaying ? '🎵 Reproduciendo audio interactivo y avanzando versos...' : 'Desplaza el cursor o presiona Play para escuchar'}
             </span>
           </div>
         </div>
@@ -184,9 +232,9 @@ export default function WaveformScrubber({ cancion, onSeleccionarVersoPorTiempo 
 
       <div style={{ marginTop: '10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '0.78rem', color: 'var(--text-muted)' }}>
         <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-          <Sparkles size={12} color="#f59e0b" /> Las estrellas ✨ indican dónde hay metáforas en la canción
+          <Sparkles size={12} color="#f59e0b" /> Las estrellas ✨ indican las metáforas en la canción
         </span>
-        <span>Arrastra la barra para escuchar y leer</span>
+        <span>Arrastra la barra para explorar el audio y los versos</span>
       </div>
 
     </div>

@@ -1,85 +1,104 @@
 import React, { useState } from 'react';
-import { Play, Pause, Volume2, Disc, Tv, Radio, Sparkles } from 'lucide-react';
+import { Play, Pause, Volume2, Disc, Tv, Radio, Sparkles, Music } from 'lucide-react';
 
 export default function PlayerWidget({ cancion }) {
-  const [provider, setProvider] = useState('spotify'); // 'spotify' | 'youtube' | 'audio'
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [provider, setProvider] = useState('youtube'); // Default to YouTube so user can play music right away!
+  const [isPlayingAudio, setIsPlayingAudio] = useState(false);
 
   return (
-    <div className="glass-panel" style={{ padding: '24px', marginBottom: '24px' }}>
+    <div className="glass-panel" style={{ padding: '24px', marginBottom: '24px', position: 'relative' }}>
       
       {/* Player Header */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px', flexWrap: 'wrap', gap: '12px' }}>
         <div>
-          <span className="badge badge-gold" style={{ marginBottom: '8px' }}>
-            <Disc size={14} /> Reproductor Agnóstico
+          <span className="badge badge-gold" style={{ marginBottom: '8px', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+            <Disc size={14} /> Reproductor de Música Activo
           </span>
           <h2 style={{ fontSize: '1.4rem', fontWeight: 800 }}>{cancion.titulo}</h2>
           <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem' }}>
-            por <strong style={{ color: '#f8fafc' }}>{cancion.artistaNombre}</strong> • Album: {cancion.album}
+            por <strong style={{ color: '#f8fafc' }}>{cancion.artistaNombre}</strong> • Álbum: {cancion.album}
           </p>
         </div>
 
         {/* Provider Switcher Tabs */}
-        <div style={{ display: 'flex', gap: '8px', background: 'rgba(15, 23, 42, 0.8)', padding: '6px', borderRadius: '12px' }}>
+        <div style={{ display: 'flex', gap: '8px', background: 'rgba(15, 23, 42, 0.8)', padding: '6px', borderRadius: '12px', flexWrap: 'wrap' }}>
+          <button
+            onClick={() => setProvider('youtube')}
+            style={{
+              padding: '8px 14px',
+              borderRadius: '8px',
+              fontSize: '0.85rem',
+              fontWeight: 800,
+              background: provider === 'youtube' ? 'linear-gradient(135deg, #ff0000, #cc0000)' : 'transparent',
+              color: '#ffffff',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              border: 'none',
+              cursor: 'pointer',
+              boxShadow: provider === 'youtube' ? '0 0 12px rgba(255, 0, 0, 0.4)' : 'none'
+            }}
+          >
+            <Tv size={16} /> YouTube Audio/Vídeo
+          </button>
+
           <button
             onClick={() => setProvider('spotify')}
             style={{
-              padding: '6px 12px',
+              padding: '8px 14px',
               borderRadius: '8px',
-              fontSize: '0.8rem',
-              fontWeight: 700,
+              fontSize: '0.85rem',
+              fontWeight: 800,
               background: provider === 'spotify' ? '#1db954' : 'transparent',
               color: provider === 'spotify' ? '#ffffff' : 'var(--text-muted)',
               display: 'flex',
               alignItems: 'center',
-              gap: '6px'
+              gap: '6px',
+              border: 'none',
+              cursor: 'pointer'
             }}
           >
-            <Radio size={14} /> Spotify
-          </button>
-
-          <button
-            onClick={() => setProvider('youtube')}
-            style={{
-              padding: '6px 12px',
-              borderRadius: '8px',
-              fontSize: '0.8rem',
-              fontWeight: 700,
-              background: provider === 'youtube' ? '#ff0000' : 'transparent',
-              color: provider === 'youtube' ? '#ffffff' : 'var(--text-muted)',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px'
-            }}
-          >
-            <Tv size={14} /> YouTube
+            <Radio size={16} /> Spotify
           </button>
 
           <button
             onClick={() => setProvider('audio')}
             style={{
-              padding: '6px 12px',
+              padding: '8px 14px',
               borderRadius: '8px',
-              fontSize: '0.8rem',
-              fontWeight: 700,
+              fontSize: '0.85rem',
+              fontWeight: 800,
               background: provider === 'audio' ? 'var(--primary)' : 'transparent',
               color: provider === 'audio' ? '#ffffff' : 'var(--text-muted)',
               display: 'flex',
               alignItems: 'center',
-              gap: '6px'
+              gap: '6px',
+              border: 'none',
+              cursor: 'pointer'
             }}
           >
-            <Volume2 size={14} /> Audio Directo
+            <Volume2 size={16} /> Muestra MP3
           </button>
         </div>
       </div>
 
       {/* Embed Container based on provider */}
-      <div style={{ borderRadius: '16px', overflow: 'hidden', background: '#000000', minHeight: '152px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ borderRadius: '16px', overflow: 'hidden', background: '#000000', border: '1px solid rgba(255, 255, 255, 0.1)', boxShadow: '0 8px 32px rgba(0,0,0,0.5)' }}>
+        {provider === 'youtube' && cancion.youtubeId && (
+          <div style={{ position: 'relative', width: '100%', paddingTop: '32%', minHeight: '220px' }}>
+            <iframe
+              style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', border: 'none' }}
+              src={`https://www.youtube-nocookie.com/embed/${cancion.youtubeId}?autoplay=0&enablejsapi=1&rel=0`}
+              title={`YouTube Player - ${cancion.titulo}`}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+            />
+          </div>
+        )}
+
         {provider === 'spotify' && (
           <iframe
-            src={`https://open.spotify.com/embed/track/${cancion.spotifyTrackId}?utm_source=generator&theme=0`}
+            src={`https://open.spotify.com/embed/track/${cancion.spotifyTrackId || '2nLdbGg6Cg0L3lKzXpZ9P7'}?utm_source=generator&theme=0`}
             width="100%"
             height="152"
             frameBorder="0"
@@ -90,26 +109,13 @@ export default function PlayerWidget({ cancion }) {
           />
         )}
 
-        {provider === 'youtube' && (
-          <iframe
-            width="100%"
-            height="220"
-            src={`https://www.youtube.com/embed/${cancion.youtubeId}`}
-            title="YouTube Player"
-            frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-          />
-        )}
-
         {provider === 'audio' && (
           <div style={{ padding: '24px', width: '100%', textAlign: 'center', background: 'linear-gradient(135deg, #1e293b, #0f172a)' }}>
-            <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)', marginBottom: '12px' }}>
-              🎵 Muestra de Audio Simulada HTML5
+            <p style={{ fontSize: '0.95rem', color: '#f8fafc', fontWeight: 700, marginBottom: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+              <Music size={18} color="#ec4899" /> Muestra de Audio Directa (MP3)
             </p>
-            <audio controls style={{ width: '100%', maxWidth: '500px' }}>
-              <source src={cancion.audioPreviewUrl} type="audio/mpeg" />
-              Tu navegador no soporta el elemento de audio.
+            <audio controls autoPlay src={cancion.audioPreviewUrl} style={{ width: '100%', maxWidth: '550px' }}>
+              Tu navegador no soporta el elemento de audio HTML5.
             </audio>
           </div>
         )}
@@ -117,7 +123,7 @@ export default function PlayerWidget({ cancion }) {
 
       <div style={{ marginTop: '14px', fontSize: '0.85rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '6px' }}>
         <Sparkles size={14} color="#f59e0b" />
-        <span>Tip Didáctico: Escucha la música mientras lees los versos abajo para sentir el ritmo y las figuras retóricas.</span>
+        <span>Haz clic en ▶️ en el reproductor para escuchar la canción original de {cancion.artistaNombre} mientras sigues los versos.</span>
       </div>
 
     </div>

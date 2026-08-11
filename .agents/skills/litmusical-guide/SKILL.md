@@ -32,6 +32,7 @@ Cuando una IA inicie una nueva sesión o iteración en este repositorio, DEBE ej
   - **Modo Admin / Padres:** Panel para gestionar canciones, ver sugerencias del buzón familiar y configurar la IA.
 - **Visualizador de Ondas Musicales (Waveform Scrubber):** La música y las estrofas se leen y escuchan en sincronía. La niña puede desplazar un cursor horizontal sobre las ondas musicales para navegar por la canción, escuchando fragmentos y activando el verso correspondiente.
 - **Diccionario Integrado (RAE / Palabras difíciles):** Herramienta integrada para hacer clic en palabras complejas (*mimbre, nardos, polisón, cimientos*) y desplegar su definición infantil.
+- **Persistencia Local-First:** Progreso de puntos/estrellas y catálogo dinámico persistido en `LocalStorage` con importación/exportación JSON.
 
 - **Idioma de Commits en Git:** Todos los mensajes de commit de Git DEBEN redactarse siempre en el idioma del usuario (**Español**). Ejemplo: `git commit -m "feat: prototipo v0.1.2 con Modo Detective, RAE y Ondas Musicales"`.
 - **Debate Socrático & SDD:** Toda decisión técnica o funcional importante debe discutirse brevemente usando un enfoque SDD.
@@ -43,7 +44,7 @@ Cuando una IA inicie una nueva sesión o iteración en este repositorio, DEBE ej
 Al finalizar una sesión o antes de pausar el desarrollo:
 1. **Verificación de Memoria Local:** Garantizar que las decisiones de arquitectura y la memoria de hito quedan guardadas localmente en este archivo `.agents/skills/litmusical-guide/SKILL.md` y en [`BACKLOG.md`](../../BACKLOG.md). Esto asegura que Antigravity o cualquier IA que reanude el trabajo rescate el estado exacto sin perder ningún detalle.
 2. **Actualizar `BACKLOG.md`:** Registrar la Sesión como CERRADA, listar las iteraciones completadas en la sesión y marcar el número de versión/subversión alcanzado.
-3. **Resumen de Estado:** Indicar claramente el punto de entrada para la próxima sesión (ej. Sesión 2 → Iteración 4 / `v0.2.0`).
+3. **Resumen de Estado:** Indicar claramente el punto de entrada para la próxima sesión (ej. Sesión 3 → Iteración 5 / `v0.3.0`).
 
 
 ---
@@ -56,6 +57,7 @@ Al finalizar una sesión o antes de pausar el desarrollo:
 - **Audio Agnostic:** Soporte modular para Spotify, YouTube y Audio local.
 - **Conexión Ollama / LangChain:** Cliente configurable con fallback inmediato a respuestas locales en caso de fin de cuota o desconexión.
 - **Sugerencias Familiares:** Buzón intuitivo para aportaciones de la hija y su madre.
+- **Persistencia Local-First:** Progreso y catálogo guardados en `LocalStorage` y exportables/importables en JSON.
 
 ### ❌ Iniciativas Descartadas
 - **Addon de Odoo:** Descartado definitivamente para priorizar una arquitectura ligera, portable y local-first.
@@ -66,6 +68,6 @@ Al finalizar una sesión o antes de pausar el desarrollo:
 - **v0.1.0:** Prototipo Visual e Interactivo (Maqueta visual completa con datos simulados).
 - **v0.1.1:** Interactividad dinámica de versos y cambio de canciones.
 - **v0.1.2:** Motor de preguntas/respuestas de la Trivia de Detectives y puntos.
-- **v0.2.0:** Persistencia Local-First (archivos JSON y LocalStorage).
-- **v0.3.0:** Conexión activa con Ollama local y fallback offline inteligente.
+- **v0.2.0:** Persistencia Local-First (archivos JSON y LocalStorage) + Editor de canciones. [COMPLETADO - SESIÓN 2]
+- **v0.3.0:** Conexión activa con Ollama local y fallback offline inteligente. [PRÓXIMO OBJETIVO - SESIÓN 3]
 - **v0.4.0:** Gamificación avanzada, insignias y efectos de sonido.
