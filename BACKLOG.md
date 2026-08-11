@@ -6,10 +6,10 @@ Documento de seguimiento del proyecto **LitMusical**. Este archivo es actualizad
 
 ## 📍 ESTADO ACTUAL DEL PROYECTO
 
-- **Estado de la Sesión:** 🔴 **SESIÓN 1 CERRADA** (Completadas Iteración 1, Iteración 2 e Iteración 3).
-- **Subversión Alcanzada:** `v0.1.2 (Completada y probada)`
-- **📌 Punto de Reanudación para la SESIÓN 2 / Iteración 4:** 
-  > Al iniciar la **Sesión 2**, comenzar con la **Iteración 4 (v0.2.0)**: Implementar la persistencia automática de estrellas, puntos y nivel del usuario en `LocalStorage`, además del guardado y carga dinámica del catálogo de canciones desde JSON local.
+- **Estado de la Sesión:** 🔴 **SESIÓN 2 CERRADA** (Completada Iteración 4: `v0.2.0`).
+- **Subversión Alcanzada:** `v0.2.0 (Completada y probada)`
+- **📌 Punto de Reanudación para la SESIÓN 3 / Iteración 5:** 
+  > Al iniciar la **Sesión 3**, comenzar con la **Iteración 5 (v0.3.0)**: Cablear el cliente del servicio de IA `aiService.js` con el servidor Ollama local (`http://localhost:11434`), con fallback automático al modo estático offline si no hay conexión.
 
 ---
 
@@ -31,7 +31,10 @@ Documento de seguimiento del proyecto **LitMusical**. Este archivo es actualizad
    - *Paso 4: Celebración con Confetti + Puntos.*
 5. **Diccionario RAE Infantil Integrado:** Palabras clave destacables (*mimbre, fragua, nardos, polisón, cimientos*).
 6. **Reproductor Agnóstico:** Soporte modular para Spotify Embed, YouTube y Audio HTML5.
-7. **Protocolo de Memoria vía Skill:** Skill de Antigravity para continuidad de sesiones e iteraciones.
+7. **Persistencia Local-First (`v0.2.0`):**
+   - Guardado automático de puntos, nivel y estrellas en `LocalStorage`.
+   - Gestor y editor de canciones en Modo Admin (alta, baja, exportación/importación JSON y restauración por defecto).
+8. **Protocolo de Memoria vía Skill:** Skill de Antigravity para continuidad de sesiones e iteraciones.
 
 ### ❌ Descartadas
 1. **Módulo de Odoo (`litmusical_odoo`):** Descartado para mantener una arquitectura local-first ligera, rápida y portable.
@@ -56,24 +59,15 @@ Documento de seguimiento del proyecto **LitMusical**. Este archivo es actualizad
 - [x] Marcadores ✨ en la onda musical donde ocurren las figuras literarias.
 - [x] Sincronización en tiempo real del minutero, audio y verso activo.
 
-### 📦 `v0.2.0` - Persistencia Local-First & Guardado de Progreso (Target Próxima Iteración)
-- [ ] Guardado automático de puntos, nivel y estrellas en `LocalStorage`.
-- [ ] Editor local para añadir nuevas canciones desde la app.
+### 📦 `v0.2.0` - Persistencia Local-First & Editor de Canciones (COMPLETADA)
+- [x] Guardado automático de puntos, nivel y estrellas en `LocalStorage`.
+- [x] Gestor local de canciones (`SongManager.jsx`) en el Modo Admin.
+- [x] Exportación e Importación de catálogos en archivos `.json`.
+- [x] Restauración de valores por defecto de canciones y de usuario.
 
-
-
-
-### 🎮 `v0.1.2` - Motor de Juego Trivia y Puntuación
-- [ ] Motor de preguntas y respuestas de figuras literarias.
-- [ ] Cálculo de puntuación y animación de insignias.
-
-### 📦 `v0.2.0` - Persistencia Local-First
-- [ ] Guardado automático en `LocalStorage`.
-- [ ] Importación y exportación de archivos `JSON`.
-
-### 🤖 `v0.3.0` - Cliente Ollama / LangChain & Fallback Offline
+### 🤖 `v0.3.0` - Cliente Ollama / LangChain & Fallback Offline (Target Próxima Iteración)
 - [ ] Cableado del servicio `aiService.js` con Ollama local (`http://localhost:11434`).
-- [ ] Fallback automático al modo offline estático.
+- [ ] Fallback automático al modo offline estático si Ollama no está corriendo.
 
 ### 🏆 `v0.4.0` - Gamificación Avanzada
-- [ ] Misiones diarias y sonidos de interacción.
+- [ ] Misiones diarias y efectos de sonido de interacción.

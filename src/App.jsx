@@ -1,29 +1,77 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
 import ModoDetectiveGuiado from './components/ModoDetectiveGuiado';
 import ModoAdmin from './components/ModoAdmin';
 import FigureCatalog from './components/FigureCatalog';
 import PlayerWidget from './components/PlayerWidget';
 
-import { CANCIONES, TEMAS_EMOCIONES } from './data/mockData';
-import { Shield, Settings, Sparkles, Heart, FileText, Code2, BookOpen } from 'lucide-react';
+import {
+  loadUserProgress,
+  saveUserProgress,
+  resetUserProgress,
+  loadSongsCatalog,
+  saveSongsCatalog,
+  resetSongsCatalog
+} from './utils/storage';
+
+import { Shield, Settings, Heart, FileText, Code2, BookOpen } from 'lucide-react';
 
 export default function App() {
   const [modoIA, setModoIA] = useState(true);
-  const [puntos, setPuntos] = useState(450);
-  const [nivel, setNivel] = useState(3);
-  const [estrellas, setEstrellas] = useState(5);
 
+  // User progress state (Persisted in LocalStorage)
+  const [progreso, setProgreso] = useState(() => loadUserProgress());
+  const { puntos, nivel, estrellas } = progreso;
+
+  // Songs catalog state (Persisted in LocalStorage)
+  const [canciones, setCanciones] = useState(() => loadSongsCatalog());
   const [modoPrincipal, setModoPrincipal] = useState('detective'); // 'detective' | 'admin' | 'diccionario'
-  const [cancionActual, setCancionActual] = useState(CANCIONES[0]);
+  const [cancionActual, setCancionActual] = useState(() => canciones[0] || null);
+
+  // Sync user progress to LocalStorage when changed
+  useEffect(() => {
+    saveUserProgress(progreso);
+  }, [progreso]);
+
+  // Sync songs catalog to LocalStorage when changed
+  useEffect(() => {
+    saveSongsCatalog(canciones);
+    // Ensure selected song is valid
+    if (!cancionActual || !canciones.some(c => c.id === cancionActual.id)) {
+      setCancionActual(canciones[0] || null);
+    }
+  }, [canciones]);
 
   const handleSumarPuntos = (cantidad) => {
     const nuevosPuntos = puntos + cantidad;
-    setPuntos(nuevosPuntos);
+    let nuevoNivel = nivel;
+    let nuevasEstrellas = estrellas;
+
     if (nuevosPuntos >= 600 && nivel < 4) {
-      setNivel(4);
-      setEstrellas(estrellas + 1);
+      nuevoNivel = 4;
+      nuevasEstrellas = estrellas + 1;
     }
+
+    setProgreso({
+      puntos: nuevosPuntos,
+      nivel: nuevoNivel,
+      estrellas: nuevasEstrellas
+    });
+  };
+
+  const handleResetProgreso = () => {
+    const defaultProg = resetUserProgress();
+    setProgreso(defaultProg);
+  };
+
+  const handleGuardarCanciones = (nuevoCatálogo) => {
+    setCanciones(nuevoCatálogo);
+  };
+
+  const handleRestaurarCanciones = () => {
+    const defaultCat = resetSongsCatalog();
+    setCanciones(defaultCat);
+    setCancionActual(defaultCat[0]);
   };
 
   return (
@@ -41,7 +89,7 @@ export default function App() {
       {/* Main Mode Switcher: Modo Detective (Hija) vs Modo Admin (Padres) */}
       <div className="glass-panel" style={{ padding: '14px 20px', marginBottom: '24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
         
-        <div style={{ display: 'flex', gap: '10px' }}>
+        <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
           <button
             onClick={() => setModoPrincipal('detective')}
             style={{
@@ -54,7 +102,9 @@ export default function App() {
               display: 'flex',
               alignItems: 'center',
               gap: '8px',
-              boxShadow: modoPrincipal === 'detective' ? '0 0 15px rgba(139, 92, 246, 0.4)' : 'none'
+              boxShadow: modoPrincipal === 'detective' ? '0 0 15px rgba(139, 92, 246, 0.4)' : 'none',
+              border: 'none',
+              cursor: 'pointer'
             }}
           >
             <Shield size={18} /> 👧 Modo Detective (Para Tu Hija)
@@ -72,7 +122,9 @@ export default function App() {
               display: 'flex',
               alignItems: 'center',
               gap: '8px',
-              boxShadow: modoPrincipal === 'diccionario' ? '0 0 15px rgba(6, 182, 212, 0.4)' : 'none'
+              boxShadow: modoPrincipal === 'diccionario' ? '0 0 15px rgba(6, 182, 212, 0.4)' : 'none',
+              border: 'none',
+              cursor: 'pointer'
             }}
           >
             <BookOpen size={18} /> 📖 Diccionario de Figuras
@@ -91,7 +143,8 @@ export default function App() {
             border: '1px solid rgba(245, 158, 11, 0.4)',
             display: 'flex',
             alignItems: 'center',
-            gap: '8px'
+            gap: '8px',
+            cursor: 'pointer'
           }}
         >
           <Settings size={18} /> 👨‍👩‍👧 Modo Admin y Padres
@@ -104,9 +157,9 @@ export default function App() {
         <div>
           {/* Song Switcher strip for Detective */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px', overflowX: 'auto', paddingBottom: '6px' }}>
-            <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)', fontWeight: 700 }}>Elegir Canción:</span>
-            {CANCIONES.map((c) => {
-              const isSelected = cancionActual.id === c.id;
+            <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)', fontWeight: 700, whiteSpace: 'nowrap' }}>Elegir Canción:</span>
+            {canciones.map((c) => {
+              const isSelected = cancionActual && cancionActual.id === c.id;
               return (
                 <button
                   key={c.id}
@@ -118,7 +171,9 @@ export default function App() {
                     color: '#ffffff',
                     fontWeight: 700,
                     fontSize: '0.85rem',
-                    border: `1px solid ${isSelected ? 'var(--primary)' : 'rgba(255, 255, 255, 0.1)'}`
+                    border: `1px solid ${isSelected ? 'var(--primary)' : 'rgba(255, 255, 255, 0.1)'}`,
+                    whiteSpace: 'nowrap',
+                    cursor: 'pointer'
                   }}
                 >
                   🎵 {c.titulo} ({c.artistaNombre})
@@ -128,13 +183,15 @@ export default function App() {
           </div>
 
           {/* Agnostic Audio Player */}
-          <PlayerWidget cancion={cancionActual} />
+          {cancionActual && <PlayerWidget cancion={cancionActual} />}
 
           {/* Guided Detective Experience (Meaning first, then Figure labeling + RAE) */}
-          <ModoDetectiveGuiado
-            cancion={cancionActual}
-            onGanarPuntos={handleSumarPuntos}
-          />
+          {cancionActual && (
+            <ModoDetectiveGuiado
+              cancion={cancionActual}
+              onGanarPuntos={handleSumarPuntos}
+            />
+          )}
         </div>
       )}
 
@@ -145,17 +202,27 @@ export default function App() {
 
       {/* VIEW 3: MODO ADMIN / PADRES */}
       {modoPrincipal === 'admin' && (
-        <ModoAdmin modoIA={modoIA} setModoIA={setModoIA} />
+        <ModoAdmin
+          modoIA={modoIA}
+          setModoIA={setModoIA}
+          canciones={canciones}
+          onGuardarCanciones={handleGuardarCanciones}
+          onRestaurarCanciones={handleRestaurarCanciones}
+          puntos={puntos}
+          nivel={nivel}
+          estrellas={estrellas}
+          onResetProgreso={handleResetProgreso}
+        />
       )}
 
       {/* Footer linking to memory skill & backlog */}
       <footer style={{ marginTop: '40px', paddingTop: '20px', borderTop: '1px solid rgba(255, 255, 255, 0.08)', textAlign: 'center', color: 'var(--text-muted)', fontSize: '0.85rem' }}>
         <p style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', marginBottom: '6px' }}>
-          <span>LitMusical v0.1.1 • Diseñado para aprender literatura con música</span> <Heart size={14} color="#ec4899" fill="#ec4899" />
+          <span>LitMusical v0.2.0 • Diseñado para aprender literatura con música</span> <Heart size={14} color="#ec4899" fill="#ec4899" />
         </p>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px', fontSize: '0.8rem' }}>
           <a href="#" style={{ color: '#c084fc', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-            <FileText size={12} /> BACKLOG.md (v0.1.1)
+            <FileText size={12} /> BACKLOG.md (v0.2.0)
           </a>
           <span>•</span>
           <a href="#" style={{ color: '#38bdf8', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
