@@ -62,7 +62,17 @@ export function loadSongsCatalog() {
     if (saved) {
       const parsed = JSON.parse(saved);
       if (Array.isArray(parsed) && parsed.length > 0) {
-        return parsed;
+        return parsed.map(savedSong => {
+          const defaultSong = CANCIONES.find(c => c.id === savedSong.id);
+          if (defaultSong) {
+            return {
+              ...savedSong,
+              youtubeId: defaultSong.youtubeId,
+              spotifyTrackId: defaultSong.spotifyTrackId || savedSong.spotifyTrackId
+            };
+          }
+          return savedSong;
+        });
       }
     }
   } catch (err) {
