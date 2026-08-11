@@ -1,5 +1,5 @@
-import React, { useEffect, useRef } from 'react';
-import { Play, Pause, Sparkles } from 'lucide-react';
+import React, { useEffect } from 'react';
+import { Play, Pause, Sparkles, Music } from 'lucide-react';
 
 export default function WaveformScrubber({
   cancion,
@@ -9,45 +9,14 @@ export default function WaveformScrubber({
   setPosicion,
   onSeleccionarVersoPorTiempo
 }) {
-  const audioCtxRef = useRef(null);
-
-  // Helper to play a harmonic web audio note on scrubber move/play
-  const playTone = (freq = 440, duration = 0.2) => {
-    try {
-      if (!audioCtxRef.current) {
-        audioCtxRef.current = new (window.AudioContext || window.webkitAudioContext)();
-      }
-      const ctx = audioCtxRef.current;
-      if (ctx.state === 'suspended') {
-        ctx.resume();
-      }
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-
-      osc.type = 'triangle';
-      osc.frequency.setValueAtTime(freq, ctx.currentTime);
-
-      gain.gain.setValueAtTime(0.06, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + duration);
-
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-
-      osc.start();
-      osc.stop(ctx.currentTime + duration);
-    } catch (e) {
-      // Ignore audio context autoplay restriction
-    }
-  };
-
-  // Generate 45 waveform bars
+  // Generate 45 visual waveform bars
   const bars = Array.from({ length: 45 }, (_, i) => {
     const heightPercent = 20 + Math.abs(Math.sin(i * 0.45) * 75);
     const isFigureMarker = i === 12 || i === 28 || i === 38;
     return { id: i, heightPercent, isFigureMarker };
   });
 
-  // Auto-advance progress line when playing
+  // Auto-advance timeline cursor smoothly when playing (WITHOUT any synth beeps!)
   useEffect(() => {
     let timer;
     if (isPlaying) {
@@ -57,13 +26,7 @@ export default function WaveformScrubber({
             setIsPlaying(false);
             return 0;
           }
-          const next = prev + 1;
-          // Play subtle tone during timeline progression
-          const scales = [261.63, 293.66, 329.63, 349.23, 392.00, 440.00];
-          if (next % 5 === 0) {
-            playTone(scales[next % scales.length], 0.2);
-          }
-          return next;
+          return prev + 1;
         });
       }, 300);
     }
@@ -84,17 +47,7 @@ export default function WaveformScrubber({
   }, [posicion, cancion, onSeleccionarVersoPorTiempo]);
 
   const handleSliderChange = (e) => {
-    const val = Number(e.target.value);
-    setPosicion(val);
-    playTone(300 + val * 3, 0.1);
-  };
-
-  const togglePlay = () => {
-    const nextState = !isPlaying;
-    setIsPlaying(nextState);
-    if (nextState) {
-      playTone(523.25, 0.3); // Play sound on toggle
-    }
+    setPosicion(Number(e.target.value));
   };
 
   const formatearTiempo = (porcentaje) => {
@@ -106,46 +59,49 @@ export default function WaveformScrubber({
   };
 
   return (
-    <div className="glass-panel" style={{ padding: '20px', marginBottom: '24px', position: 'relative' }}>
+    <div style={{ background: 'rgba(15, 23, 42, 0.7)', borderRadius: '16px', padding: '16px 20px', border: '1px solid rgba(139, 92, 246, 0.2)', marginBottom: '20px' }}>
       
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <button
-            onClick={togglePlay}
+            onClick={() => setIsPlaying(!isPlaying)}
             style={{
-              width: '48px',
-              height: '48px',
+              width: '42px',
+              height: '42px',
               borderRadius: '50%',
               background: isPlaying ? 'linear-gradient(135deg, #ec4899, #ef4444)' : 'linear-gradient(135deg, #8b5cf6, #ec4899)',
               color: '#ffffff',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              boxShadow: isPlaying ? '0 0 20px rgba(236, 72, 153, 0.6)' : '0 0 16px rgba(139, 92, 246, 0.5)',
+              boxShadow: isPlaying ? '0 0 16px rgba(236, 72, 153, 0.6)' : '0 0 12px rgba(139, 92, 246, 0.4)',
               border: 'none',
               cursor: 'pointer'
             }}
+            title={isPlaying ? 'Pausar avance de la canción' : 'Reproducir y sincronizar versos'}
           >
-            {isPlaying ? <Pause size={22} /> : <Play size={22} style={{ marginLeft: '3px' }} />}
+            {isPlaying ? <Pause size={20} /> : <Play size={20} style={{ marginLeft: '2px' }} />}
           </button>
           <div>
-            <h4 style={{ fontSize: '1rem', fontWeight: 800 }}>Visualizador de Ondas «{cancion.titulo}»</h4>
+            <h4 style={{ fontSize: '0.95rem', fontWeight: 800, color: '#f8fafc' }}>
+              Línea de Tiempo y Ondas «{cancion.titulo}»
+            </h4>
             <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
-              {isPlaying ? '▶️ Sincronizado con el reproductor principal' : 'Pulsar Play o desplazar el cursor para navegar en la canción'}
+              {isPlaying ? '▶️ Sincronizando avance con la lectura...' : 'Desplaza el marcador rosa para avanzar por la letra'}
             </span>
           </div>
         </div>
 
         <div style={{ textAlign: 'right' }}>
-          <span style={{ fontWeight: 800, fontSize: '1.1rem', color: '#fbbf24', fontFamily: 'monospace' }}>
+          <span style={{ fontWeight: 800, fontSize: '1.05rem', color: '#fbbf24', fontFamily: 'monospace' }}>
             {formatearTiempo(posicion)}
           </span>
-          <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'block' }}>/ 3:00 min</span>
+          <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', display: 'block' }}>/ 3:00 min</span>
         </div>
       </div>
 
-      {/* Waveform Visualizer Area */}
-      <div style={{ position: 'relative', height: '90px', background: 'rgba(15, 23, 42, 0.8)', borderRadius: '14px', padding: '12px 16px', display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: '3px', border: '1px solid rgba(255, 255, 255, 0.08)', overflow: 'hidden' }}>
+      {/* Visualizer Bar Container */}
+      <div style={{ position: 'relative', height: '70px', background: 'rgba(15, 23, 42, 0.9)', borderRadius: '12px', padding: '10px 14px', display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: '3px', border: '1px solid rgba(255, 255, 255, 0.08)', overflow: 'hidden' }}>
         
         {bars.map((bar, i) => {
           const barPos = (i / bars.length) * 100;
@@ -163,7 +119,7 @@ export default function WaveformScrubber({
                 flex: 1,
                 height: `${bar.heightPercent}%`,
                 background: barColor,
-                borderRadius: '4px',
+                borderRadius: '3px',
                 transition: 'background 0.15s ease',
                 position: 'relative'
               }}
@@ -175,7 +131,7 @@ export default function WaveformScrubber({
                     top: '-16px',
                     left: '50%',
                     transform: 'translateX(-50%)',
-                    fontSize: '0.7rem'
+                    fontSize: '0.65rem'
                   }}
                 >
                   ✨
@@ -205,8 +161,8 @@ export default function WaveformScrubber({
               top: '50%',
               left: '50%',
               transform: 'translate(-50%, -50%)',
-              width: '16px',
-              height: '16px',
+              width: '14px',
+              height: '14px',
               borderRadius: '50%',
               background: '#ffffff',
               border: '3px solid #ec4899',
@@ -234,11 +190,11 @@ export default function WaveformScrubber({
         />
       </div>
 
-      <div style={{ marginTop: '10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '0.78rem', color: 'var(--text-muted)' }}>
+      <div style={{ marginTop: '8px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '0.75rem', color: 'var(--text-muted)' }}>
         <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-          <Sparkles size={12} color="#f59e0b" /> Estrellas ✨ indican la aparición de figuras literarias en la canción
+          <Sparkles size={12} color="#f59e0b" /> Las estrellas ✨ indican dónde hay metáforas en la letra
         </span>
-        <span>Mover el cursor actualiza la reproducción y el verso</span>
+        <span>Arrastra para saltar a otra parte de la canción</span>
       </div>
 
     </div>

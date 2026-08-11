@@ -135,7 +135,7 @@ export const CANCIONES = [
     temaId: "amor",
     temaNombre: "Amor y Valentía",
     spotifyTrackId: "4jV6vG6q8m5p2Jk1P8qJ85",
-    youtubeId: "RkP-v2m50bA",
+    youtubeId: "R9K-xL_b_kM",
     audioPreviewUrl: "",
     resumen_didactico: "Una canción preciosa sobre un corazón sensible que sabe resistir los golpes de la vida.",
     versos: [
