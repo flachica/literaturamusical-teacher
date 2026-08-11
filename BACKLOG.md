@@ -6,10 +6,10 @@ Documento de seguimiento del proyecto **LitMusical**. Este archivo es actualizad
 
 ## 📍 ESTADO ACTUAL DEL PROYECTO
 
-- **Estado de la Sesión:** 🔴 **SESIÓN 2 CERRADA** (Completada Iteración 4: `v0.2.0`).
-- **Subversión Alcanzada:** `v0.2.0 (Completada y probada)`
+- **Estado de la Sesión:** 🔴 **SESIÓN 2 CERRADA** (Completada Iteración 4 y Ajustes v0.2.1).
+- **Subversión Alcanzada:** `v0.2.1 (Completada, probada y sincronizada)`
 - **📌 Punto de Reanudación para la SESIÓN 3 / Iteración 5:** 
-  > Al iniciar la **Sesión 3**, comenzar con la **Iteración 5 (v0.3.0)**: Cablear el cliente del servicio de IA `aiService.js` con el servidor Ollama local (`http://localhost:11434`), con fallback automático al modo estático offline si no hay conexión.
+  > Al iniciar la **Sesión 3**, comenzar con la **Iteración 5 (v0.3.0)**: Cablear el cliente del servicio de IA `aiService.js` con el servidor Ollama local (`http://localhost:11434`), con fallback automático al modo estático offline si no hay conexión, para análisis automático de letras aportadas en Modo Admin.
 
 ---
 
@@ -64,6 +64,7 @@ Documento de seguimiento del proyecto **LitMusical**. Este archivo es actualizad
 - [x] Gestor local de canciones (`SongManager.jsx`) en el Modo Admin.
 - [x] Exportación e Importación de catálogos en archivos `.json`.
 - [x] Restauración de valores por defecto de canciones y de usuario.
+- [x] `v0.2.1`: Actualización del ID de vídeo de Banda Educativa (*El Río del Tiempo*) y sincronización automática de `youtubeId` en LocalStorage.
 
 ### 🤖 `v0.3.0` - Cliente Ollama / LangChain & Fallback Offline (Target Próxima Iteración)
 - [ ] Cableado del servicio `aiService.js` con Ollama local (`http://localhost:11434`).
