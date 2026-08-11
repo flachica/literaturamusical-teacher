@@ -68,6 +68,6 @@ Al finalizar una sesión o antes de pausar el desarrollo:
 - **v0.1.0:** Prototipo Visual e Interactivo (Maqueta visual completa con datos simulados).
 - **v0.1.1:** Interactividad dinámica de versos y cambio de canciones.
 - **v0.1.2:** Motor de preguntas/respuestas de la Trivia de Detectives y puntos.
-- **v0.2.0:** Persistencia Local-First (archivos JSON y LocalStorage) + Editor de canciones. [COMPLETADO - SESIÓN 2]
+- **v0.2.0 / v0.2.1:** Persistencia Local-First (archivos JSON y LocalStorage) + Editor de canciones y sincronización automática de vídeos de YouTube. [COMPLETADO - SESIÓN 2]
 - **v0.3.0:** Conexión activa con Ollama local y fallback offline inteligente. [PRÓXIMO OBJETIVO - SESIÓN 3]
 - **v0.4.0:** Gamificación avanzada, insignias y efectos de sonido.
