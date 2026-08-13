@@ -293,7 +293,7 @@ export default function SongManager({ canciones, onGuardarCanciones, onRestaurar
 
             <div>
               <label style={{ fontSize: '0.8rem', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>Álbum / Año</label>
-              <input type="text" placeholder="Ej: Un día en el mundo (2008)" value={nuevoAlbum} onChange={e => setNuevoAlbum(e.target.value)} style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', background: '#0f172a', color: '#fff', border: '1px solid #334155' }} />
+              <input type="text" placeholder="Ej: Detectives Poéticos (2024)" value={nuevoAlbum} onChange={e => setNuevoAlbum(e.target.value)} style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', background: '#0f172a', color: '#fff', border: '1px solid #334155' }} />
             </div>
 
             <div>
@@ -308,7 +308,7 @@ export default function SongManager({ canciones, onGuardarCanciones, onRestaurar
 
           <div style={{ marginBottom: '14px' }}>
             <label style={{ fontSize: '0.8rem', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>Resumen Didáctico (¿De qué trata la historia?)</label>
-            <input type="text" placeholder="Ej: Canción sobre dejarse llevar y afrontar los cambios de la vida." value={nuevoResumen} onChange={e => setNuevoResumen(e.target.value)} style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', background: '#0f172a', color: '#fff', border: '1px solid #334155' }} />
+            <input type="text" placeholder="Ej: Canción sobre el paso del tiempo y las emociones." value={nuevoResumen} onChange={e => setNuevoResumen(e.target.value)} style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', background: '#0f172a', color: '#fff', border: '1px solid #334155' }} />
           </div>
 
           {/* MP3 Audio File or URL Section */}
@@ -355,7 +355,7 @@ export default function SongManager({ canciones, onGuardarCanciones, onRestaurar
             
             <div style={{ marginBottom: '10px' }}>
               <label style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>Texto del Verso Principal</label>
-              <input type="text" placeholder="Ej: Se dejó llevar por la banda-educativa, a la deriva..." value={versoTexto} onChange={e => setVersoTexto(e.target.value)} style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', background: '#0f172a', color: '#fff', border: '1px solid #334155' }} />
+              <input type="text" placeholder="Ej: El tiempo es un río suave que avanza sin descansar..." value={versoTexto} onChange={e => setVersoTexto(e.target.value)} style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', background: '#0f172a', color: '#fff', border: '1px solid #334155' }} />
             </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '10px', marginBottom: '10px' }}>
@@ -370,7 +370,7 @@ export default function SongManager({ canciones, onGuardarCanciones, onRestaurar
 
               <div>
                 <label style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>Pregunta de Comprensión del Verso</label>
-                <input type="text" placeholder="Ej: ¿Qué significa 'dejarse llevar por la banda-educativa'?" value={versoPregunta} onChange={e => setVersoPregunta(e.target.value)} style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', background: '#0f172a', color: '#fff', border: '1px solid #334155' }} />
+                <input type="text" placeholder="Ej: ¿Por qué se dice que el tiempo es un río suave?" value={versoPregunta} onChange={e => setVersoPregunta(e.target.value)} style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', background: '#0f172a', color: '#fff', border: '1px solid #334155' }} />
               </div>
             </div>
 

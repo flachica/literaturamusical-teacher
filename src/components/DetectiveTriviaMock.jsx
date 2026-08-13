@@ -7,12 +7,12 @@ export default function DetectiveTriviaMock({ onGanarPuntos }) {
   const [completado, setCompletado] = useState(false);
 
   const pregunta = {
-    verso: "«Le dije que su corazón era de mimbre»",
+    verso: "«El tiempo es un río suave que avanza sin descansar»",
     cancion: "El Río del Tiempo - Banda Educativa",
     correcta: "metafora",
     opciones: [
       { id: "simil", texto: "Símil (Comparación con 'como')", icono: "🪞" },
-      { id: "metafora", texto: "Metáfora (Decir que el corazón ES de mimbre)", icono: "✨" },
+      { id: "metafora", texto: "Metáfora (Decir que el tiempo ES un río)", icono: "✨" },
       { id: "hiperbole", texto: "Hipérbole (Exageración gigante)", icono: "🚀" }
     ]
   };
@@ -50,7 +50,7 @@ export default function DetectiveTriviaMock({ onGanarPuntos }) {
       </div>
 
       <h3 style={{ fontSize: '1.25rem', fontWeight: 800, marginBottom: '8px' }}>
-        ¿Qué figura literaria utiliza el poeta en este verso?
+        ¿Qué figura literaria se utiliza en este verso?
       </h3>
 
       <div style={{ background: 'rgba(15, 23, 42, 0.8)', padding: '16px 20px', borderRadius: '12px', marginBottom: '20px', borderLeft: '4px solid var(--primary)' }}>

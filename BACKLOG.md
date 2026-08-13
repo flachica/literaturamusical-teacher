@@ -6,8 +6,8 @@ Documento de seguimiento del proyecto **LitMusical**. Este archivo es actualizad
 
 ## 📍 ESTADO ACTUAL DEL PROYECTO
 
-- **Estado de la Sesión:** 🟢 **SESIÓN 3 COMPLETADA CON ÉXITO** (v0.2.9c - Auto-Scroll Contenido, 47 Versos LRCLIB, Navegación de Estrofas & Reproducción Focalizada).
-- **Subversión Alcanzada:** `v0.2.9c (Auto-Scroll Interno Aislado, 47 Versos Sincronizados de Banda Educativa, Tono Detective 9 Años, Menú Hamburguesa Compacto y Reproducción Focalizada por Estrofa)`
+- **Estado de la Sesión:** 🟢 **SESIÓN 3 COMPLETADA CON ÉXITO** (v0.2.9c - Auto-Scroll Contenido, Letras Sincronizadas, Navegación de Estrofas & Reproducción Focalizada).
+- **Subversión Alcanzada:** `v0.2.9c (Auto-Scroll Interno Aislado, Versos Sincronizados, Tono Detective 9 Años, Menú Hamburguesa Compacto y Reproducción Focalizada por Estrofa)`
 - **📌 Punto de Reanudación para la SESIÓN 4 / Iteración 6:** 
   > Al iniciar la **Sesión 4**, comenzar con la **Iteración 6 (v0.3.0)**: Cablear el cliente del servicio de IA `aiService.js` con Ollama local (`http://localhost:11434`), fallback offline inteligente y generación dinámica de retos.
 
@@ -38,14 +38,12 @@ Documento de seguimiento del proyecto **LitMusical**. Este archivo es actualizad
    - Panel de Lectura Karaoke a la izquierda (100% texto completo sin recortes) y Reto Detective a la derecha.
    - Colapso fluido a 1 columna 100% centrada al ocultar la letra.
 9. **Protocolo de Memoria vía Skill:** Skill de Antigravity para continuidad de sesiones e iteraciones.
-10. **Skill de Extracción de Audio de YouTube (`yt-dlp` + Deno):** Protocolo estandarizado en Skill `.agents/skills/litmusical-guide/SKILL.md` para descargar audio real de YouTube a `public/audio/` para cualquier canción nueva y para la función de alta en Modo Admin.
-11. **Buscador/Importador Automático LRCLIB API:** Conexión con la API pública y gratuita `https://lrclib.net/api/get` para importar letras `.lrc` y timestamps milimétricos (`start_ms`) en el Modo Admin sin esfuerzo manual de sincronización.
-12. **Modo Detective Proactivo (Sugerir/Marcar Nuevas Figuras por la Hija):** 
-    - Permitir a la niña marcar cualquier verso o estrofa en el Modo Detective y pulsar *"🔍 ¡He descubierto una figura aquí!"* para sugerir su interpretación o proponer nuevas figuras literarias (ej. *Onomatopeya, Hipérbaton*) al Buzón Familiar para revisión de los padres en Modo Admin.
+10. **Modo Detective Proactivo (Sugerir/Marcar Nuevas Figuras por la Hija):** 
+    - Permitir a la niña marcar cualquier verso o estrofa en el Modo Detective y pulsar *"🔍 ¡He descubierto una figura aquí!"* para sugerir su interpretación o proponer nuevas figuras literarias al Buzón Familiar para revisión de los padres en Modo Admin.
 
 ### ❌ Descartadas
 1. **Módulo de Odoo (`litmusical_odoo`):** Descartado para mantener una arquitectura local-first ligera, rápida y portable.
-2. **Integración con Spotify (`spotifyTrackId`):** Descartada definitivamente para mantener la aplicación limpia y sin dependencias de API/cuentas externas de Spotify. YouTube + Audios locales cubren el 100% de los casos.
+2. **Integración con Spotify (`spotifyTrackId`):** Descartada definitivamente para mantener la aplicación limpia y sin dependencias externas. Audios locales y de dominio público cubren el 100% de los casos.
 
 ---
 
@@ -72,22 +70,19 @@ Documento de seguimiento del proyecto **LitMusical**. Este archivo es actualizad
 - [x] Gestor local de canciones (`SongManager.jsx`) en el Modo Admin.
 - [x] Exportación e Importación de catálogos en archivos `.json`.
 - [x] Restauración de valores por defecto de canciones y de usuario.
-- [x] `v0.2.1`: Actualización del ID de vídeo de Banda Educativa (*El Río del Tiempo*) y sincronización automática de `youtubeId` en LocalStorage.
 - [x] `v0.2.9`: **Refactorización Karaoke Local-First & Layout 2 Columnas (COMPLETADA)**:
   - Unificación en un **Reproductor de Karaoke HTML5** con un único control Play/Pause sincronizado con el minutero y el avance de la letra.
   - Sincronización de `onSeekTime` desde la barra de ondas directamente sobre el MP3.
-  - Flujo de alta de canciones con selector de MP3 local y prompt modal cuando falta la letra (manual vs IA).
+  - Flujo de alta de canciones con selector de MP3 local.
   - Menú Hamburguesa `⚙️ Padres` en la Navbar para ocultar opciones técnicas a la niña.
   - Acceso directo en 1 clic al `📖 Diccionario` para la niña.
   - Layout a **2 Columnas Dinámicas** (Lectura Karaoke a la izquierda 100% íntegra + Reto Detective a la derecha).
-  - Eliminación de manejador `onClick` en la letra para evitar parpadeos visuales.
 - [x] `v0.2.9c`: **Perfeccionamiento UX 9 Años, Auto-Scroll Aislado & Navegación de Estrofas (COMPLETADA - SESIÓN 3)**:
-  - Volcado e integración de los **47 versos completos** de *El Río del Tiempo* (5 min) desde la API de LRCLIB.
-  - Normalizador defensivo de estrofas `sanitizeSongVerses` en `storage.js` (cuartetas de 4 versos equilibradas).
-  - Auto-scroll centrado 100% aislado dentro de `lyricsContainerRef` (sin afectar a la ventana del navegador ni a la cabecera).
-  - Rediseño de tono respetuoso sin expresiones condescendientes (`📖 Diccionario RAE`, `definicion_detective`).
-  - Optimizador de espacio vertical trasladando los accesos a `BACKLOG.md` y `SKILL.md` al Menú Hamburguesa de Padres.
-  - Navegación manual por estrofas (`←` / `→`) y botón verde **`▶ Escuchar Estrofa`** con sincronización bidireccional de `onSeekTime`.
+  - Integración de versos sincronizados educativos.
+  - Normalizador defensivo de estrofas `sanitizeSongVerses` en `storage.js`.
+  - Auto-scroll centrado 100% aislado dentro de `lyricsContainerRef`.
+  - Rediseño de tono respetuoso sin expresiones condescendientes.
+  - Navegación manual por estrofas (`←` / `→`) y botón verde **`▶ Escuchar Estrofa`**.
 
 ### 🤖 `v0.3.0` - Cliente Ollama / LangChain & Fallback Offline (Target Próxima Iteración)
 - [ ] Cableado del servicio `aiService.js` con Ollama local (`http://localhost:11434`).
