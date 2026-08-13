@@ -54,6 +54,25 @@ export function resetUserProgress() {
 }
 
 /**
+ * Normaliza y sanitiza la lista de versos garantizando que tengan estrofaNum estructurado
+ */
+export function sanitizeSongVerses(versos) {
+  if (!Array.isArray(versos) || versos.length === 0) return versos;
+
+  const primerEstrofa = versos[0]?.estrofaNum;
+  const todasTienenMismoNum = versos.every(v => v.estrofaNum === primerEstrofa);
+
+  if (!primerEstrofa || todasTienenMismoNum) {
+    return versos.map((v, idx) => ({
+      ...v,
+      estrofaNum: Math.floor(idx / 4) + 1
+    }));
+  }
+
+  return versos;
+}
+
+/**
  * Carga el catálogo de canciones (LocalStorage o mockData por defecto)
  */
 export function loadSongsCatalog() {
@@ -64,21 +83,32 @@ export function loadSongsCatalog() {
       if (Array.isArray(parsed) && parsed.length > 0) {
         return parsed.map(savedSong => {
           const defaultSong = CANCIONES.find(c => c.id === savedSong.id);
+          const rawVersos = (defaultSong && defaultSong.versos && defaultSong.versos.length !== savedSong.versos?.length)
+            ? defaultSong.versos
+            : (savedSong.versos || defaultSong?.versos);
+
           if (defaultSong) {
             return {
               ...savedSong,
               youtubeId: defaultSong.youtubeId,
-              spotifyTrackId: defaultSong.spotifyTrackId || savedSong.spotifyTrackId
+              audioPreviewUrl: defaultSong.audioPreviewUrl || savedSong.audioPreviewUrl,
+              versos: sanitizeSongVerses(rawVersos)
             };
           }
-          return savedSong;
+          return {
+            ...savedSong,
+            versos: sanitizeSongVerses(savedSong.versos)
+          };
         });
       }
     }
   } catch (err) {
     console.error('Error cargando canciones de LocalStorage:', err);
   }
-  return CANCIONES;
+  return CANCIONES.map(c => ({
+    ...c,
+    versos: sanitizeSongVerses(c.versos)
+  }));
 }
 
 /**

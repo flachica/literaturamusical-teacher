@@ -31,14 +31,31 @@ export default function App() {
   // Unified Playback State (Synchronized across PlayerWidget and WaveformScrubber)
   const [isPlaying, setIsPlaying] = useState(false);
   const [posicion, setPosicion] = useState(0); // 0 to 100%
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(180);
   const [localAudioSrc, setLocalAudioSrc] = useState(null);
+  const audioRef = React.useRef(null);
 
-  // Reset playback position on song change
+  // Detective mission step & full lyrics toggle state
+  const [paso, setPaso] = useState(1);
+  const [mostrarLetraCompleta, setMostrarLetraCompleta] = useState(true);
+
+  // Reset playback position and detective step on song change
   useEffect(() => {
     setIsPlaying(false);
     setPosicion(0);
+    setCurrentTime(0);
+    setDuration(180);
     setLocalAudioSrc(null);
+    setPaso(1);
   }, [cancionActual?.id]);
+
+  const handleSeekTime = (targetSeconds) => {
+    if (audioRef.current) {
+      audioRef.current.currentTime = targetSeconds;
+    }
+    setCurrentTime(targetSeconds);
+  };
 
   // Sync user progress to LocalStorage when changed
   useEffect(() => {
@@ -96,73 +113,10 @@ export default function App() {
         puntos={puntos}
         nivel={nivel}
         estrellas={estrellas}
+        modoPrincipal={modoPrincipal}
+        setModoPrincipal={setModoPrincipal}
+        onResetProgreso={handleResetProgreso}
       />
-
-      {/* Main Mode Switcher: Modo Detective (Hija) vs Modo Admin (Padres) */}
-      <div className="glass-panel" style={{ padding: '14px 20px', marginBottom: '24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
-        
-        <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-          <button
-            onClick={() => setModoPrincipal('detective')}
-            style={{
-              padding: '10px 20px',
-              borderRadius: '12px',
-              fontWeight: 800,
-              fontSize: '0.95rem',
-              background: modoPrincipal === 'detective' ? 'linear-gradient(135deg, #8b5cf6, #ec4899)' : 'rgba(15, 23, 42, 0.6)',
-              color: '#ffffff',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px',
-              boxShadow: modoPrincipal === 'detective' ? '0 0 15px rgba(139, 92, 246, 0.4)' : 'none',
-              border: 'none',
-              cursor: 'pointer'
-            }}
-          >
-            <Shield size={18} /> 👧 Modo Detective (Para Tu Hija)
-          </button>
-
-          <button
-            onClick={() => setModoPrincipal('diccionario')}
-            style={{
-              padding: '10px 20px',
-              borderRadius: '12px',
-              fontWeight: 800,
-              fontSize: '0.95rem',
-              background: modoPrincipal === 'diccionario' ? 'linear-gradient(135deg, #06b6d4, #3b82f6)' : 'rgba(15, 23, 42, 0.6)',
-              color: '#ffffff',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px',
-              boxShadow: modoPrincipal === 'diccionario' ? '0 0 15px rgba(6, 182, 212, 0.4)' : 'none',
-              border: 'none',
-              cursor: 'pointer'
-            }}
-          >
-            <BookOpen size={18} /> 📖 Diccionario de Figuras
-          </button>
-        </div>
-
-        <button
-          onClick={() => setModoPrincipal('admin')}
-          style={{
-            padding: '10px 20px',
-            borderRadius: '12px',
-            fontWeight: 800,
-            fontSize: '0.9rem',
-            background: modoPrincipal === 'admin' ? 'linear-gradient(135deg, #f59e0b, #d97706)' : 'rgba(30, 41, 59, 0.7)',
-            color: modoPrincipal === 'admin' ? '#ffffff' : '#fbbf24',
-            border: '1px solid rgba(245, 158, 11, 0.4)',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-            cursor: 'pointer'
-          }}
-        >
-          <Settings size={18} /> 👨‍👩‍👧 Modo Admin y Padres
-        </button>
-
-      </div>
 
       {/* VIEW 1: MODO DETECTIVE GUIADO (LIMPIO Y PASO A PASO PARA 9 AÑOS) */}
       {modoPrincipal === 'detective' && (
@@ -202,8 +156,17 @@ export default function App() {
               setIsPlaying={setIsPlaying}
               posicion={posicion}
               setPosicion={setPosicion}
+              currentTime={currentTime}
+              setCurrentTime={setCurrentTime}
+              duration={duration}
+              setDuration={setDuration}
               localAudioSrc={localAudioSrc}
               setLocalAudioSrc={setLocalAudioSrc}
+              audioRef={audioRef}
+              paso={paso}
+              setPaso={setPaso}
+              mostrarLetraCompleta={mostrarLetraCompleta}
+              setMostrarLetraCompleta={setMostrarLetraCompleta}
             />
           )}
 
@@ -216,6 +179,13 @@ export default function App() {
               setIsPlaying={setIsPlaying}
               posicion={posicion}
               setPosicion={setPosicion}
+              currentTime={currentTime}
+              onSeekTime={handleSeekTime}
+              duration={duration}
+              paso={paso}
+              setPaso={setPaso}
+              mostrarLetraCompleta={mostrarLetraCompleta}
+              setMostrarLetraCompleta={setMostrarLetraCompleta}
             />
           )}
         </div>
@@ -240,22 +210,6 @@ export default function App() {
           onResetProgreso={handleResetProgreso}
         />
       )}
-
-      {/* Footer linking to memory skill & backlog */}
-      <footer style={{ marginTop: '40px', paddingTop: '20px', borderTop: '1px solid rgba(255, 255, 255, 0.08)', textAlign: 'center', color: 'var(--text-muted)', fontSize: '0.85rem' }}>
-        <p style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', marginBottom: '6px' }}>
-          <span>LitMusical v0.2.0 • Diseñado para aprender literatura con música</span> <Heart size={14} color="#ec4899" fill="#ec4899" />
-        </p>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px', fontSize: '0.8rem' }}>
-          <a href="#" style={{ color: '#c084fc', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-            <FileText size={12} /> BACKLOG.md
-          </a>
-          <span>•</span>
-          <a href="#" style={{ color: '#38bdf8', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-            <Code2 size={12} /> Skill: litmusical-guide
-          </a>
-        </div>
-      </footer>
 
     </div>
   );

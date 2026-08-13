@@ -7,7 +7,9 @@ export default function WaveformScrubber({
   setIsPlaying,
   posicion,
   setPosicion,
-  onSeleccionarVersoPorTiempo
+  onSeleccionarVersoPorTiempo,
+  onSeekTime,
+  duration
 }) {
   // Generate 45 visual waveform bars
   const bars = Array.from({ length: 45 }, (_, i) => {
@@ -15,23 +17,6 @@ export default function WaveformScrubber({
     const isFigureMarker = i === 12 || i === 28 || i === 38;
     return { id: i, heightPercent, isFigureMarker };
   });
-
-  // Auto-advance timeline cursor smoothly when playing (WITHOUT any synth beeps!)
-  useEffect(() => {
-    let timer;
-    if (isPlaying) {
-      timer = setInterval(() => {
-        setPosicion((prev) => {
-          if (prev >= 100) {
-            setIsPlaying(false);
-            return 0;
-          }
-          return prev + 1;
-        });
-      }, 300);
-    }
-    return () => clearInterval(timer);
-  }, [isPlaying, setIsPlaying, setPosicion]);
 
   // Sync active verse based on scrubber position
   useEffect(() => {
@@ -47,11 +32,17 @@ export default function WaveformScrubber({
   }, [posicion, cancion, onSeleccionarVersoPorTiempo]);
 
   const handleSliderChange = (e) => {
-    setPosicion(Number(e.target.value));
+    const newPos = Number(e.target.value);
+    setPosicion(newPos);
+    if (onSeekTime) {
+      const targetDuration = duration || 180;
+      const targetSeconds = (newPos / 100) * targetDuration;
+      onSeekTime(targetSeconds);
+    }
   };
 
   const formatearTiempo = (porcentaje) => {
-    const totalSegundos = 180; // 3 minutes total
+    const totalSegundos = duration || 180;
     const actuales = Math.floor((porcentaje / 100) * totalSegundos);
     const mins = Math.floor(actuales / 60);
     const segs = actuales % 60;
@@ -78,16 +69,16 @@ export default function WaveformScrubber({
               border: 'none',
               cursor: 'pointer'
             }}
-            title={isPlaying ? 'Pausar avance de la canción' : 'Reproducir y sincronizar versos'}
+            title={isPlaying ? 'Pausar avance del karaoke' : 'Reproducir y sincronizar versos'}
           >
             {isPlaying ? <Pause size={20} /> : <Play size={20} style={{ marginLeft: '2px' }} />}
           </button>
           <div>
             <h4 style={{ fontSize: '0.95rem', fontWeight: 800, color: '#f8fafc' }}>
-              Línea de Tiempo y Ondas «{cancion.titulo}»
+              Línea de Tiempo Karaoke y Ondas «{cancion.titulo}»
             </h4>
             <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
-              {isPlaying ? '▶️ Sincronizando avance con la lectura...' : 'Desplaza el marcador rosa para avanzar por la letra'}
+              {isPlaying ? '▶️ Sincronizando audio con la lectura...' : 'Desplaza el marcador rosa para saltar a cualquier parte del audio'}
             </span>
           </div>
         </div>
@@ -96,7 +87,9 @@ export default function WaveformScrubber({
           <span style={{ fontWeight: 800, fontSize: '1.05rem', color: '#fbbf24', fontFamily: 'monospace' }}>
             {formatearTiempo(posicion)}
           </span>
-          <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', display: 'block' }}>/ 3:00 min</span>
+          <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', display: 'block' }}>
+            / {formatearTiempo(100)} min
+          </span>
         </div>
       </div>
 
@@ -176,6 +169,7 @@ export default function WaveformScrubber({
           type="range"
           min="0"
           max="100"
+          step="0.1"
           value={posicion}
           onChange={handleSliderChange}
           style={{
@@ -194,7 +188,7 @@ export default function WaveformScrubber({
         <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
           <Sparkles size={12} color="#f59e0b" /> Las estrellas ✨ indican dónde hay metáforas en la letra
         </span>
-        <span>Arrastra para saltar a otra parte de la canción</span>
+        <span>Arrastra el cursor para saltar en el audio MP3</span>
       </div>
 
     </div>

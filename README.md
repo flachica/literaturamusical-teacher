@@ -14,9 +14,10 @@
 ## 🛠️ Tecnologías y Arquitectura
 
 - **Frontend:** React + Vite (Diseño infantil/joven gamificado).
-- **Persistencia:** Local-First (JSON, LocalStorage).
-- **Reproductores de Audio:** Modular (Spotify Embed, YouTube Embed, HTML5 Audio).
-- **IA Assistant:** Cableado para Ollama local (`http://localhost:11434`) con sistema de Fallback Offline (Modo Sin IA).
+- **Fuente de Verdad de Letras y Timestamps:** **LRCLIB API** (`https://lrclib.net/`). API pública y gratuita para obtención de letras `.lrc` sincronizadas a nivel de milisegundo (`start_ms`).
+- **Reproductor & Extractor de Audio:** Audio HTML5 Local-First con descarga automatizada desde YouTube (`yt-dlp` + Deno) alojada en `public/audio/`.
+- **Persistencia:** Local-First (`LocalStorage`, importación/exportación JSON).
+- **IA Assistant:** Cliente para Ollama local (`http://localhost:11434`) con sistema de Fallback Offline.
 
 ---
 

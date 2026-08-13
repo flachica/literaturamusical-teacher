@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Play, Pause, Volume2, Disc, Tv, Radio, Sparkles, ExternalLink, Upload } from 'lucide-react';
+import React, { useEffect } from 'react';
+import { Play, Pause, Disc, Upload, ListMusic } from 'lucide-react';
 
 export default function PlayerWidget({
   cancion,
@@ -7,247 +7,285 @@ export default function PlayerWidget({
   setIsPlaying,
   posicion,
   setPosicion,
+  currentTime,
+  setCurrentTime,
+  duration,
+  setDuration,
   localAudioSrc,
-  setLocalAudioSrc
+  setLocalAudioSrc,
+  audioRef,
+  onSeekTime,
+  onSeleccionarVersoPorTiempo,
+  paso,
+  mostrarLetraCompleta,
+  setMostrarLetraCompleta
 }) {
-  const [provider, setProvider] = useState('youtube'); // 'youtube' | 'spotify' | 'audio'
-  const audioRef = useRef(null);
+  // Active audio source
+  const audioSrc = localAudioSrc || cancion?.audioPreviewUrl || '';
 
-  // Sync HTML5 audio element play/pause
+  // Generate 42 visual waveform bars
+  const bars = Array.from({ length: 42 }, (_, i) => {
+    const heightPercent = 25 + Math.abs(Math.sin(i * 0.45) * 70);
+    const isFigureMarker = i === 10 || i === 25 || i === 36;
+    return { id: i, heightPercent, isFigureMarker };
+  });
+
+  // Sync HTML5 audio playback state
   useEffect(() => {
-    if (audioRef.current && localAudioSrc) {
+    if (audioRef?.current && audioSrc) {
       if (isPlaying) {
-        audioRef.current.play().catch(() => {});
+        audioRef.current.play().catch(err => {
+          console.warn('Playback error / Autoplay blocked:', err);
+          setIsPlaying(false);
+        });
       } else {
         audioRef.current.pause();
       }
     }
-  }, [isPlaying, localAudioSrc]);
+  }, [isPlaying, audioSrc, audioRef, setIsPlaying]);
 
-  const handleAudioTimeUpdate = () => {
-    if (audioRef.current && audioRef.current.duration) {
-      const currentPct = (audioRef.current.currentTime / audioRef.current.duration) * 100;
-      setPosicion(currentPct);
+  // Handle native audio time updates
+  const handleTimeUpdate = () => {
+    if (audioRef?.current) {
+      const cur = audioRef.current.currentTime || 0;
+      const dur = audioRef.current.duration || 180;
+      setCurrentTime(cur);
+      if (dur > 0) {
+        setDuration(dur);
+        const pct = (cur / dur) * 100;
+        setPosicion(pct);
+      }
     }
   };
 
+  // Handle seeking via range slider or clicking waveform
+  const handleSliderChange = (e) => {
+    const newPos = Number(e.target.value);
+    setPosicion(newPos);
+    const targetDuration = duration || 180;
+    const targetSeconds = (newPos / 100) * targetDuration;
+    if (audioRef?.current) {
+      audioRef.current.currentTime = targetSeconds;
+    }
+    if (onSeekTime) {
+      onSeekTime(targetSeconds);
+    }
+  };
+
+  // Handle file upload
   const handleFileUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
       const url = URL.createObjectURL(file);
       setLocalAudioSrc(url);
-      setProvider('audio');
       setIsPlaying(true);
     }
   };
 
+  const formatearTiempo = (segundos) => {
+    if (!segundos || isNaN(segundos)) return '0:00';
+    const mins = Math.floor(segundos / 60);
+    const segs = Math.floor(segundos % 60);
+    return `${mins}:${segs < 10 ? '0' : ''}${segs}`;
+  };
+
   return (
-    <div className="glass-panel" style={{ padding: '20px 24px', marginBottom: '24px', position: 'relative' }}>
+    <div className="glass-panel" style={{ padding: '16px 20px', marginBottom: '20px', position: 'relative' }}>
       
-      {/* Player Header */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px', flexWrap: 'wrap', gap: '12px' }}>
-        <div>
-          <span className="badge badge-gold" style={{ marginBottom: '6px', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
-            <Disc size={14} /> Reproductor de Música Principal
-          </span>
-          <h2 style={{ fontSize: '1.4rem', fontWeight: 800 }}>{cancion.titulo}</h2>
-          <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem' }}>
-            por <strong style={{ color: '#f8fafc' }}>{cancion.artistaNombre}</strong> • Álbum: {cancion.album}
-          </p>
-        </div>
+      {/* Hidden HTML5 Audio element */}
+      {audioSrc && (
+        <audio
+          ref={audioRef}
+          src={audioSrc}
+          onTimeUpdate={handleTimeUpdate}
+          onLoadedMetadata={() => {
+            if (audioRef?.current?.duration) {
+              setDuration(audioRef.current.duration);
+            }
+          }}
+          onEnded={() => setIsPlaying(false)}
+        />
+      )}
 
-        {/* Provider Tabs */}
-        <div style={{ display: 'flex', gap: '8px', background: 'rgba(15, 23, 42, 0.8)', padding: '6px', borderRadius: '12px', flexWrap: 'wrap' }}>
-          <button
-            onClick={() => setProvider('youtube')}
-            style={{
-              padding: '8px 14px',
-              borderRadius: '8px',
-              fontSize: '0.85rem',
-              fontWeight: 800,
-              background: provider === 'youtube' ? 'linear-gradient(135deg, #ff0000, #cc0000)' : 'transparent',
-              color: '#ffffff',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px',
-              border: 'none',
-              cursor: 'pointer',
-              boxShadow: provider === 'youtube' ? '0 0 12px rgba(255, 0, 0, 0.4)' : 'none'
-            }}
-          >
-            <Tv size={16} /> YouTube Vídeo
-          </button>
-
-          <button
-            onClick={() => setProvider('spotify')}
-            style={{
-              padding: '8px 14px',
-              borderRadius: '8px',
-              fontSize: '0.85rem',
-              fontWeight: 800,
-              background: provider === 'spotify' ? '#1db954' : 'transparent',
-              color: provider === 'spotify' ? '#ffffff' : 'var(--text-muted)',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px',
-              border: 'none',
-              cursor: 'pointer'
-            }}
-          >
-            <Radio size={16} /> Spotify
-          </button>
-
-          <button
-            onClick={() => setProvider('audio')}
-            style={{
-              padding: '8px 14px',
-              borderRadius: '8px',
-              fontSize: '0.85rem',
-              fontWeight: 800,
-              background: provider === 'audio' ? 'var(--primary)' : 'transparent',
-              color: provider === 'audio' ? '#ffffff' : 'var(--text-muted)',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px',
-              border: 'none',
-              cursor: 'pointer'
-            }}
-          >
-            <Volume2 size={16} /> Archivo MP3 Local
-          </button>
-        </div>
-      </div>
-
-      {/* Main Controls Header */}
-      <div style={{ background: 'rgba(15, 23, 42, 0.9)', padding: '12px 18px', borderRadius: '14px', border: '1px solid rgba(255, 255, 255, 0.08)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px', gap: '16px', flexWrap: 'wrap' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <button
-            onClick={() => setIsPlaying(!isPlaying)}
-            style={{
-              width: '46px',
-              height: '46px',
-              borderRadius: '50%',
-              background: isPlaying ? 'linear-gradient(135deg, #ec4899, #ef4444)' : 'linear-gradient(135deg, #8b5cf6, #ec4899)',
-              color: '#ffffff',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              boxShadow: '0 0 16px rgba(139, 92, 246, 0.5)',
-              border: 'none',
-              cursor: 'pointer'
-            }}
-          >
-            {isPlaying ? <Pause size={22} /> : <Play size={22} style={{ marginLeft: '3px' }} />}
-          </button>
+      {/* Row 1: Unified Header (Song Title + Step Dots 1 2 3 4 + Full Lyrics Toggle) */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px', flexWrap: 'wrap', gap: '10px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <Disc size={20} color="#ec4899" className={isPlaying ? 'spin-animation' : ''} />
           <div>
-            <span style={{ fontSize: '0.9rem', fontWeight: 800, color: '#ffffff' }}>
-              {isPlaying ? '▶️ Canción activa - Avance de versos activado' : '⏸️ Pulsa Play para reproducir e iniciar la lectura'}
-            </span>
-            <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)', display: 'block' }}>
-              La letra avanza sincronizada para que tu hija pueda leerla cómodamente
-            </span>
+            <h3 style={{ fontSize: '1.2rem', fontWeight: 900, color: '#f8fafc', margin: 0, lineHeight: 1.2 }}>
+              {cancion.titulo} <span style={{ fontWeight: 400, color: 'var(--text-muted)', fontSize: '0.9rem' }}>— {cancion.artistaNombre}</span>
+            </h3>
           </div>
         </div>
 
-        {provider === 'youtube' && cancion.youtubeId && (
-          <a
-            href={`https://www.youtube.com/watch?v=${cancion.youtubeId}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              padding: '6px 12px',
-              borderRadius: '8px',
-              background: 'rgba(255, 0, 0, 0.15)',
-              color: '#ff6b6b',
-              border: '1px solid rgba(255, 0, 0, 0.3)',
-              fontSize: '0.8rem',
-              fontWeight: 700,
-              textDecoration: 'none',
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '6px'
-            }}
-          >
-            <ExternalLink size={14} /> Abrir en YouTube si el iframe se bloquea
-          </a>
-        )}
+        {/* Unified Step Indicator Dots (1 2 3 4) + Lyrics Toggle */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          {paso && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '4px', background: 'rgba(15, 23, 42, 0.7)', padding: '4px 8px', borderRadius: '9999px', border: '1px solid rgba(255, 255, 255, 0.08)' }}>
+              {[1, 2, 3, 4].map((stepNum) => {
+                const isCompleted = paso > stepNum;
+                const isCurrent = paso === stepNum;
+                return (
+                  <div
+                    key={stepNum}
+                    style={{
+                      width: '24px',
+                      height: '24px',
+                      borderRadius: '50%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontWeight: 800,
+                      fontSize: '0.75rem',
+                      background: isCompleted ? '#10b981' : isCurrent ? 'var(--primary)' : 'rgba(255,255,255,0.1)',
+                      color: '#ffffff'
+                    }}
+                    title={`Paso ${stepNum}`}
+                  >
+                    {isCompleted ? '✓' : stepNum}
+                  </div>
+                );
+              })}
+            </div>
+          )}
+
+          {setMostrarLetraCompleta && (
+            <button
+              onClick={() => setMostrarLetraCompleta(!mostrarLetraCompleta)}
+              style={{
+                padding: '5px 10px',
+                borderRadius: '8px',
+                background: mostrarLetraCompleta ? 'rgba(139, 92, 246, 0.25)' : 'rgba(255, 255, 255, 0.06)',
+                color: mostrarLetraCompleta ? '#c084fc' : 'var(--text-muted)',
+                border: '1px solid rgba(139, 92, 246, 0.3)',
+                fontSize: '0.78rem',
+                fontWeight: 700,
+                display: 'flex',
+                alignItems: 'center',
+                gap: '5px',
+                cursor: 'pointer'
+              }}
+            >
+              <ListMusic size={14} /> {mostrarLetraCompleta ? 'Ocultar Letra' : 'Ver Letra'}
+            </button>
+          )}
+        </div>
       </div>
 
-      {/* Embed Display Box */}
-      <div style={{ borderRadius: '16px', overflow: 'hidden', background: '#000000', border: '1px solid rgba(255, 255, 255, 0.1)' }}>
+      {/* Row 2: Unified Controls + Integrated Waveform Scrubber + Timer */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '12px', background: 'rgba(15, 23, 42, 0.95)', padding: '10px 14px', borderRadius: '14px', border: '1px solid rgba(139, 92, 246, 0.3)' }}>
         
-        {/* YOUTUBE */}
-        {provider === 'youtube' && cancion.youtubeId && (
-          <div style={{ position: 'relative', width: '100%', paddingTop: '36%', minHeight: '230px' }}>
-            <iframe
-              style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', border: 'none' }}
-              src={`https://www.youtube.com/embed/${cancion.youtubeId}?rel=0`}
-              title={`YouTube Player - ${cancion.titulo}`}
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
+        {/* Single Play / Pause Button */}
+        <button
+          onClick={() => setIsPlaying(!isPlaying)}
+          style={{
+            width: '44px',
+            height: '44px',
+            borderRadius: '50%',
+            background: isPlaying ? 'linear-gradient(135deg, #ec4899, #ef4444)' : 'linear-gradient(135deg, #8b5cf6, #ec4899)',
+            color: '#ffffff',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            boxShadow: isPlaying ? '0 0 16px rgba(236, 72, 153, 0.7)' : '0 0 12px rgba(139, 92, 246, 0.5)',
+            border: 'none',
+            cursor: 'pointer',
+            flexShrink: 0
+          }}
+          title={isPlaying ? 'Pausar karaoke' : 'Reproducir y sincronizar versos'}
+        >
+          {isPlaying ? <Pause size={22} /> : <Play size={22} style={{ marginLeft: '3px' }} />}
+        </button>
+
+        {/* Integrated Waveform Visualizer & Interactive Slider */}
+        <div style={{ flex: 1, position: 'relative', height: '44px', background: 'rgba(15, 23, 42, 0.8)', borderRadius: '10px', padding: '6px 10px', display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: '2px', overflow: 'hidden', border: '1px solid rgba(255, 255, 255, 0.08)' }}>
+          {bars.map((bar, i) => {
+            const barPos = (i / bars.length) * 100;
+            const isPassed = barPos <= posicion;
+
+            let barColor = 'rgba(255, 255, 255, 0.15)';
+            if (isPassed) {
+              barColor = bar.isFigureMarker ? '#f59e0b' : '#c084fc';
+            }
+
+            return (
+              <div
+                key={bar.id}
+                style={{
+                  flex: 1,
+                  height: `${bar.heightPercent}%`,
+                  background: barColor,
+                  borderRadius: '2px',
+                  position: 'relative'
+                }}
+              >
+                {bar.isFigureMarker && (
+                  <span style={{ position: 'absolute', top: '-14px', left: '50%', transform: 'translateX(-50%)', fontSize: '0.6rem' }}>
+                    ✨
+                  </span>
+                )}
+              </div>
+            );
+          })}
+
+          {/* Draggable Vertical Cursor Line */}
+          <div
+            style={{
+              position: 'absolute',
+              top: 0,
+              bottom: 0,
+              left: `${posicion}%`,
+              width: '3px',
+              background: '#ec4899',
+              boxShadow: '0 0 10px #ec4899',
+              pointerEvents: 'none',
+              zIndex: 10
+            }}
+          >
+            <div
+              style={{
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                width: '12px',
+                height: '12px',
+                borderRadius: '50%',
+                background: '#ffffff',
+                border: '2px solid #ec4899'
+              }}
             />
           </div>
-        )}
 
-        {/* SPOTIFY */}
-        {provider === 'spotify' && (
-          <div style={{ padding: '12px', background: '#121212' }}>
-            <iframe
-              src={`https://open.spotify.com/embed/track/${cancion.spotifyTrackId}?utm_source=generator&theme=0`}
-              width="100%"
-              height="152"
-              frameBorder="0"
-              allowFullScreen=""
-              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-              loading="lazy"
-              title="Spotify Embed Official"
-            />
-          </div>
-        )}
+          {/* Transparent Range Input Overlay */}
+          <input
+            type="range"
+            min="0"
+            max="100"
+            step="0.1"
+            value={posicion}
+            onChange={handleSliderChange}
+            style={{
+              position: 'absolute',
+              inset: 0,
+              width: '100%',
+              height: '100%',
+              opacity: 0,
+              cursor: 'ew-resize',
+              zIndex: 20
+            }}
+          />
+        </div>
 
-        {/* MP3 LOCAL */}
-        {provider === 'audio' && (
-          <div style={{ padding: '24px', width: '100%', textAlign: 'center', background: 'linear-gradient(135deg, #1e293b, #0f172a)' }}>
-            {localAudioSrc ? (
-              <div>
-                <p style={{ fontSize: '0.95rem', color: '#34d399', fontWeight: 800, marginBottom: '12px' }}>
-                  🎵 Pista de audio MP3 cargada correctamente
-                </p>
-                <audio
-                  ref={audioRef}
-                  src={localAudioSrc}
-                  onTimeUpdate={handleAudioTimeUpdate}
-                  controls
-                  style={{ width: '100%', maxWidth: '550px' }}
-                />
-              </div>
-            ) : (
-              <div>
-                <p style={{ fontSize: '1rem', color: '#f8fafc', fontWeight: 800, marginBottom: '6px' }}>
-                  📂 Cargar audio en MP3 de «{cancion.titulo}»
-                </p>
-                <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '16px' }}>
-                  Sube el archivo MP3 original que tengas en tu ordenador para escuchar a {cancion.artistaNombre} mientras tu hija lee la letra.
-                </p>
-                <label style={{
-                  padding: '12px 24px',
-                  borderRadius: '12px',
-                  background: 'linear-gradient(135deg, #38bdf8, #0284c7)',
-                  color: '#ffffff',
-                  fontWeight: 800,
-                  fontSize: '0.9rem',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  cursor: 'pointer'
-                }}>
-                  <Upload size={18} /> Cargar MP3 desde mi PC
-                  <input type="file" accept="audio/*" onChange={handleFileUpload} style={{ display: 'none' }} />
-                </label>
-              </div>
-            )}
-          </div>
-        )}
+        {/* Single Timer Counter */}
+        <div style={{ flexShrink: 0, textAlign: 'right', minWidth: '70px' }}>
+          <span style={{ fontWeight: 900, fontSize: '0.95rem', color: '#fbbf24', fontFamily: 'monospace' }}>
+            {formatearTiempo(currentTime)}
+          </span>
+          <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)', display: 'block' }}>
+            / {formatearTiempo(duration || 180)}
+          </span>
+        </div>
 
       </div>
 

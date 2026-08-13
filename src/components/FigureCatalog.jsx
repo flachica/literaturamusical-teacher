@@ -51,7 +51,7 @@ export default function FigureCatalog() {
               </h4>
 
               <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '12px', lineHeight: 1.4 }}>
-                {figura.definicion_infantil}
+                {figura.definicion_detective || figura.definicion_infantil}
               </p>
 
               <div style={{ background: 'rgba(255, 255, 255, 0.03)', padding: '8px 12px', borderRadius: '8px' }}>
