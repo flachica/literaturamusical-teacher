@@ -6,11 +6,11 @@ Documento de seguimiento del desarrollo interactivo de **LitMusical** estructura
 
 ## 📍 ESTADO ACTUAL DEL PRO OYECTO
 
-* **Sesión Actual**: 🟢 **SESIÓN 5 EN CURSO** (Iteración 7)
-* **Subversión Alcanzada**: `v0.2.12` (Arquitectura Local-First Fortalecida, Comprobación Física de Audios y Recuperación desde YouTube).
+* **Sesión Actual**: 🟢 **SESIÓN 5 EN CURSO** (Iteración 8)
+* **Subversión Alcanzada**: `v0.2.12` (Arquitectura Local-First Fortalecida).
 * **Métrica Clave del Reto (CPVM)**: 
   $$\text{CPVM} = [\text{Retos de figuras literarias resueltos con éxito}] + [\text{por la niña de forma autónoma}]$$
-* **Objetivo de la Iteración**: Iniciar el desarrollo de la versión `v0.3.0` enfocada en la Gamificación Avanzada para elevar la motivación y el comportamiento voluntario de la niña detective.
+* **Objetivo de la Iteración**: Refactorizar y componetizar `App.jsx` (`v0.2.13`) para robustecer la arquitectura antes de añadir la gamificación.
 
 ---
 
@@ -28,7 +28,16 @@ Documento de seguimiento del desarrollo interactivo de **LitMusical** estructura
 
 ---
 
-### 🏆 `v0.3.0` - Gamificación Avanzada "Escuela de Detectives" (EN CURSO)
+### 🏗️ `v0.2.13` - Refactorización de Arquitectura y Componetización (EN CURSO)
+* **Objetivo**: Reducir el acoplamiento y el tamaño de `App.jsx` dividiéndolo en hooks personalizados independientes.
+* **Entregables**:
+  * Hook `useAudioPlayer` para encapsular todo el estado de sincronización, temporizador, reproducción y seek del widget de música.
+  * Hook `useLocalCatalog` para encapsular la carga inicial de disco, verificación física de audios en caliente y guardado de canciones y figuras.
+  * Simplificación de `App.jsx` para que actúe únicamente como router y orquestador minimalista de la interfaz.
+
+---
+
+### 🏆 `v0.3.0` - Gamificación Avanzada "Escuela de Detectives" (PLANIFICADA)
 
 > 🧪 **Hipótesis Causal**:
 > **Si** implementamos rangos de progreso de detective, placas visuales de logros y efectos de sonido interactivos autogenerados,
