@@ -31,6 +31,31 @@ export default function App() {
   const [figuras, setFiguras] = useState(() => loadFiguresCatalog());
   const [modoPrincipal, setModoPrincipal] = useState('detective'); // 'detective' | 'admin' | 'diccionario'
   const [cancionActual, setCancionActual] = useState(() => canciones[0] || null);
+  const [audioStatus, setAudioStatus] = useState({});
+
+  const comprobarDisponibilidadAudios = async (catalogToCheck = canciones) => {
+    const statuses = {};
+    for (const c of catalogToCheck) {
+      if (c.audioPreviewUrl && c.audioPreviewUrl.startsWith('/audio/')) {
+        try {
+          const res = await fetch('/api/check-audio', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ filename: c.audioPreviewUrl })
+          });
+          const data = await res.json();
+          statuses[c.id] = data.exists ? 'disponible' : 'perdido';
+        } catch (err) {
+          statuses[c.id] = 'error';
+        }
+      } else if (c.audioPreviewUrl && (c.audioPreviewUrl.startsWith('http://') || c.audioPreviewUrl.startsWith('https://'))) {
+        statuses[c.id] = 'red'; // URL de red
+      } else {
+        statuses[c.id] = 'vacio'; // Sin audio
+      }
+    }
+    setAudioStatus(statuses);
+  };
 
   // Unified Playback State (Synchronized across PlayerWidget and WaveformScrubber)
   const [isPlaying, setIsPlaying] = useState(false);
@@ -51,6 +76,7 @@ export default function App() {
       .then(diskSongs => {
         if (Array.isArray(diskSongs) && diskSongs.length > 0) {
           setCanciones(diskSongs);
+          comprobarDisponibilidadAudios(diskSongs);
           setCancionActual(prev => {
             const match = diskSongs.find(s => s.id === prev?.id);
             return match || diskSongs[0];
@@ -99,6 +125,7 @@ export default function App() {
   // Sync songs catalog to LocalStorage when changed
   useEffect(() => {
     saveSongsCatalog(canciones);
+    comprobarDisponibilidadAudios(canciones);
     // Ensure selected song is valid
     if (!cancionActual || !canciones.some(c => c.id === cancionActual.id)) {
       setCancionActual(canciones[0] || null);
@@ -186,6 +213,7 @@ export default function App() {
           {cancionActual && (
             <PlayerWidget
               cancion={cancionActual}
+              audioStatus={audioStatus}
               isPlaying={isPlaying}
               setIsPlaying={setIsPlaying}
               posicion={posicion}
@@ -208,6 +236,7 @@ export default function App() {
           {cancionActual && (
             <ModoDetectiveGuiado
               cancion={cancionActual}
+              audioStatus={audioStatus}
               onGanarPuntos={handleSumarPuntos}
               isPlaying={isPlaying}
               setIsPlaying={setIsPlaying}
@@ -237,6 +266,7 @@ export default function App() {
           setModoIA={setModoIA}
           canciones={canciones}
           figuras={figuras}
+          audioStatus={audioStatus}
           onGuardarCanciones={handleGuardarCanciones}
           onRestaurarCanciones={handleRestaurarCanciones}
           onGuardarFiguras={setFiguras}
