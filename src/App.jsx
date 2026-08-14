@@ -1,168 +1,52 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Navbar from './components/Navbar';
 import ModoDetectiveGuiado from './components/ModoDetectiveGuiado';
 import ModoAdmin from './components/ModoAdmin';
 import FigureCatalog from './components/FigureCatalog';
 import PlayerWidget from './components/PlayerWidget';
 
-import {
-  loadUserProgress,
-  saveUserProgress,
-  resetUserProgress,
-  loadSongsCatalog,
-  saveSongsCatalog,
-  resetSongsCatalog,
-  loadFiguresCatalog,
-  saveFiguresCatalog,
-  resetFiguresCatalog
-} from './utils/storage';
-
-import { Shield, Settings, Heart, FileText, Code2, BookOpen } from 'lucide-react';
+import useAudioPlayer from './hooks/useAudioPlayer';
+import useLocalCatalog from './hooks/useLocalCatalog';
 
 export default function App() {
   const [modoIA, setModoIA] = useState(true);
+  const [modoPrincipal, setModoPrincipal] = useState('detective'); // 'detective' | 'admin' | 'diccionario'
+  const [cancionActual, setCancionActual] = useState(null);
 
-  // User progress state (Persisted in LocalStorage)
-  const [progreso, setProgreso] = useState(() => loadUserProgress());
+  // Custom hook for catalogs, physical audio checks and user progress
+  const {
+    canciones,
+    figuras,
+    setFiguras,
+    audioStatus,
+    progreso,
+    handleSumarPuntos,
+    handleResetProgreso,
+    handleGuardarCanciones,
+    handleRestaurarCanciones
+  } = useLocalCatalog(cancionActual, setCancionActual);
+
   const { puntos, nivel, estrellas } = progreso;
 
-  // Songs catalog state (Persisted in LocalStorage)
-  const [canciones, setCanciones] = useState(() => loadSongsCatalog());
-  const [figuras, setFiguras] = useState(() => loadFiguresCatalog());
-  const [modoPrincipal, setModoPrincipal] = useState('detective'); // 'detective' | 'admin' | 'diccionario'
-  const [cancionActual, setCancionActual] = useState(() => canciones[0] || null);
-  const [audioStatus, setAudioStatus] = useState({});
-
-  const comprobarDisponibilidadAudios = async (catalogToCheck = canciones) => {
-    const statuses = {};
-    for (const c of catalogToCheck) {
-      if (c.audioPreviewUrl && c.audioPreviewUrl.startsWith('/audio/')) {
-        try {
-          const res = await fetch('/api/check-audio', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ filename: c.audioPreviewUrl })
-          });
-          const data = await res.json();
-          statuses[c.id] = data.exists ? 'disponible' : 'perdido';
-        } catch (err) {
-          statuses[c.id] = 'error';
-        }
-      } else if (c.audioPreviewUrl && (c.audioPreviewUrl.startsWith('http://') || c.audioPreviewUrl.startsWith('https://'))) {
-        statuses[c.id] = 'red'; // URL de red
-      } else {
-        statuses[c.id] = 'vacio'; // Sin audio
-      }
-    }
-    setAudioStatus(statuses);
-  };
-
-  // Unified Playback State (Synchronized across PlayerWidget and WaveformScrubber)
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [posicion, setPosicion] = useState(0); // 0 to 100%
-  const [currentTime, setCurrentTime] = useState(0);
-  const [duration, setDuration] = useState(180);
-  const [localAudioSrc, setLocalAudioSrc] = useState(null);
-  const audioRef = React.useRef(null);
+  // Custom hook for unified audio player playback state
+  const {
+    isPlaying,
+    setIsPlaying,
+    posicion,
+    setPosicion,
+    currentTime,
+    setCurrentTime,
+    duration,
+    setDuration,
+    localAudioSrc,
+    setLocalAudioSrc,
+    audioRef,
+    handleSeekTime
+  } = useAudioPlayer(cancionActual);
 
   // Detective mission step & full lyrics toggle state
   const [paso, setPaso] = useState(1);
   const [mostrarLetraCompleta, setMostrarLetraCompleta] = useState(true);
-
-  // Fetch latest catalog from disk endpoint (/api/songs) on mount
-  useEffect(() => {
-    fetch('/api/songs')
-      .then(res => res.json())
-      .then(diskSongs => {
-        if (Array.isArray(diskSongs) && diskSongs.length > 0) {
-          setCanciones(diskSongs);
-          comprobarDisponibilidadAudios(diskSongs);
-          setCancionActual(prev => {
-            const match = diskSongs.find(s => s.id === prev?.id);
-            return match || diskSongs[0];
-          });
-        }
-      })
-      .catch(err => console.warn('Aviso al cargar canciones de disco:', err));
-
-    fetch('/api/figuras')
-      .then(res => res.json())
-      .then(diskFigures => {
-        if (Array.isArray(diskFigures) && diskFigures.length > 0) {
-          setFiguras(diskFigures);
-        }
-      })
-      .catch(err => console.warn('Aviso al cargar figuras de disco:', err));
-  }, []);
-
-  // Sync figures catalog when changed
-  useEffect(() => {
-    saveFiguresCatalog(figuras);
-  }, [figuras]);
-
-  // Reset playback position and detective step on song change
-  useEffect(() => {
-    setIsPlaying(false);
-    setPosicion(0);
-    setCurrentTime(0);
-    setDuration(180);
-    setLocalAudioSrc(null);
-    setPaso(1);
-  }, [cancionActual?.id]);
-
-  const handleSeekTime = (targetSeconds) => {
-    if (audioRef.current) {
-      audioRef.current.currentTime = targetSeconds;
-    }
-    setCurrentTime(targetSeconds);
-  };
-
-  // Sync user progress to LocalStorage when changed
-  useEffect(() => {
-    saveUserProgress(progreso);
-  }, [progreso]);
-
-  // Sync songs catalog to LocalStorage when changed
-  useEffect(() => {
-    saveSongsCatalog(canciones);
-    comprobarDisponibilidadAudios(canciones);
-    // Ensure selected song is valid
-    if (!cancionActual || !canciones.some(c => c.id === cancionActual.id)) {
-      setCancionActual(canciones[0] || null);
-    }
-  }, [canciones]);
-
-  const handleSumarPuntos = (cantidad) => {
-    const nuevosPuntos = puntos + cantidad;
-    let nuevoNivel = nivel;
-    let nuevasEstrellas = estrellas;
-
-    if (nuevosPuntos >= 600 && nivel < 4) {
-      nuevoNivel = 4;
-      nuevasEstrellas = estrellas + 1;
-    }
-
-    setProgreso({
-      puntos: nuevosPuntos,
-      nivel: nuevoNivel,
-      estrellas: nuevasEstrellas
-    });
-  };
-
-  const handleResetProgreso = () => {
-    const defaultProg = resetUserProgress();
-    setProgreso(defaultProg);
-  };
-
-  const handleGuardarCanciones = (nuevoCatálogo) => {
-    setCanciones(nuevoCatálogo);
-  };
-
-  const handleRestaurarCanciones = () => {
-    const defaultCat = resetSongsCatalog();
-    setCanciones(defaultCat);
-    setCancionActual(defaultCat[0]);
-  };
 
   return (
     <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 16px 40px' }}>
