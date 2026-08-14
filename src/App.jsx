@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
 import ModoDetectiveGuiado from './components/ModoDetectiveGuiado';
 import ModoAdmin from './components/ModoAdmin';
+import FigureCatalog from './components/FigureCatalog';
 import PlayerWidget from './components/PlayerWidget';
 
 import {
@@ -224,7 +225,12 @@ export default function App() {
         </div>
       )}
 
-      {/* VIEW 2: MODO ADMIN / PADRES */}
+      {/* VIEW 2: DICCIONARIO DE FIGURAS */}
+      {modoPrincipal === 'diccionario' && (
+        <FigureCatalog figuras={figuras} />
+      )}
+
+      {/* VIEW 3: MODO ADMIN / PADRES */}
       {modoPrincipal === 'admin' && (
         <ModoAdmin
           modoIA={modoIA}
