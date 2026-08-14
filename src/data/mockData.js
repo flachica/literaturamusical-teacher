@@ -1348,7 +1348,7 @@ export const CANCIONES = [
     temaId: "amor",
     temaNombre: "Naturaleza y Reflexión",
     youtubeId: "",
-    audioPreviewUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+    audioPreviewUrl: "/audio/el-viaje-del-tiempo.webm",
     resumen_didactico: "Una canción educativa sobre cómo el tiempo fluye suavemente y las emociones nos enseñan a crecer.",
     versos: [
       {
@@ -1430,7 +1430,7 @@ export const CANCIONES = [
     temaId: "naturaleza",
     temaNombre: "Naturaleza y Sueños",
     youtubeId: "",
-    audioPreviewUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
+    audioPreviewUrl: "/audio/la-luna-en-el-agua.webm",
     resumen_didactico: "Un poema místico del dominio público adaptado donde la luna cobra vida e ilumina la noche.",
     versos: [
       {
@@ -1478,7 +1478,7 @@ export const CANCIONES = [
     temaId: "reflexion",
     temaNombre: "Reflexión y Misterio",
     youtubeId: "",
-    audioPreviewUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3",
+    audioPreviewUrl: "/audio/el-viento-y-las-hojas.webm",
     resumen_didactico: "Una canción didáctica sobre aprender a dejarse llevar por los aprendizajes como hojas al viento.",
     versos: [
       {
