@@ -60,18 +60,27 @@ export default function Navbar({
           </div>
         </div>
 
-        {/* User Stats Bar for Daughter (Visible in Detective mode) */}
+        {/* User Stats Bar for Daughter (Visible in Detective & Diccionario modes) */}
         {!esAdmin && (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '16px', background: 'transparent', padding: '6px 0', fontSize: '0.88rem', fontWeight: 700, color: '#f8fafc' }}>
-            <span>Nivel {nivel}</span>
-            <span style={{ color: 'var(--text-muted)' }}>•</span>
-            <span>{estrellas} estrellas</span>
-            <span style={{ color: 'var(--text-muted)' }}>•</span>
-            <span style={{ color: '#38bdf8' }}>{puntos} PTS</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', background: 'rgba(15, 23, 42, 0.7)', padding: '6px 16px', borderRadius: '9999px', border: '1px solid rgba(255, 255, 255, 0.1)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <Award size={16} color="#f59e0b" />
+              <span style={{ fontWeight: 800, color: '#fbbf24', fontSize: '0.85rem' }}>Nivel {nivel}</span>
+            </div>
+            <div style={{ width: '1px', height: '14px', background: 'rgba(255, 255, 255, 0.2)' }} />
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <Star size={16} color="#ec4899" fill="#ec4899" />
+              <span style={{ fontWeight: 800, color: '#f472b6', fontSize: '0.85rem' }}>{estrellas} Estrellas</span>
+            </div>
+            <div style={{ width: '1px', height: '14px', background: 'rgba(255, 255, 255, 0.2)' }} />
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <Sparkles size={16} color="#38bdf8" />
+              <span style={{ fontWeight: 800, color: '#38bdf8', fontSize: '0.85rem' }}>{puntos} PTS</span>
+            </div>
           </div>
         )}
 
-        {/* Action Buttons: Return to Game + Hamburger Menu */}
+        {/* Action Buttons: Return to Game / Dictionary + Hamburger Menu */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px', position: 'relative' }} ref={menuRef}>
           
           {/* Direct Return Button to Detective Mode when in Admin Mode */}
@@ -93,22 +102,45 @@ export default function Navbar({
               Volver al Juego
             </button>
           ) : (
-            /* Direct 1-Click Parent Mode Button */
-            <button
-              onClick={() => setModoPrincipal('admin')}
-              style={{
-                padding: '8px 16px',
-                borderRadius: '10px',
-                fontWeight: 800,
-                fontSize: '0.85rem',
-                background: 'rgba(245, 158, 11, 0.15)',
-                color: '#fbbf24',
-                border: '1px solid rgba(245, 158, 11, 0.3)',
-                cursor: 'pointer'
-              }}
-            >
-              Modo Padres
-            </button>
+            <>
+              {/* Direct 1-Click Dictionary Button for Daughter */}
+              <button
+                onClick={() => setModoPrincipal(modoPrincipal === 'diccionario' ? 'detective' : 'diccionario')}
+                style={{
+                  padding: '8px 16px',
+                  borderRadius: '10px',
+                  fontWeight: 800,
+                  fontSize: '0.85rem',
+                  background: modoPrincipal === 'diccionario' ? 'linear-gradient(135deg, #06b6d4, #3b82f6)' : 'rgba(6, 182, 212, 0.2)',
+                  color: modoPrincipal === 'diccionario' ? '#ffffff' : '#38bdf8',
+                  border: '1px solid rgba(6, 182, 212, 0.4)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  cursor: 'pointer',
+                  boxShadow: modoPrincipal === 'diccionario' ? '0 0 12px rgba(6, 182, 212, 0.4)' : 'none'
+                }}
+              >
+                <BookOpen size={16} /> {modoPrincipal === 'diccionario' ? 'Volver al Juego' : 'Diccionario'}
+              </button>
+
+              {/* Direct 1-Click Parent Mode Button */}
+              <button
+                onClick={() => setModoPrincipal('admin')}
+                style={{
+                  padding: '8px 16px',
+                  borderRadius: '10px',
+                  fontWeight: 800,
+                  fontSize: '0.85rem',
+                  background: 'rgba(245, 158, 11, 0.15)',
+                  color: '#fbbf24',
+                  border: '1px solid rgba(245, 158, 11, 0.3)',
+                  cursor: 'pointer'
+                }}
+              >
+                Modo Padres
+              </button>
+            </>
           )}
 
           {/* Hamburger / Parent Settings Button */}
