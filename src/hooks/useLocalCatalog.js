@@ -52,7 +52,7 @@ export default function useLocalCatalog(cancionActual, setCancionActual) {
 
   // Fetch latest catalogs from disk endpoints on mount
   useEffect(() => {
-    fetch('/api/songs')
+    fetch(`/api/songs?t=${Date.now()}`)
       .then(res => res.json())
       .then(diskSongs => {
         if (Array.isArray(diskSongs) && diskSongs.length > 0) {
@@ -68,7 +68,7 @@ export default function useLocalCatalog(cancionActual, setCancionActual) {
       })
       .catch(err => console.warn('Aviso al cargar canciones de disco:', err));
 
-    fetch('/api/figuras')
+    fetch(`/api/figuras?t=${Date.now()}`)
       .then(res => res.json())
       .then(diskFigures => {
         if (Array.isArray(diskFigures) && diskFigures.length > 0) {

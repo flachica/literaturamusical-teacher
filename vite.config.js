@@ -13,6 +13,12 @@ function jsonStoragePlugin() {
     name: 'json-storage-plugin',
     configureServer(server) {
       server.middlewares.use((req, res, next) => {
+        if (req.url.startsWith('/api/')) {
+          res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0');
+          res.setHeader('Pragma', 'no-cache');
+          res.setHeader('Expires', '0');
+        }
+
         if (req.url === '/api/download-audio' && req.method === 'POST') {
           let body = ''
           req.on('data', chunk => { body += chunk })
