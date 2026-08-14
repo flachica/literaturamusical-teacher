@@ -1,99 +1,97 @@
-# 📋 BACKLOG DE INICIATIVAS Y VERSIONES - LitMusical
+# 📋 BACKLOG DE INICIATIVAS Y VERSIONES - LitMusical (Sesión 5)
 
-Documento de seguimiento del proyecto **LitMusical**. Este archivo es actualizado al finalizar cada sesión de desarrollo con la IA siguiendo la Skill [`.agents/skills/litmusical-guide/SKILL.md`](.agents/skills/litmusical-guide/SKILL.md).
-
----
-
-## 📍 ESTADO ACTUAL DEL PROYECTO
-
-- **Estado de la Sesión:** 🟢 **SESIÓN 5 COMPLETADA CON ÉXITO** (v0.2.12 - Fortalecimiento de Arquitectura Local-First con Recuperación de Audios desde YouTube).
-- **Subversión Alcanzada:** `v0.2.12 (Persistencia de youtubeUrl/youtubeId en el catálogo, endpoint /api/check-audio en backend Vite para comprobar archivos locales, y botones en Modo Admin para recuperar individualmente o reparar en lote todos los audios perdidos descargándolos desde YouTube)`.
-- **📌 Punto de Reanudación para la SESIÓN 6 / Iteración 8:** 
-  > Al iniciar la **Sesión 6**, continuar con la gamificación avanzada (v0.3.0) y postergar la integración del cliente de IA local con Ollama (v0.4.0) según el nuevo orden prioritario del backlog.
+Documento de seguimiento del desarrollo interactivo de **LitMusical** estructurado mediante la metodología **Impact-Driven Growth (IDG)** para garantizar que cada entrega genere cambios reales de comportamiento (*outcomes*) y valor en el aprendizaje pedagógico.
 
 ---
 
+## 📍 ESTADO ACTUAL DEL PRO OYECTO
 
-## 💡 INICIATIVAS
-
-### ✅ Aprobadas
-1. **Frontend Prototipo Gamificado:** Interfaz neón/vibrante tipo "Escuela de Detectives Literarios".
-2. **Separación de Vistas (Modo Detective vs. Modo Admin):**
-   - **Modo Detective (Hija):** Experiencia limpia, enfocada y guiada paso a paso por una sola canción con acceso en 1 clic a `📖 Diccionario`.
-   - **Modo Admin (Padres):** Menú Hamburguesa `⚙️ Padres` para gestionar catálogo, configurar Ollama local e exportar JSON.
-3. **Visualizador de Ondas Musicales (Waveform Scrubber):**
-   - Cursor de desplazamiento horizontal sobre ondas neón con marcadores de estrellas ✨ donde están las metáforas.
-   - Sincronización dinámica de la reproducción de audio HTML5 MP3 con el verso activo de la canción.
-4. **Flujo Pedagógico "Comprensión Primero":**
-   - *Paso 1: Leer estrofa + Diccionario RAE Didáctico.*
-   - *Paso 2: Reto de Comprensión del Significado.*
-   - *Paso 3: Etiquetar la Figura Literaria.*
-   - *Paso 4: Celebración con Confetti + Puntos.*
-5. **Diccionario RAE Infantil Integrado:** Palabras clave destacables (*mimbre, fragua, nardos, polisón, cimientos*).
-6. **Reproductor Agnóstico Local-First:** Reproductor de Karaoke HTML5 unificado con soporte para audios MP3 locales.
-7. **Persistencia Local-First (`v0.2.0`):**
-   - Guardado automático de puntos, nivel y estrellas en `LocalStorage`.
-   - Gestor y editor de canciones en Modo Admin (alta, baja, exportación/importación JSON y restauración por defecto).
-8. **Layout a 2 Columnas Dinámicas (`v0.2.6 - v0.2.9`):**
-   - Panel de Lectura Karaoke a la izquierda (100% texto completo sin recortes) y Reto Detective a la derecha.
-   - Colapso fluido a 1 columna 100% centrada al ocultar la letra.
-9. **Protocolo de Memoria vía Skill:** Skill de Antigravity para continuidad de sesiones e iteraciones.
-10. **Modo Detective Proactivo (Sugerir/Marcar Nuevas Figuras por la Hija):** 
-    - Permitir a la niña marcar cualquier verso o estrofa en el Modo Detective y pulsar *"🔍 ¡He descubierto una figura aquí!"* para sugerir su interpretación o proponer nuevas figuras literarias al Buzón Familiar para revisión de los padres en Modo Admin.
-
-### ❌ Descartadas
-1. **Módulo de Odoo (`litmusical_odoo`):** Descartado para mantener una arquitectura local-first ligera, rápida y portable.
-2. **Integración con Spotify (`spotifyTrackId`):** Descartada definitivamente para mantener la aplicación limpia y sin dependencias externas. Audios locales y de dominio público cubren el 100% de los casos.
+* **Sesión Actual**: 🟢 **SESIÓN 5 EN CURSO** (Iteración 7)
+* **Subversión Alcanzada**: `v0.2.12` (Arquitectura Local-First Fortalecida, Comprobación Física de Audios y Recuperación desde YouTube).
+* **Métrica Clave del Reto (CPVM)**: 
+  $$\text{CPVM} = [\text{Retos de figuras literarias resueltos con éxito}] + [\text{por la niña de forma autónoma}]$$
+* **Objetivo de la Iteración**: Iniciar el desarrollo de la versión `v0.3.0` enfocada en la Gamificación Avanzada para elevar la motivación y el comportamiento voluntario de la niña detective.
 
 ---
 
-## 🗓️ HOJA DE RUTA POR SUBVERSIONES (ROADMAP)
+## 🗓️ HOJA DE RUTA DETALLADA POR SUBVERSIONES (ROADMAP IDG)
 
-### 🎨 `v0.1.0` - Prototipo Visual e Interactivo (COMPLETADA)
-- [x] Configuración de la Skill `.agents/skills/litmusical-guide/SKILL.md`.
-- [x] Creación de `README.md` y `BACKLOG.md`.
-- [x] Inicialización del proyecto Vite + React en `/home/fernando/proyectos/litmusical`.
-- [x] Componentes iniciales.
+### 🎨 `v0.1.0` - `v0.2.11` (COMPLETADAS)
+* Prototipo visual interactivo, modo detective vs. modo admin, visualizador de ondas neón, catálogo local, wizard de 3 pasos para añadir canciones y extractor de MP3 desde YouTube con control anti-403 en servidor local.
 
-### ⚡ `v0.1.1` - UX Infantil, Comprensión Primero & Diccionario RAE (COMPLETADA)
-- [x] Separación de interfaces: **Modo Detective (Niña)** vs **Modo Admin y Padres**.
-- [x] Flujo didáctico paso a paso: *Lectura & RAE -> Comprensión de la Letra -> Identificar Figura -> Celebración*.
-- [x] Integración de Diccionario RAE Didáctico.
+### 📦 `v0.2.12` - Fortalecimiento Local-First (COMPLETADA - SESIÓN 5)
+* **Objetivo**: Evitar la pérdida de audios al cambiar de equipo o clonar el repositorio sin binarios.
+* **Entregables**:
+  * Guardado persistente de `youtubeUrl` y `youtubeId` en el archivo JSON y LocalStorage.
+  * Endpoint `/api/check-audio` en backend Vite para comprobar la presencia física del audio en disco.
+  * Indicador de estado de audio (`🟢 disponible`, `🌐 en red`, `⚠️ perdido`) y herramientas de recuperación individual/masiva en Modo Admin.
 
-### 🌊 `v0.1.2` - Visualizador de Ondas Musicales (Waveform Scrubber) (COMPLETADA)
-- [x] Barra interactiva de ondas neón con cursor deslizante horizontal.
-- [x] Marcadores ✨ en la onda musical donde ocurren las figuras literarias.
-- [x] Sincronización en tiempo real del minutero, audio y verso activo.
+---
 
-### 📦 `v0.2.0` - Persistencia Local-First & Editor de Canciones (COMPLETADA)
-- [x] Guardado automático de puntos, nivel y estrellas en `LocalStorage`.
-- [x] Gestor local de canciones (`SongManager.jsx`) en el Modo Admin.
-- [x] Exportación e Importación de catálogos en archivos `.json`.
-- [x] Restauración de valores por defecto de canciones y de usuario.
-- [x] `v0.2.9`: **Refactorización Karaoke Local-First & Layout 2 Columnas (COMPLETADA)**:
-  - Unificación en un **Reproductor de Karaoke HTML5** con un único control Play/Pause sincronizado con el minutero y el avance de la letra.
-  - Sincronización de `onSeekTime` desde la barra de ondas directamente sobre el MP3.
-  - Flujo de alta de canciones con selector de MP3 local.
-  - Menú Hamburguesa `⚙️ Padres` en la Navbar para ocultar opciones técnicas a la niña.
-  - Acceso directo en 1 clic al `📖 Diccionario` para la niña.
-  - Layout a **2 Columnas Dinámicas** (Lectura Karaoke a la izquierda 100% íntegra + Reto Detective a la derecha).
-- [x] `v0.2.9c`: **Perfeccionamiento UX 9 Años, Auto-Scroll Aislado & Navegación de Estrofas (COMPLETADA - SESIÓN 3)**:
-  - Integración de versos sincronizados educativos.
-  - Normalizador defensivo de estrofas `sanitizeSongVerses` en `storage.js`.
-  - Auto-scroll centrado 100% aislado dentro de `lyricsContainerRef`.
-  - Rediseño de tono respetuoso sin expresiones condescendientes.
-  - Navegación manual por estrofas (`←` / `→`) y botón verde **`▶ Escuchar Estrofa`**.
+### 🏆 `v0.3.0` - Gamificación Avanzada "Escuela de Detectives" (EN CURSO)
 
-### 📦 `v0.2.12` - Fortalecimiento de Arquitectura Local-First & Reparador de YouTube (COMPLETADA - SESIÓN 5)
-- [x] Persistencia de metadatos `youtubeUrl` y `youtubeId` al registrar canciones en el catálogo.
-- [x] Endpoint `/api/check-audio` en backend Vite para verificar la existencia del archivo de audio local en disco.
-- [x] Indicador visual de estado de audio local (🟢 disponible, ⚠️ no encontrado) en Modo Admin.
-- [x] Botón individual `"⚡ Recuperar"` y botón global `"🔄 Reparar Audios Perdidos"` en Modo Admin para descargar audios desde YouTube.
+> 🧪 **Hipótesis Causal**:
+> **Si** implementamos rangos de progreso de detective, placas visuales de logros y efectos de sonido interactivos autogenerados,
+> **Provocará** que la niña acceda a la app con más frecuencia semanal de forma voluntaria y use más el diccionario didáctico,
+> **Moviendo** la CPVM de retos resueltos autónomamente y consolidando su comprensión literaria.
 
-### 🏆 `v0.3.0` - Gamificación Avanzada
-- [ ] Misiones diarias y efectos de sonido de interacción.
+* [ ] **Rangos de Detective**:
+  * Implementar progresión por niveles de experiencia basados en puntos:
+    * *Nivel 1 (0-150 pts)*: Detective Novato 🔍
+    * *Nivel 2 (151-350 pts)*: Ayudante de Inspector 🧥
+    * *Nivel 3 (351-600 pts)*: Inspector Literario 🕵️‍♀️
+    * *Nivel 4 (601+ pts)*: Superdetective de Oro 🏆
+  * Mostrar de forma destacada el rango de la niña detective en la Navbar y el Modo Detective.
+* [ ] **Álbum de Placas y Logros (Insignias)**:
+  * Crear un panel visual en Modo Detective para ver los logros desbloqueados:
+    * 📖 *Placa del Lector* (Por abrir el diccionario 5 veces).
+    * 🦊 *Oído de Lince* (Por escuchar estrofas individuales 10 veces).
+    * ✨ *Racha Poética* (Por responder 3 preguntas de comprensión seguidas sin fallar).
+    * 🎵 *Melómano Literario* (Por completar 3 canciones diferentes).
+* [ ] **Audio Feedback (Web Audio API)**:
+  * Generar efectos de sonido dinámicos en la UI sintetizados en tiempo real (evita descargar archivos de audio):
+    * Sonido de éxito/puntos (arpegio ascendente).
+    * Sonido de fallo/pista (tono suave descendente).
+    * Sonido de desbloqueo de placa (fanfarria pequeña).
 
-### 🤖 `v0.4.0` - Cliente Ollama / LangChain & Fallback Offline
-- [ ] Cableado del servicio `aiService.js` con Ollama local (`http://localhost:11434`).
-- [ ] Fallback automático al modo offline estático si Ollama no está corriendo.
-- [ ] Generación y renderizado automático de letras y retos didácticos para canciones registradas con `letraPendienteIA: true`.
+---
+
+### 🤖 `v0.4.0` - Asistente de IA con Ollama Local y Fallback Offline
+
+> 🧪 **Hipótesis Causal**:
+> **Si** permitimos que un LLM local (Ollama) genere automáticamente las preguntas de comprensión infantil y la explicación de figuras para canciones incompletas,
+> **Provocará** que los padres dediquen un 90% menos de tiempo a escribir retos a mano en Modo Admin,
+> **Moviendo** la CPVM al acelerar la incorporación de nuevas canciones en el catálogo.
+
+* [ ] **Servicio de IA Local (`aiService.js`)**:
+  * Conectar el frontend con el endpoint local `http://localhost:11434/api/chat` usando el modelo `llama3` u otro instalado.
+  * Prompt System pedagógico refinado (tono respetuoso, adaptado a 9 años, en español).
+* [ ] **Generador de Retos**:
+  * Botón *"🤖 Generar Retos con IA"* para canciones marcadas con `letraPendienteIA: true`.
+  * Generación y formateo automático de estrofas, preguntas de comprensión infantil con opciones A/B y explicaciones del verso.
+* [ ] **Fallback Offline Inteligente**:
+  * Si la llamada a Ollama falla o no está activo, autogenerar un reto simplificado estático por defecto sin bloquear el guardado de la canción.
+
+---
+
+### 🔍 `v0.5.0` - Modo Detective Proactivo (Sugerencia de Figuras)
+
+> 🧪 **Hipótesis Causal**:
+> **Si** permitimos que la niña marque libremente palabras o frases y sugiera nuevas figuras que ha descubierto,
+> **Provocará** que adopte un rol de lectura crítica activa en lugar de solo responder cuestionarios prefijados,
+> **Moviendo** la CPVM de retos literarios al crear un círculo de co-creación familiar en el catálogo.
+
+* [ ] **Herramienta "¡He descubierto una figura!"**:
+  * Permitir que la niña haga clic o seleccione cualquier línea/palabra y pulse un botón interactivo de descubrimiento.
+  * Formulario infantil simplificado donde elige qué figura cree que es (Metáfora, Símil, Personificación...) y por qué.
+* [ ] **Buzón Familiar en Modo Admin**:
+  * Panel donde los padres visualizan los descubrimientos de la niña.
+  * Botones para *"Aprobar e integrar en la canción"* (otorgando estrellas extra a la niña) o *"Conversar en la cena"*.
+
+---
+
+## 🏛️ MEMORIA DE DECISIONES DE ARQUITECTURA (IDG)
+
+1. **Persistencia Local-First**: LocalStorage es la base de datos de estado inmediato. Los ficheros JSON de disco (`songs_catalog.json` y `user_progress.json`) sincronizan el estado del servidor de desarrollo para asegurar la portabilidad del código y el despliegue sin dependencias.
+2. **Audio Autogenerado**: Para evitar subir archivos de sonido pesados a Git, todos los efectos sonoros de recompensa de la v0.3.0 se sintetizan dinámicamente usando la **Web Audio API** del navegador (osciladores y envolventes de volumen).
+3. **No Spotify**: Descartada para evitar barreras de autenticación OAuth e IDs de tracks de terceros, garantizando que el juego sea offline/local-first y duradero.
