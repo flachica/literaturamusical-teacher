@@ -1,4 +1,4 @@
-import { CANCIONES } from '../data/mockData';
+import { CANCIONES, FIGURAS_LITERARIAS } from '../data/mockData';
 
 const PROGRESS_KEY = 'litmusical_user_progress_v1';
 const SONGS_KEY = 'litmusical_songs_catalog_v1';
@@ -146,4 +146,55 @@ export function resetSongsCatalog() {
     console.error('Error al restaurar catálogo original:', err);
   }
   return CANCIONES;
+}
+
+const FIGURES_KEY = 'litmusical_figures_catalog_v1';
+
+/**
+ * Carga el catálogo de figuras literarias (LocalStorage o mockData por defecto)
+ */
+export function loadFiguresCatalog() {
+  try {
+    const saved = localStorage.getItem(FIGURES_KEY);
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        return parsed;
+      }
+    }
+  } catch (err) {
+    console.error('Error cargando figuras de LocalStorage:', err);
+  }
+  
+  const initialFigures = [...FIGURAS_LITERARIAS];
+  saveFiguresCatalog(initialFigures);
+  return initialFigures;
+}
+
+/**
+ * Guarda el catálogo completo de figuras literarias en LocalStorage y en disco
+ */
+export function saveFiguresCatalog(figures) {
+  try {
+    localStorage.setItem(FIGURES_KEY, JSON.stringify(figures));
+    fetch('/api/figuras', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(figures)
+    }).catch(err => console.warn('Aviso: Servidor estático sin API de figuras en disco:', err.message));
+  } catch (err) {
+    console.error('Error guardando catálogo de figuras:', err);
+  }
+}
+
+/**
+ * Restaura el catálogo de figuras literarias por defecto
+ */
+export function resetFiguresCatalog() {
+  try {
+    localStorage.removeItem(FIGURES_KEY);
+  } catch (err) {
+    console.error('Error al restaurar catálogo de figuras:', err);
+  }
+  return FIGURAS_LITERARIAS;
 }
