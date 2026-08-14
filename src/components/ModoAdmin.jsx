@@ -10,6 +10,7 @@ export default function ModoAdmin({
   setModoIA,
   canciones,
   figuras,
+  audioStatus,
   onGuardarCanciones,
   onRestaurarCanciones,
   onGuardarFiguras,
