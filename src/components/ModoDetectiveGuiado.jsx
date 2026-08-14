@@ -16,8 +16,12 @@ export default function ModoDetectiveGuiado({
   paso,
   setPaso,
   mostrarLetraCompleta,
-  setMostrarLetraCompleta
+  setMostrarLetraCompleta,
+  audioStatus
 }) {
+  const estadoAudio = audioStatus?.[cancion?.id] || 'vacio';
+  const tieneAudio = cancion?.audioPreviewUrl && estadoAudio !== 'perdido' && estadoAudio !== 'vacio';
+
   const [versoActual, setVersoActual] = useState(cancion.versos[0]);
   const [palabraRaeActiva, setPalabraRaeActiva] = useState(null);
   const [opcionComprension, setOpcionComprension] = useState(null);
@@ -43,7 +47,7 @@ export default function ModoDetectiveGuiado({
   }, [cancion?.versos]);
 
   const handlePlayEstrofa = (tiempoInicio) => {
-    if (typeof tiempoInicio === 'number' && onSeekTime) {
+    if (tieneAudio && typeof tiempoInicio === 'number' && onSeekTime) {
       onSeekTime(tiempoInicio);
       if (setIsPlaying) setIsPlaying(true);
     }
@@ -57,7 +61,7 @@ export default function ModoDetectiveGuiado({
       setOpcionComprension(null);
       setOpcionFigura(null);
 
-      if (onSeekTime && typeof primerVersoDeEstrofa.tiempoInicio === 'number') {
+      if (tieneAudio && onSeekTime && typeof primerVersoDeEstrofa.tiempoInicio === 'number') {
         onSeekTime(primerVersoDeEstrofa.tiempoInicio);
       }
     }
@@ -84,6 +88,7 @@ export default function ModoDetectiveGuiado({
 
   // Automatically sync active verse smoothly based on real audio currentTime with 350ms anticipation lead
   React.useEffect(() => {
+    if (!tieneAudio) return; // Si no hay audio, la navegación es 100% manual
     if (!cancion?.versos || cancion.versos.length === 0) return;
 
     let versoCorrespondiente = null;
