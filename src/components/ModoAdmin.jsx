@@ -133,6 +133,7 @@ export default function ModoAdmin({
       {pestanaActiva === 'canciones' && (
         <SongManager
           canciones={canciones}
+          audioStatus={audioStatus}
           onGuardarCanciones={onGuardarCanciones}
           onRestaurarDefault={onRestaurarCanciones}
         />
