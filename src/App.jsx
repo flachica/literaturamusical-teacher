@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
 import ModoDetectiveGuiado from './components/ModoDetectiveGuiado';
 import ModoAdmin from './components/ModoAdmin';
-import FigureCatalog from './components/FigureCatalog';
 import PlayerWidget from './components/PlayerWidget';
 
 import {
@@ -11,7 +10,10 @@ import {
   resetUserProgress,
   loadSongsCatalog,
   saveSongsCatalog,
-  resetSongsCatalog
+  resetSongsCatalog,
+  loadFiguresCatalog,
+  saveFiguresCatalog,
+  resetFiguresCatalog
 } from './utils/storage';
 
 import { Shield, Settings, Heart, FileText, Code2, BookOpen } from 'lucide-react';
@@ -25,6 +27,7 @@ export default function App() {
 
   // Songs catalog state (Persisted in LocalStorage)
   const [canciones, setCanciones] = useState(() => loadSongsCatalog());
+  const [figuras, setFiguras] = useState(() => loadFiguresCatalog());
   const [modoPrincipal, setModoPrincipal] = useState('detective'); // 'detective' | 'admin' | 'diccionario'
   const [cancionActual, setCancionActual] = useState(() => canciones[0] || null);
 
@@ -54,7 +57,21 @@ export default function App() {
         }
       })
       .catch(err => console.warn('Aviso al cargar canciones de disco:', err));
+
+    fetch('/api/figuras')
+      .then(res => res.json())
+      .then(diskFigures => {
+        if (Array.isArray(diskFigures) && diskFigures.length > 0) {
+          setFiguras(diskFigures);
+        }
+      })
+      .catch(err => console.warn('Aviso al cargar figuras de disco:', err));
   }, []);
+
+  // Sync figures catalog when changed
+  useEffect(() => {
+    saveFiguresCatalog(figuras);
+  }, [figuras]);
 
   // Reset playback position and detective step on song change
   useEffect(() => {
@@ -207,19 +224,16 @@ export default function App() {
         </div>
       )}
 
-      {/* VIEW 2: DICCIONARIO DE FIGURAS */}
-      {modoPrincipal === 'diccionario' && (
-        <FigureCatalog />
-      )}
-
-      {/* VIEW 3: MODO ADMIN / PADRES */}
+      {/* VIEW 2: MODO ADMIN / PADRES */}
       {modoPrincipal === 'admin' && (
         <ModoAdmin
           modoIA={modoIA}
           setModoIA={setModoIA}
           canciones={canciones}
+          figuras={figuras}
           onGuardarCanciones={handleGuardarCanciones}
           onRestaurarCanciones={handleRestaurarCanciones}
+          onGuardarFiguras={setFiguras}
           puntos={puntos}
           nivel={nivel}
           estrellas={estrellas}
