@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FIGURAS_LITERARIAS } from '../data/mockData';
+import { FIGURAS_LITERARIAS } from '../data/initialData';
 import { BookOpen, Sparkles, Star } from 'lucide-react';
 
 export default function FigureCatalog({ figuras }) {

@@ -1502,7 +1502,7 @@ export const CANCIONES = [
   }
 ];
 
-export const MOCK_SUGERENCIAS_FAMILIARES = [
+export const SUGERENCIAS_FAMILIARES_INICIALES = [
   {
     id: 1,
     propuestoPor: "Tu Hija (9 años)",

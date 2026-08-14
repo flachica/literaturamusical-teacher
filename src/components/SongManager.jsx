@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Trash2, Download, Upload, RotateCcw, Music, Sparkles, Check, AlertCircle, Bot, Edit3 } from 'lucide-react';
-import { FIGURAS_LITERARIAS, TEMAS_EMOCIONES } from '../data/mockData';
+import { FIGURAS_LITERARIAS, TEMAS_EMOCIONES } from '../data/initialData';
 import ConfirmModal from './ConfirmModal';
 
 // Función auxiliar para extraer el ID de YouTube

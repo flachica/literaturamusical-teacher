@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { MOCK_SUGERENCIAS_FAMILIARES } from '../data/mockData';
+import { SUGERENCIAS_FAMILIARES_INICIALES } from '../data/initialData';
 import { Heart, Plus, MessageSquare, User, Sparkles } from 'lucide-react';
 
 export default function FamilySuggestions() {
-  const [sugerencias, setSugerencias] = useState(MOCK_SUGERENCIAS_FAMILIARES);
+  const [sugerencias, setSugerencias] = useState(SUGERENCIAS_FAMILIARES_INICIALES);
   const [nuevaCancion, setNuevaCancion] = useState('');
   const [nuevoArtista, setNuevoArtista] = useState('');
   const [motivo, setMotivo] = useState('');

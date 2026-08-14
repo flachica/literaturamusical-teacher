@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import confetti from 'canvas-confetti';
-import { DICCIONARIO_RAE, FIGURAS_LITERARIAS } from '../data/mockData';
+import { DICCIONARIO_RAE, FIGURAS_LITERARIAS } from '../data/initialData';
 import { Book, CheckCircle, ArrowRight, Trophy, RotateCcw, ListMusic, Sparkles, Play, ChevronLeft, ChevronRight } from 'lucide-react';
 
 export default function ModoDetectiveGuiado({

@@ -1,4 +1,4 @@
-import { CANCIONES, FIGURAS_LITERARIAS } from '../data/mockData';
+import { CANCIONES, FIGURAS_LITERARIAS } from '../data/initialData';
 
 const PROGRESS_KEY = 'litmusical_user_progress_v1';
 const SONGS_KEY = 'litmusical_songs_catalog_v1';
@@ -84,7 +84,7 @@ export function sanitizeSongVerses(versos) {
 }
 
 /**
- * Carga el catálogo de canciones (LocalStorage o mockData por defecto)
+ * Carga el catálogo de canciones (LocalStorage o catálogo inicial por defecto)
  */
 export function loadSongsCatalog() {
   try {
@@ -151,7 +151,7 @@ export function resetSongsCatalog() {
 const FIGURES_KEY = 'litmusical_figures_catalog_v1';
 
 /**
- * Carga el catálogo de figuras literarias (LocalStorage o mockData por defecto)
+ * Carga el catálogo de figuras literarias (LocalStorage o catálogo inicial por defecto)
  */
 export function loadFiguresCatalog() {
   try {

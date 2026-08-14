@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Sparkles, HelpCircle, Bot, CheckCircle2, ChevronRight, Bookmark } from 'lucide-react';
-import { FIGURAS_LITERARIAS } from '../data/mockData';
+import { FIGURAS_LITERARIAS } from '../data/initialData';
 
 export default function LyricViewer({ cancion, modoIA, onSumarPuntos }) {
   const [versoSeleccionado, setVersoSeleccionado] = useState(cancion.versos[0]);
