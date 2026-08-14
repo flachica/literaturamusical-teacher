@@ -93,5 +93,6 @@ Cuando el usuario o la IA soliciten cargar o sincronizar una nueva canción educ
 - **v0.2.9 / v0.2.9c:** Refactorización Karaoke HTML5, Versos Sincronizados, Auto-Scroll Aislado, Tono Respetuoso 9 Años, Menú Hamburguesa Compacto, Navegación de Estrofas y Reproducción Focalizada. [COMPLETADO CON ÉXITO - SESIÓN 3]
 - **v0.2.10:** Scrubber sin retardo (`isDraggingRef`), Temporizador ⏱️ en cabecera superior centrada, Karaoke continuo por estrofas/versos conjuntos en panel izquierdo, descarga de audio local segura (`yt-dlp` + `deno` ignorada en git) e integración con LRCLIB Karaoke API (47 versos de Marea Corazón de Mimbre). [COMPLETADO CON ÉXITO - SESIÓN 4]
 - **v0.2.11:** Conversor de YouTube a MP3 local en backend (`yt-dlp` con banderas anti-403), Formulario Wizard en 3 pasos con tecla `ENTER`, indicador visual de trabajo para padres, retorno rápido a Modo Detective y `ConfirmModal.jsx` integrado. [COMPLETADO CON ÉXITO - SESIÓN 4]
-- **v0.3.0:** Conexión activa con Ollama local y fallback offline inteligente. [PRÓXIMO OBJETIVO - SESIÓN 5]
-- **v0.4.0:** Gamificación avanzada, insignias y efectos de sonido.
+- **v0.2.12:** Fortalecimiento de Arquitectura Local-First con persistencia de metadatos de YouTube, comprobación de existencia física de audios en backend, estado de disponibilidad en tarjetas de Modo Admin, y herramientas de recuperación/reparación individual y global de audios desde YouTube. [COMPLETADO CON ÉXITO - SESIÓN 5]
+- **v0.3.0:** Gamificación avanzada, insignias y efectos de sonido. [PRÓXIMO OBJETIVO - SESIÓN 6]
+- **v0.4.0:** Conexión activa con Ollama local y fallback offline inteligente.

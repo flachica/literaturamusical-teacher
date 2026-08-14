@@ -1,7 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Plus, Trash2, Download, Upload, RotateCcw, Music, Sparkles, Check, AlertCircle, Bot, Edit3 } from 'lucide-react';
 import { FIGURAS_LITERARIAS, TEMAS_EMOCIONES } from '../data/mockData';
 import ConfirmModal from './ConfirmModal';
+
+// Función auxiliar para extraer el ID de YouTube
+const obtenerYoutubeId = (url) => {
+  if (!url) return '';
+  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+  const match = url.match(regExp);
+  return (match && match[2].length === 11) ? match[2] : '';
+};
 
 export default function SongManager({ canciones, onGuardarCanciones, onRestaurarDefault }) {
   const [mostrarForm, setMostrarForm] = useState(false);
@@ -21,6 +29,7 @@ export default function SongManager({ canciones, onGuardarCanciones, onRestaurar
   const [nuevoAudioUrl, setNuevoAudioUrl] = useState('');
   const [nuevoResumen, setNuevoResumen] = useState('');
   const [archivoMp3Nombre, setArchivoMp3Nombre] = useState('');
+  const [youtubeUrlOriginal, setYoutubeUrlOriginal] = useState('');
 
   // Verso 1
   const [versoTexto, setVersoTexto] = useState('');
@@ -35,6 +44,138 @@ export default function SongManager({ canciones, onGuardarCanciones, onRestaurar
 
   // Descarga y conversión de audio de YouTube
   const [cargandoAudioYouTube, setCargandoAudioYouTube] = useState(false);
+
+  // Estados para comprobar disponibilidad de audios y reparación
+  const [audioStatus, setAudioStatus] = useState({});
+  const [reparandoGlobal, setReparandoGlobal] = useState(false);
+  const [reparandoSongId, setReparandoSongId] = useState(null);
+
+  // Función para comprobar la existencia física de los audios locales en el servidor
+  const comprobarDisponibilidadAudios = async () => {
+    const statuses = {};
+    for (const c of canciones) {
+      if (c.audioPreviewUrl && c.audioPreviewUrl.startsWith('/audio/')) {
+        try {
+          const res = await fetch('/api/check-audio', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ filename: c.audioPreviewUrl })
+          });
+          const data = await res.json();
+          statuses[c.id] = data.exists ? 'disponible' : 'perdido';
+        } catch (err) {
+          statuses[c.id] = 'error';
+        }
+      } else {
+        statuses[c.id] = 'red'; // URL externa de red
+      }
+    }
+    setAudioStatus(statuses);
+  };
+
+  useEffect(() => {
+    comprobarDisponibilidadAudios();
+  }, [canciones]);
+
+  const handleRecuperarAudio = async (song) => {
+    let queryUrl = song.youtubeUrl;
+    if (!queryUrl && song.youtubeId) {
+      queryUrl = `https://www.youtube.com/watch?v=${song.youtubeId}`;
+    }
+    if (!queryUrl) {
+      queryUrl = `${song.artistaNombre} ${song.titulo}`;
+    }
+
+    setReparandoSongId(song.id);
+    try {
+      const res = await fetch('/api/download-audio', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url: queryUrl })
+      });
+      const data = await res.json();
+      if (data.success && data.audioPath) {
+        const ytId = obtenerYoutubeId(queryUrl) || song.youtubeId || '';
+        const catalogoActualizado = canciones.map(c => {
+          if (c.id === song.id) {
+            return {
+              ...c,
+              audioPreviewUrl: data.audioPath,
+              audioUrl: data.audioPath,
+              youtubeUrl: queryUrl.includes('youtube.com') || queryUrl.includes('youtu.be') ? queryUrl : c.youtubeUrl || '',
+              youtubeId: ytId || c.youtubeId || ''
+            };
+          }
+          return c;
+        });
+        onGuardarCanciones(catalogoActualizado);
+        setMensajeExito(`¡Audio de «${song.titulo}» recuperado correctamente!`);
+        setTimeout(() => setMensajeExito(''), 3000);
+      } else {
+        alert(data.error || `No se pudo recuperar el audio para «${song.titulo}»`);
+      }
+    } catch (err) {
+      alert(`Error al conectar con el servidor para recuperar «${song.titulo}»: ` + err.message);
+    } finally {
+      setReparandoSongId(null);
+    }
+  };
+
+  const handleRepararTodosLosAudiosPerdidos = async () => {
+    const perdidas = canciones.filter(c => audioStatus[c.id] === 'perdido');
+    if (perdidas.length === 0) {
+      alert('¡Todos los audios del catálogo están disponibles en este equipo!');
+      return;
+    }
+
+    setReparandoGlobal(true);
+    let exitosas = 0;
+    let catalogoActualizado = [...canciones];
+
+    for (const song of perdidas) {
+      let queryUrl = song.youtubeUrl;
+      if (!queryUrl && song.youtubeId) {
+        queryUrl = `https://www.youtube.com/watch?v=${song.youtubeId}`;
+      }
+      if (!queryUrl) {
+        queryUrl = `${song.artistaNombre} ${song.titulo}`;
+      }
+
+      setReparandoSongId(song.id);
+      try {
+        const res = await fetch('/api/download-audio', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url: queryUrl })
+        });
+        const data = await res.json();
+        if (data.success && data.audioPath) {
+          const ytId = obtenerYoutubeId(queryUrl) || song.youtubeId || '';
+          catalogoActualizado = catalogoActualizado.map(c => {
+            if (c.id === song.id) {
+              return {
+                ...c,
+                audioPreviewUrl: data.audioPath,
+                audioUrl: data.audioPath,
+                youtubeUrl: queryUrl.includes('youtube.com') || queryUrl.includes('youtu.be') ? queryUrl : c.youtubeUrl || '',
+                youtubeId: ytId || c.youtubeId || ''
+              };
+            }
+            return c;
+          });
+          exitosas++;
+        }
+      } catch (err) {
+        console.error(`Error al recuperar «${song.titulo}» en reparación global:`, err);
+      }
+    }
+
+    onGuardarCanciones(catalogoActualizado);
+    setReparandoGlobal(false);
+    setReparandoSongId(null);
+    setMensajeExito(`¡Sincronización finalizada! Se han recuperado ${exitosas} de ${perdidas.length} audios perdidos.`);
+    setTimeout(() => setMensajeExito(''), 5000);
+  };
 
   const handleConvertirAudioYouTube = async (urlAProcesar) => {
     let targetUrl = urlAProcesar || nuevoAudioUrl.trim();
@@ -56,6 +197,7 @@ export default function SongManager({ canciones, onGuardarCanciones, onRestaurar
       if (data.success && data.audioPath) {
         setNuevoAudioUrl(data.audioPath);
         setArchivoMp3Nombre(`YouTube MP3 (${data.filename})`);
+        setYoutubeUrlOriginal(targetUrl);
         setMensajeExito(`¡Audio procesado! Se ha descargado y convertido a ${data.filename} para reproducir en LitMusical.`);
       } else {
         alert(data.error || 'No se pudo convertir el audio de YouTube.');
@@ -229,6 +371,8 @@ export default function SongManager({ canciones, onGuardarCanciones, onRestaurar
       temaId: temaObj.id,
       temaNombre: temaObj.nombre,
       audioPreviewUrl: nuevoAudioUrl.trim() || 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
+      youtubeUrl: youtubeUrlOriginal,
+      youtubeId: obtenerYoutubeId(youtubeUrlOriginal),
       resumen_didactico: nuevoResumen.trim() || 'Canción añadida desde el panel de padres para karaoke didáctico.',
       letraPendienteIA: solicitarIA,
       versos: versosConstruidos
@@ -242,6 +386,7 @@ export default function SongManager({ canciones, onGuardarCanciones, onRestaurar
     setNuevoArtista('');
     setNuevoAlbum('');
     setNuevoAudioUrl('');
+    setYoutubeUrlOriginal('');
     setArchivoMp3Nombre('');
     setNuevoResumen('');
     setVersoTexto('');
@@ -378,6 +523,32 @@ export default function SongManager({ canciones, onGuardarCanciones, onRestaurar
           </label>
 
           <button
+            onClick={handleRepararTodosLosAudiosPerdidos}
+            disabled={reparandoGlobal || !canciones.some(c => audioStatus[c.id] === 'perdido')}
+            style={{
+              padding: '8px 14px',
+              borderRadius: '10px',
+              background: reparandoGlobal
+                ? 'rgba(71, 85, 105, 0.4)'
+                : canciones.some(c => audioStatus[c.id] === 'perdido')
+                  ? 'linear-gradient(135deg, #f59e0b, #d97706)'
+                  : 'rgba(245, 158, 11, 0.1)',
+              color: canciones.some(c => audioStatus[c.id] === 'perdido') ? '#ffffff' : '#f59e0b',
+              border: `1px solid ${canciones.some(c => audioStatus[c.id] === 'perdido') ? 'transparent' : 'rgba(245, 158, 11, 0.3)'}`,
+              fontWeight: 700,
+              fontSize: '0.85rem',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              cursor: (!canciones.some(c => audioStatus[c.id] === 'perdido') || reparandoGlobal) ? 'not-allowed' : 'pointer'
+            }}
+            title="Escanea y descarga los archivos de audio locales perdidos a partir de sus enlaces de YouTube"
+          >
+            <RotateCcw size={14} style={{ animation: reparandoGlobal ? 'spin 2s linear infinite' : 'none' }} />
+            {reparandoGlobal ? '⏳ Reparando...' : '🔄 Reparar Audios Perdidos'}
+          </button>
+
+          <button
             onClick={() => setMostrarConfirmRestaurar(true)}
             style={{
               padding: '8px 12px',
@@ -408,6 +579,33 @@ export default function SongManager({ canciones, onGuardarCanciones, onRestaurar
       {errorImport && (
         <div style={{ background: 'rgba(239, 68, 68, 0.2)', color: '#fca5a5', border: '1px solid #ef4444', padding: '12px 16px', borderRadius: '10px', fontSize: '0.88rem', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
           <AlertCircle size={18} /> {errorImport}
+        </div>
+      )}
+
+      {/* Alerta de progreso de reparación global */}
+      {reparandoGlobal && (
+        <div style={{
+          background: 'rgba(245, 158, 11, 0.25)',
+          padding: '12px 16px',
+          borderRadius: '10px',
+          border: '1px solid #f59e0b',
+          color: '#fbbf24',
+          fontSize: '0.85rem',
+          marginBottom: '16px',
+          fontWeight: 800,
+          display: 'flex',
+          alignItems: 'center',
+          gap: '10px'
+        }}>
+          <div style={{
+            width: '20px',
+            height: '20px',
+            border: '3px solid rgba(245, 158, 11, 0.3)',
+            borderTop: '3px solid #f59e0b',
+            borderRadius: '50%',
+            animation: 'spin 1s linear infinite'
+          }} />
+          <span>⏳ Sincronización en lote en curso. Descargando audios locales perdidos desde YouTube... Por favor, espera a que finalice.</span>
         </div>
       )}
 
@@ -856,6 +1054,53 @@ export default function SongManager({ canciones, onGuardarCanciones, onRestaurar
                   <Bot size={12} /> 🤖 Pendiente de IA (v0.3.0)
                 </span>
               )}
+
+              {/* Indicador de estado del audio */}
+              <div style={{ marginTop: '8px', display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
+                {audioStatus[c.id] === 'disponible' && (
+                  <span style={{ fontSize: '0.72rem', background: 'rgba(16, 185, 129, 0.15)', color: '#34d399', padding: '2px 8px', borderRadius: '6px', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                    🟢 Audio en disco
+                  </span>
+                )}
+                {audioStatus[c.id] === 'red' && (
+                  <span style={{ fontSize: '0.72rem', background: 'rgba(56, 189, 248, 0.15)', color: '#38bdf8', padding: '2px 8px', borderRadius: '6px', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                    🌐 Audio en Red
+                  </span>
+                )}
+                {audioStatus[c.id] === 'perdido' && (
+                  <span style={{ fontSize: '0.72rem', background: 'rgba(239, 68, 68, 0.15)', color: '#f87171', border: '1px solid rgba(239, 68, 68, 0.3)', padding: '2px 8px', borderRadius: '6px', fontWeight: 800, display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                    ⚠️ Audio no encontrado
+                  </span>
+                )}
+                {audioStatus[c.id] === 'checking' && (
+                  <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                    🔍 Comprobando audio...
+                  </span>
+                )}
+
+                {/* Botón de recuperar individual */}
+                {audioStatus[c.id] === 'perdido' && (
+                  <button
+                    onClick={() => handleRecuperarAudio(c)}
+                    disabled={reparandoSongId === c.id || reparandoGlobal}
+                    style={{
+                      padding: '2px 8px',
+                      borderRadius: '6px',
+                      background: reparandoSongId === c.id ? '#475569' : 'linear-gradient(135deg, #f59e0b, #d97706)',
+                      color: '#ffffff',
+                      border: 'none',
+                      fontWeight: 800,
+                      fontSize: '0.72rem',
+                      cursor: (reparandoSongId === c.id || reparandoGlobal) ? 'wait' : 'pointer',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '4px'
+                    }}
+                  >
+                    {reparandoSongId === c.id ? '⏳ Descargando...' : '⚡ Recuperar'}
+                  </button>
+                )}
+              </div>
 
               <p style={{ fontSize: '0.8rem', color: '#cbd5e1', marginTop: '8px', lineHeight: 1.4 }}>
                 {c.resumen_didactico}

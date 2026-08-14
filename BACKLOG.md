@@ -6,10 +6,10 @@ Documento de seguimiento del proyecto **LitMusical**. Este archivo es actualizad
 
 ## 📍 ESTADO ACTUAL DEL PROYECTO
 
-- **Estado de la Sesión:** 🟢 **SESIÓN 4 COMPLETADA CON ÉXITO** (v0.2.11 - Conversor de YouTube a MP3 Anti-403, Wizard de 3 Pasos con Tecla Enter, Modal Flotante Integrado & Retorno Rápido a Modo Detective).
-- **Subversión Alcanzada:** `v0.2.11 (Conversor de YouTube a MP3 local en backend con yt-dlp anti-403, Formulario Wizard en 3 pasos con soporte de tecla ENTER, indicador visual de trabajo para padres, botón directo de retorno a Modo Detective y ConfirmModal.jsx integrado)`.
-- **📌 Punto de Reanudación para la SESIÓN 5 / Iteración 7:** 
-  > Al iniciar la **Sesión 5**, continuar con la conexión del cliente Ollama (`http://localhost:11434`), pulido UX/UI o gamificación avanzada (insignias, efectos de sonido).
+- **Estado de la Sesión:** 🟢 **SESIÓN 5 COMPLETADA CON ÉXITO** (v0.2.12 - Fortalecimiento de Arquitectura Local-First con Recuperación de Audios desde YouTube).
+- **Subversión Alcanzada:** `v0.2.12 (Persistencia de youtubeUrl/youtubeId en el catálogo, endpoint /api/check-audio en backend Vite para comprobar archivos locales, y botones en Modo Admin para recuperar individualmente o reparar en lote todos los audios perdidos descargándolos desde YouTube)`.
+- **📌 Punto de Reanudación para la SESIÓN 6 / Iteración 8:** 
+  > Al iniciar la **Sesión 6**, continuar con la gamificación avanzada (v0.3.0) y postergar la integración del cliente de IA local con Ollama (v0.4.0) según el nuevo orden prioritario del backlog.
 
 ---
 
@@ -84,10 +84,16 @@ Documento de seguimiento del proyecto **LitMusical**. Este archivo es actualizad
   - Rediseño de tono respetuoso sin expresiones condescendientes.
   - Navegación manual por estrofas (`←` / `→`) y botón verde **`▶ Escuchar Estrofa`**.
 
-### 🤖 `v0.3.0` - Cliente Ollama / LangChain & Fallback Offline (Target Próxima Iteración)
+### 📦 `v0.2.12` - Fortalecimiento de Arquitectura Local-First & Reparador de YouTube (COMPLETADA - SESIÓN 5)
+- [x] Persistencia de metadatos `youtubeUrl` y `youtubeId` al registrar canciones en el catálogo.
+- [x] Endpoint `/api/check-audio` en backend Vite para verificar la existencia del archivo de audio local en disco.
+- [x] Indicador visual de estado de audio local (🟢 disponible, ⚠️ no encontrado) en Modo Admin.
+- [x] Botón individual `"⚡ Recuperar"` y botón global `"🔄 Reparar Audios Perdidos"` en Modo Admin para descargar audios desde YouTube.
+
+### 🏆 `v0.3.0` - Gamificación Avanzada
+- [ ] Misiones diarias y efectos de sonido de interacción.
+
+### 🤖 `v0.4.0` - Cliente Ollama / LangChain & Fallback Offline
 - [ ] Cableado del servicio `aiService.js` con Ollama local (`http://localhost:11434`).
 - [ ] Fallback automático al modo offline estático si Ollama no está corriendo.
 - [ ] Generación y renderizado automático de letras y retos didácticos para canciones registradas con `letraPendienteIA: true`.
-
-### 🏆 `v0.4.0` - Gamificación Avanzada
-- [ ] Misiones diarias y efectos de sonido de interacción.

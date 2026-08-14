@@ -63,6 +63,31 @@ function jsonStoragePlugin() {
           return
         }
 
+        if (req.url === '/api/check-audio' && req.method === 'POST') {
+          let body = ''
+          req.on('data', chunk => { body += chunk })
+          req.on('end', () => {
+            try {
+              const { filename } = JSON.parse(body)
+              if (!filename) {
+                res.statusCode = 400
+                res.setHeader('Content-Type', 'application/json')
+                return res.end(JSON.stringify({ error: 'Falta el parámetro filename.' }))
+              }
+              const cleanFilename = path.basename(filename)
+              const filePath = path.join(audioDir, cleanFilename)
+              const exists = fs.existsSync(filePath)
+              res.setHeader('Content-Type', 'application/json')
+              return res.end(JSON.stringify({ success: true, exists }))
+            } catch (err) {
+              res.statusCode = 500
+              res.setHeader('Content-Type', 'application/json')
+              return res.end(JSON.stringify({ error: err.message }))
+            }
+          })
+          return
+        }
+
         if (req.url === '/api/songs') {
           const songsFilePath = path.join(dataDir, 'songs_catalog.json')
 
