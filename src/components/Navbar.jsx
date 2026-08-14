@@ -105,26 +105,48 @@ export default function Navbar({
               🕵️‍♀️ Volver al Juego de Detective
             </button>
           ) : (
-            /* Direct 1-Click Dictionary Button for Daughter */
-            <button
-              onClick={() => setModoPrincipal(modoPrincipal === 'diccionario' ? 'detective' : 'diccionario')}
-              style={{
-                padding: '8px 16px',
-                borderRadius: '10px',
-                fontWeight: 800,
-                fontSize: '0.85rem',
-                background: modoPrincipal === 'diccionario' ? 'linear-gradient(135deg, #06b6d4, #3b82f6)' : 'rgba(6, 182, 212, 0.2)',
-                color: modoPrincipal === 'diccionario' ? '#ffffff' : '#38bdf8',
-                border: '1px solid rgba(6, 182, 212, 0.4)',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '6px',
-                cursor: 'pointer',
-                boxShadow: modoPrincipal === 'diccionario' ? '0 0 12px rgba(6, 182, 212, 0.4)' : 'none'
-              }}
-            >
-              <BookOpen size={16} /> {modoPrincipal === 'diccionario' ? '👧 Volver al Juego' : '📖 Diccionario'}
-            </button>
+            <>
+              {/* Direct 1-Click Dictionary Button for Daughter */}
+              <button
+                onClick={() => setModoPrincipal(modoPrincipal === 'diccionario' ? 'detective' : 'diccionario')}
+                style={{
+                  padding: '8px 16px',
+                  borderRadius: '10px',
+                  fontWeight: 800,
+                  fontSize: '0.85rem',
+                  background: modoPrincipal === 'diccionario' ? 'linear-gradient(135deg, #06b6d4, #3b82f6)' : 'rgba(6, 182, 212, 0.2)',
+                  color: modoPrincipal === 'diccionario' ? '#ffffff' : '#38bdf8',
+                  border: '1px solid rgba(6, 182, 212, 0.4)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  cursor: 'pointer',
+                  boxShadow: modoPrincipal === 'diccionario' ? '0 0 12px rgba(6, 182, 212, 0.4)' : 'none'
+                }}
+              >
+                <BookOpen size={16} /> {modoPrincipal === 'diccionario' ? '👧 Volver al Juego' : '📖 Diccionario'}
+              </button>
+
+              {/* Direct 1-Click Parent Mode Button */}
+              <button
+                onClick={() => setModoPrincipal('admin')}
+                style={{
+                  padding: '8px 16px',
+                  borderRadius: '10px',
+                  fontWeight: 800,
+                  fontSize: '0.85rem',
+                  background: 'rgba(245, 158, 11, 0.15)',
+                  color: '#fbbf24',
+                  border: '1px solid rgba(245, 158, 11, 0.3)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  cursor: 'pointer'
+                }}
+              >
+                <Settings size={16} /> ⚙️ Modo Padres
+              </button>
+            </>
           )}
 
           {/* Hamburger / Parent Settings Button */}
@@ -133,18 +155,17 @@ export default function Navbar({
             style={{
               padding: '8px 12px',
               borderRadius: '10px',
-              background: esAdmin ? 'linear-gradient(135deg, #f59e0b, #d97706)' : 'rgba(30, 41, 59, 0.7)',
-              color: esAdmin ? '#ffffff' : '#fbbf24',
-              border: '1px solid rgba(245, 158, 11, 0.4)',
+              background: 'rgba(30, 41, 59, 0.7)',
+              color: '#94a3b8',
+              border: '1px solid rgba(255, 255, 255, 0.15)',
               display: 'flex',
               alignItems: 'center',
               gap: '6px',
               cursor: 'pointer'
             }}
-            title="Menú de Padres y Ajustes"
+            title="Ajustes y Documentación"
           >
             {menuAbierto ? <X size={18} /> : <Menu size={18} />}
-            <span style={{ fontSize: '0.82rem', fontWeight: 800 }}>Padres</span>
           </button>
 
           {/* Floating Dropdown Menu for Parent Options & Project Docs */}
@@ -161,63 +182,11 @@ export default function Navbar({
               boxShadow: '0 10px 25px rgba(0, 0, 0, 0.6)',
               zIndex: 200
             }}>
-              <div style={{ padding: '6px 10px', fontSize: '0.75rem', fontWeight: 800, color: '#f59e0b', borderBottom: '1px solid rgba(255,255,255,0.08)', marginBottom: '8px' }}>
-                👨‍👩‍👧 Cambiar Modo de Pantalla
+              <div style={{ padding: '6px 10px', fontSize: '0.75rem', fontWeight: 800, color: '#fbbf24', borderBottom: '1px solid rgba(255,255,255,0.08)', marginBottom: '8px' }}>
+                ⚙️ Ajustes Técnicos
               </div>
 
-              {/* Botón Modo Detective */}
-              <button
-                onClick={() => {
-                  setModoPrincipal('detective');
-                  setMenuAbierto(false);
-                }}
-                style={{
-                  width: '100%',
-                  padding: '10px 12px',
-                  borderRadius: '8px',
-                  background: modoPrincipal === 'detective' ? 'rgba(16, 185, 129, 0.25)' : 'transparent',
-                  color: modoPrincipal === 'detective' ? '#34d399' : '#ffffff',
-                  border: modoPrincipal === 'detective' ? '1px solid #10b981' : 'none',
-                  fontWeight: 700,
-                  fontSize: '0.85rem',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  cursor: 'pointer',
-                  textAlign: 'left',
-                  marginBottom: '4px'
-                }}
-              >
-                <Shield size={16} color="#10b981" /> 🕵️‍♀️ Modo Detective (Juego)
-              </button>
-
-              {/* Botón Modo Admin */}
-              <button
-                onClick={() => {
-                  setModoPrincipal('admin');
-                  setMenuAbierto(false);
-                }}
-                style={{
-                  width: '100%',
-                  padding: '10px 12px',
-                  borderRadius: '8px',
-                  background: modoPrincipal === 'admin' ? 'rgba(245, 158, 11, 0.25)' : 'transparent',
-                  color: modoPrincipal === 'admin' ? '#fbbf24' : '#ffffff',
-                  border: modoPrincipal === 'admin' ? '1px solid #f59e0b' : 'none',
-                  fontWeight: 700,
-                  fontSize: '0.85rem',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  cursor: 'pointer',
-                  textAlign: 'left',
-                  marginBottom: '4px'
-                }}
-              >
-                <Settings size={16} color="#fbbf24" /> ⚙️ Modo Admin y Editor
-              </button>
-
-              <div style={{ padding: '6px 10px', borderTop: '1px solid rgba(255,255,255,0.08)', marginTop: '6px', paddingTop: '8px' }}>
+              <div style={{ padding: '6px 10px', marginTop: '4px' }}>
                 <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', display: 'block', marginBottom: '6px' }}>Servidor de IA Local (Ollama):</span>
                 <button
                   onClick={() => setModoIA(!modoIA)}
