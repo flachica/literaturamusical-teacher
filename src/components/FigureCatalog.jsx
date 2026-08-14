@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { FIGURAS_LITERARIAS } from '../data/mockData';
 import { BookOpen, Sparkles, Star } from 'lucide-react';
 
-export default function FigureCatalog() {
-  const [figuraSeleccionada, setFiguraSeleccionada] = useState(FIGURAS_LITERARIAS[0]);
+export default function FigureCatalog({ figuras }) {
+  const listaFiguras = figuras || FIGURAS_LITERARIAS;
+  const [figuraSeleccionada, setFiguraSeleccionada] = useState(listaFiguras[0]);
 
   return (
     <div className="glass-panel" style={{ padding: '24px', marginBottom: '24px' }}>
@@ -22,7 +23,7 @@ export default function FigureCatalog() {
 
       {/* Grid of Cards */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '16px' }}>
-        {FIGURAS_LITERARIAS.map((figura) => {
+        {listaFiguras.map((figura) => {
           const isSelected = figuraSeleccionada.id === figura.id;
           return (
             <div
