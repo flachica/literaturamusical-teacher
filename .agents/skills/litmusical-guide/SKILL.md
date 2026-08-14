@@ -39,8 +39,9 @@ Cuando una IA inicie una nueva sesión o iteración en este repositorio, DEBE ej
 
 - **Enfoque por Subversiones e Iteraciones Granulares (Babysteps y Propuesta Previa Obligatoria):** 
   * Priorizar pasos de bebé extremadamente pequeños e incrementales (*babysteps*).
-  * **NUNCA** modificar código de la aplicación directamente sin antes elaborar una propuesta clara del plan de diseño/código en tu respuesta para que el usuario la revise, refine y apruebe.
-  * El flujo interactivo debe alternar dinámicamente entre el Modo Plan (presentar propuesta y refinar con el usuario) y el Modo Edición (ejecutar la tarea granular aprobada).
+  * **NUNCA** modificar código de la aplicación directamente sin antes presentar una propuesta del plan en tu respuesta para que el usuario la revise, refine y apruebe.
+  * Las propuestas presentadas deben ser **estrictamente de carácter funcional y descriptivo**. **NO incluir bloques de código fuente, fragmentos o diffs técnicos** en las propuestas para no entorpecer ni abrumar la lectura del usuario.
+  * El flujo interactivo debe alternar dinámicamente entre el Modo Plan (presentar propuesta funcional y refinar con el usuario) y el Modo Edición (ejecutar la tarea granular aprobada).
 
 
 ### 3. Protocolo de CIERRE DE SESIÓN Y MEMORIA LOCAL
