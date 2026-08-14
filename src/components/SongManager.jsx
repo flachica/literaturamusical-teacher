@@ -11,7 +11,7 @@ const obtenerYoutubeId = (url) => {
   return (match && match[2].length === 11) ? match[2] : '';
 };
 
-export default function SongManager({ canciones, onGuardarCanciones, onRestaurarDefault }) {
+export default function SongManager({ canciones, audioStatus, onGuardarCanciones, onRestaurarDefault }) {
   const [mostrarForm, setMostrarForm] = useState(false);
   const [mensajeExito, setMensajeExito] = useState('');
   const [errorImport, setErrorImport] = useState('');
@@ -46,36 +46,8 @@ export default function SongManager({ canciones, onGuardarCanciones, onRestaurar
   const [cargandoAudioYouTube, setCargandoAudioYouTube] = useState(false);
 
   // Estados para comprobar disponibilidad de audios y reparación
-  const [audioStatus, setAudioStatus] = useState({});
   const [reparandoGlobal, setReparandoGlobal] = useState(false);
   const [reparandoSongId, setReparandoSongId] = useState(null);
-
-  // Función para comprobar la existencia física de los audios locales en el servidor
-  const comprobarDisponibilidadAudios = async () => {
-    const statuses = {};
-    for (const c of canciones) {
-      if (c.audioPreviewUrl && c.audioPreviewUrl.startsWith('/audio/')) {
-        try {
-          const res = await fetch('/api/check-audio', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ filename: c.audioPreviewUrl })
-          });
-          const data = await res.json();
-          statuses[c.id] = data.exists ? 'disponible' : 'perdido';
-        } catch (err) {
-          statuses[c.id] = 'error';
-        }
-      } else {
-        statuses[c.id] = 'red'; // URL externa de red
-      }
-    }
-    setAudioStatus(statuses);
-  };
-
-  useEffect(() => {
-    comprobarDisponibilidadAudios();
-  }, [canciones]);
 
   const handleRecuperarAudio = async (song) => {
     let queryUrl = song.youtubeUrl;
@@ -83,7 +55,8 @@ export default function SongManager({ canciones, onGuardarCanciones, onRestaurar
       queryUrl = `https://www.youtube.com/watch?v=${song.youtubeId}`;
     }
     if (!queryUrl) {
-      queryUrl = `${song.artistaNombre} ${song.titulo}`;
+      alert(`⚠️ No se puede recuperar el audio de «${song.titulo}» porque no tiene configurado un enlace o ID de YouTube.`);
+      return;
     }
 
     setReparandoSongId(song.id);
@@ -138,7 +111,8 @@ export default function SongManager({ canciones, onGuardarCanciones, onRestaurar
         queryUrl = `https://www.youtube.com/watch?v=${song.youtubeId}`;
       }
       if (!queryUrl) {
-        queryUrl = `${song.artistaNombre} ${song.titulo}`;
+        console.warn(`Omitiendo «${song.titulo}» en reparación automática por falta de enlace de YouTube.`);
+        continue;
       }
 
       setReparandoSongId(song.id);
@@ -370,7 +344,7 @@ export default function SongManager({ canciones, onGuardarCanciones, onRestaurar
       album: nuevoAlbum.trim() || 'Sencillo Local',
       temaId: temaObj.id,
       temaNombre: temaObj.nombre,
-      audioPreviewUrl: nuevoAudioUrl.trim() || 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
+      audioPreviewUrl: nuevoAudioUrl.trim() || '',
       youtubeUrl: youtubeUrlOriginal,
       youtubeId: obtenerYoutubeId(youtubeUrlOriginal),
       resumen_didactico: nuevoResumen.trim() || 'Canción añadida desde el panel de padres para karaoke didáctico.',
