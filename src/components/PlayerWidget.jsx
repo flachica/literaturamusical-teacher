@@ -18,10 +18,13 @@ export default function PlayerWidget({
   onSeleccionarVersoPorTiempo,
   paso,
   mostrarLetraCompleta,
-  setMostrarLetraCompleta
+  setMostrarLetraCompleta,
+  audioStatus
 }) {
-  // Active audio source
-  const audioSrc = localAudioSrc || cancion?.audioPreviewUrl || '';
+  // Determine if physical audio file is available and not a mockup fallback
+  const estadoAudio = audioStatus?.[cancion?.id] || 'vacio';
+  const tieneAudio = cancion?.audioPreviewUrl && estadoAudio !== 'perdido' && estadoAudio !== 'vacio';
+  const audioSrc = tieneAudio ? (localAudioSrc || cancion.audioPreviewUrl) : '';
 
   // Generate 42 visual waveform bars
   const bars = Array.from({ length: 42 }, (_, i) => {
@@ -137,7 +140,7 @@ export default function PlayerWidget({
           </div>
         </div>
 
-        {/* Top Center Prominent Timer Counter */}
+        {/* Top Center Prominent Timer Counter / Modo Lectura */}
         <div style={{
           display: 'flex',
           alignItems: 'center',
@@ -145,16 +148,18 @@ export default function PlayerWidget({
           background: 'rgba(15, 23, 42, 0.95)',
           padding: '6px 16px',
           borderRadius: '9999px',
-          border: '1.5px solid rgba(251, 191, 36, 0.4)',
-          boxShadow: '0 0 14px rgba(251, 191, 36, 0.25)'
+          border: tieneAudio ? '1.5px solid rgba(251, 191, 36, 0.4)' : '1.5px solid rgba(148, 163, 184, 0.3)',
+          boxShadow: tieneAudio ? '0 0 14px rgba(251, 191, 36, 0.25)' : 'none'
         }}>
-          <span style={{ fontSize: '0.85rem' }}>⏱️</span>
-          <span style={{ fontWeight: 900, fontSize: '1.18rem', color: '#fbbf24', fontFamily: 'monospace', letterSpacing: '0.05em' }}>
-            {formatearTiempo(currentTime)}
+          <span style={{ fontSize: '0.85rem' }}>{tieneAudio ? '⏱️' : '📖'}</span>
+          <span style={{ fontWeight: 900, fontSize: '1.05rem', color: tieneAudio ? '#fbbf24' : '#cbd5e1' }}>
+            {tieneAudio ? formatearTiempo(currentTime) : 'Modo Lectura'}
           </span>
-          <span style={{ fontSize: '0.88rem', color: '#94a3b8', fontWeight: 700 }}>
-            / {formatearTiempo(duration || 180)}
-          </span>
+          {tieneAudio && (
+            <span style={{ fontSize: '0.88rem', color: '#94a3b8', fontWeight: 700 }}>
+              / {formatearTiempo(duration || 180)}
+            </span>
+          )}
         </div>
 
         {/* Unified Step Indicator Dots (1 2 3 4) + Lyrics Toggle */}
@@ -216,34 +221,41 @@ export default function PlayerWidget({
         
         {/* Single Play / Pause Button */}
         <button
-          onClick={() => setIsPlaying(!isPlaying)}
+          onClick={() => {
+            if (tieneAudio) {
+              setIsPlaying(!isPlaying);
+            }
+          }}
+          disabled={!tieneAudio}
           style={{
             width: '44px',
             height: '44px',
             borderRadius: '50%',
-            background: isPlaying ? 'linear-gradient(135deg, #ec4899, #ef4444)' : 'linear-gradient(135deg, #8b5cf6, #ec4899)',
-            color: '#ffffff',
+            background: !tieneAudio 
+              ? 'rgba(71, 85, 105, 0.3)' 
+              : isPlaying ? 'linear-gradient(135deg, #ec4899, #ef4444)' : 'linear-gradient(135deg, #8b5cf6, #ec4899)',
+            color: !tieneAudio ? '#64748b' : '#ffffff',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            boxShadow: isPlaying ? '0 0 16px rgba(236, 72, 153, 0.7)' : '0 0 12px rgba(139, 92, 246, 0.5)',
+            boxShadow: !tieneAudio ? 'none' : isPlaying ? '0 0 16px rgba(236, 72, 153, 0.7)' : '0 0 12px rgba(139, 92, 246, 0.5)',
             border: 'none',
-            cursor: 'pointer',
+            cursor: tieneAudio ? 'pointer' : 'not-allowed',
             flexShrink: 0
           }}
-          title={isPlaying ? 'Pausar karaoke' : 'Reproducir y sincronizar versos'}
+          title={tieneAudio ? (isPlaying ? 'Pausar karaoke' : 'Reproducir y sincronizar versos') : 'Audio no configurado en esta canción'}
         >
-          {isPlaying ? <Pause size={22} /> : <Play size={22} style={{ marginLeft: '3px' }} />}
+          {isPlaying && tieneAudio ? <Pause size={22} /> : <Play size={22} style={{ marginLeft: '3px' }} />}
         </button>
 
         {/* Integrated Waveform Visualizer & Interactive Slider */}
         <div style={{ flex: 1, position: 'relative', height: '44px', background: 'rgba(15, 23, 42, 0.8)', borderRadius: '10px', padding: '6px 10px', display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: '2px', overflow: 'hidden', border: '1px solid rgba(255, 255, 255, 0.08)' }}>
           {bars.map((bar, i) => {
             const barPos = (i / bars.length) * 100;
-            const isPassed = barPos <= posicion;
+            const isPassed = tieneAudio && (barPos <= posicion);
 
-            let barColor = 'rgba(255, 255, 255, 0.15)';
-            if (isPassed) {
+            let barColor = 'rgba(255, 255, 255, 0.12)';
+            if (tieneAudio && isPassed) {
               barColor = bar.isFigureMarker ? '#f59e0b' : '#c084fc';
             }
 
@@ -258,7 +270,7 @@ export default function PlayerWidget({
                   position: 'relative'
                 }}
               >
-                {bar.isFigureMarker && (
+                {tieneAudio && bar.isFigureMarker && (
                   <span style={{ position: 'absolute', top: '-14px', left: '50%', transform: 'translateX(-50%)', fontSize: '0.6rem' }}>
                     ✨
                   </span>
@@ -267,34 +279,57 @@ export default function PlayerWidget({
             );
           })}
 
-          {/* Draggable Vertical Cursor Line */}
-          <div
-            style={{
+          {!tieneAudio && (
+            <div style={{
               position: 'absolute',
               top: 0,
+              left: 0,
+              right: 0,
               bottom: 0,
-              left: `${posicion}%`,
-              width: '3px',
-              background: '#ec4899',
-              boxShadow: '0 0 10px #ec4899',
-              pointerEvents: 'none',
-              zIndex: 10
-            }}
-          >
+              background: 'rgba(15, 23, 42, 0.4)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: '#94a3b8',
+              fontSize: '0.8rem',
+              fontWeight: 700,
+              fontStyle: 'italic',
+              pointerEvents: 'none'
+            }}>
+              Modo lectura interactiva: lee a tu propio ritmo
+            </div>
+          )}
+
+          {/* Draggable Vertical Cursor Line */}
+          {tieneAudio && (
             <div
               style={{
                 position: 'absolute',
-                top: '50%',
-                left: '50%',
-                transform: 'translate(-50%, -50%)',
-                width: '12px',
-                height: '12px',
-                borderRadius: '50%',
-                background: '#ffffff',
-                border: '2px solid #ec4899'
+                top: 0,
+                bottom: 0,
+                left: `${posicion}%`,
+                width: '3px',
+                background: '#ec4899',
+                boxShadow: '0 0 10px #ec4899',
+                pointerEvents: 'none',
+                zIndex: 10
               }}
-            />
-          </div>
+            >
+              <div
+                style={{
+                  position: 'absolute',
+                  top: '50%',
+                  left: '50%',
+                  transform: 'translate(-50%, -50%)',
+                  width: '12px',
+                  height: '12px',
+                  borderRadius: '50%',
+                  background: '#ffffff',
+                  border: '2px solid #ec4899'
+                }}
+              />
+            </div>
+          )}
 
           {/* Transparent Range Input Overlay */}
           <input
@@ -302,18 +337,19 @@ export default function PlayerWidget({
             min="0"
             max="100"
             step="0.1"
-            value={posicion}
-            onChange={handleSliderChange}
-            onPointerDown={handlePointerDown}
-            onPointerUp={handlePointerUp}
-            onTouchEnd={handlePointerUp}
+            value={tieneAudio ? posicion : 0}
+            onChange={tieneAudio ? handleSliderChange : undefined}
+            onPointerDown={tieneAudio ? handlePointerDown : undefined}
+            onPointerUp={tieneAudio ? handlePointerUp : undefined}
+            onTouchEnd={tieneAudio ? handlePointerUp : undefined}
+            disabled={!tieneAudio}
             style={{
               position: 'absolute',
               inset: 0,
               width: '100%',
               height: '100%',
               opacity: 0,
-              cursor: 'ew-resize',
+              cursor: tieneAudio ? 'ew-resize' : 'not-allowed',
               zIndex: 20
             }}
           />
