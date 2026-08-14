@@ -13,7 +13,7 @@ function jsonStoragePlugin() {
     name: 'json-storage-plugin',
     configureServer(server) {
       server.middlewares.use((req, res, next) => {
-        if (req.url.startsWith('/api/')) {
+        if (req.url.startsWith('/api/songs') || req.url.startsWith('/api/check-audio')) {
           res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0');
           res.setHeader('Pragma', 'no-cache');
           res.setHeader('Expires', '0');

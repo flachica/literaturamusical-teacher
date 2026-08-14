@@ -68,7 +68,7 @@ export default function useLocalCatalog(cancionActual, setCancionActual) {
       })
       .catch(err => console.warn('Aviso al cargar canciones de disco:', err));
 
-    fetch(`/api/figuras?t=${Date.now()}`)
+    fetch('/api/figuras')
       .then(res => res.json())
       .then(diskFigures => {
         if (Array.isArray(diskFigures) && diskFigures.length > 0) {
