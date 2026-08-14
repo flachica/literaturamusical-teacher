@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
 import { Plus, Trash2, Download, Upload, RotateCcw, Music, Sparkles, Check, AlertCircle, Bot, Edit3 } from 'lucide-react';
 import { FIGURAS_LITERARIAS, TEMAS_EMOCIONES } from '../data/mockData';
+import ConfirmModal from './ConfirmModal';
 
 export default function SongManager({ canciones, onGuardarCanciones, onRestaurarDefault }) {
   const [mostrarForm, setMostrarForm] = useState(false);
   const [mensajeExito, setMensajeExito] = useState('');
   const [errorImport, setErrorImport] = useState('');
   const [mostrarPromptLetraIA, setMostrarPromptLetraIA] = useState(false);
+
+  // Estados de modal de confirmación integrado
+  const [cancionAEliminar, setCancionAEliminar] = useState(null);
+  const [mostrarConfirmRestaurar, setMostrarConfirmRestaurar] = useState(false);
 
   // Estado para el formulario de nueva canción
   const [nuevoTitulo, setNuevoTitulo] = useState('');
@@ -25,6 +30,130 @@ export default function SongManager({ canciones, onGuardarCanciones, onRestaurar
   const [versoOpcionB, setVersoOpcionB] = useState(''); // Incorrecta
   const [versoExplicacion, setVersoExplicacion] = useState('');
 
+  // Estado para el asistente por pasos (Wizard de 3 Pasos)
+  const [pasoWizard, setPasoWizard] = useState(1);
+
+  // Descarga y conversión de audio de YouTube
+  const [cargandoAudioYouTube, setCargandoAudioYouTube] = useState(false);
+
+  const handleConvertirAudioYouTube = async (urlAProcesar) => {
+    let targetUrl = urlAProcesar || nuevoAudioUrl.trim();
+    if (!targetUrl) {
+      targetUrl = `${nuevoArtista.trim()} ${nuevoTitulo.trim()}`.trim();
+    }
+    if (!targetUrl) {
+      alert('Introduce el nombre del tema o una URL de YouTube.');
+      return;
+    }
+    setCargandoAudioYouTube(true);
+    try {
+      const res = await fetch('/api/download-audio', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url: targetUrl })
+      });
+      const data = await res.json();
+      if (data.success && data.audioPath) {
+        setNuevoAudioUrl(data.audioPath);
+        setArchivoMp3Nombre(`YouTube MP3 (${data.filename})`);
+        setMensajeExito(`¡Audio procesado! Se ha descargado y convertido a ${data.filename} para reproducir en LitMusical.`);
+      } else {
+        alert(data.error || 'No se pudo convertir el audio de YouTube.');
+      }
+    } catch (err) {
+      alert('Error de conexión con el servidor de conversión: ' + err.message);
+    } finally {
+      setCargandoAudioYouTube(false);
+    }
+  };
+
+  // Búsqueda automática en Karaoke API
+  const [cargandoAPI, setCargandoAPI] = useState(false);
+  const [versosObtenidosAPI, setVersosObtenidosAPI] = useState(null);
+
+  const handleBuscarLetraKaraokeAPI = async () => {
+    const queryText = `${nuevoArtista.trim()} ${nuevoTitulo.trim()}`.trim();
+    if (!queryText) {
+      alert('Escribe al menos el Título de la canción o el Artista para buscar.');
+      return;
+    }
+    setCargandoAPI(true);
+    try {
+      const res = await fetch(`https://lrclib.net/api/search?q=${encodeURIComponent(queryText)}`);
+      const data = await res.json();
+      if (Array.isArray(data) && data.length > 0) {
+        const match = data.find(d => d.syncedLyrics) || data[0];
+        
+        // Autorellenar automáticamente el título, artista y álbum si estaban vacíos
+        if (match.trackName && !nuevoTitulo.trim()) setNuevoTitulo(match.trackName);
+        if (match.artistName && !nuevoArtista.trim()) setNuevoArtista(match.artistName);
+        if (match.albumName && !nuevoAlbum.trim()) setNuevoAlbum(match.albumName);
+
+        const artistaFinal = match.artistName || nuevoArtista || 'Artista Desconocido';
+        const tituloFinal = match.trackName || nuevoTitulo || 'Canción';
+
+        if (match.syncedLyrics) {
+          const rawLines = match.syncedLyrics.split('\n').filter(Boolean).map(l => {
+            const m = l.match(/\[(\d+):(\d+\.\d+)\]\s*(.*)/);
+            if (!m) return null;
+            const totalSecs = Number((parseFloat(m[1]) * 60 + parseFloat(m[2])).toFixed(2));
+            return { text: m[3], time: totalSecs };
+          }).filter(Boolean);
+
+          const versos = rawLines.map((l, idx) => ({
+            linea: idx + 1,
+            estrofaNum: Math.floor(idx / 6) + 1,
+            texto: l.text,
+            tiempoInicio: l.time,
+            tiempoFin: rawLines[idx + 1] ? rawLines[idx + 1].time : l.time + 5,
+            palabrasDificiles: [],
+            preguntaComprension: `¿Qué transmite esta imagen poética de ${artistaFinal}?`,
+            opcionesComprension: [
+              { id: 'a', texto: 'Expresa emoción, libertad e imaginación con el lenguaje.', correcta: true },
+              { id: 'b', texto: 'Una descripción común sin valor poético.', correcta: false }
+            ],
+            figuraId: 'metafora',
+            figuraNombre: 'Metáfora',
+            explicacion: `Verso de ${artistaFinal} extraído de la Karaoke API.`,
+            pista: 'Reflexionar sobre el sentimiento de la letra.'
+          }));
+
+          setVersosObtenidosAPI(versos);
+          setPasoWizard(2); // Avanzar automáticamente al Paso 2 (Vincular Audio)
+          setMensajeExito(`¡Encontrada! «${tituloFinal}» de ${artistaFinal} (${versos.length} versos sincronizados). Avanzando al Paso 2...`);
+        } else if (match.plainLyrics) {
+          const plainLines = match.plainLyrics.split('\n').filter(l => l.trim().length > 0);
+          const versos = plainLines.map((text, idx) => ({
+            linea: idx + 1,
+            estrofaNum: Math.floor(idx / 6) + 1,
+            texto: text.trim(),
+            tiempoInicio: idx * 6,
+            tiempoFin: (idx + 1) * 6,
+            palabrasDificiles: [],
+            preguntaComprension: `¿Qué nos transmite esta parte de ${artistaFinal}?`,
+            opcionesComprension: [
+              { id: 'a', texto: 'Una historia contada con sentimiento.', correcta: true },
+              { id: 'b', texto: 'Sin significado especial.', correcta: false }
+            ],
+            figuraId: 'metafora',
+            figuraNombre: 'Metáfora',
+            explicacion: `Verso de ${artistaFinal}.`,
+            pista: 'Analiza la letra.'
+          }));
+          setVersosObtenidosAPI(versos);
+          setPasoWizard(2);
+          setMensajeExito(`¡Encontrada! «${tituloFinal}» de ${artistaFinal} (${versos.length} versos). Avanzando al Paso 2...`);
+        }
+      } else {
+        alert(`No se encontraron resultados en la Karaoke API para "${queryText}".`);
+      }
+    } catch (err) {
+      alert('Error al conectar con la Karaoke API: ' + err.message);
+    } finally {
+      setCargandoAPI(false);
+    }
+  };
+
   const handleMp3FileUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -41,8 +170,7 @@ export default function SongManager({ canciones, onGuardarCanciones, onRestaurar
       return;
     }
 
-    // Si no se introdujo el verso/letra, mostrar prompt interactivo
-    if (!versoTexto.trim()) {
+    if (!versoTexto.trim() && (!versosObtenidosAPI || versosObtenidosAPI.length === 0)) {
       setMostrarPromptLetraIA(true);
     } else {
       guardarCancionFinal(false);
@@ -53,37 +181,44 @@ export default function SongManager({ canciones, onGuardarCanciones, onRestaurar
     const temaObj = TEMAS_EMOCIONES.find(t => t.id === nuevoTemaId) || TEMAS_EMOCIONES[1];
     const figuraObj = FIGURAS_LITERARIAS.find(f => f.id === versoFiguraId) || FIGURAS_LITERARIAS[0];
 
-    const versosConstruidos = solicitarIA ? [
-      {
-        linea: 1,
-        texto: `[Letra pendiente de renderizar por IA para ${nuevoTitulo}]`,
-        palabrasDificiles: [],
-        preguntaComprension: `¿Qué transmite esta canción de ${nuevoArtista}?`,
-        opcionesComprension: [
-          { id: 'a', texto: 'Una historia poética llena de imaginación y emoción.', correcta: true },
-          { id: 'b', texto: 'Una descripción común sin imágenes literarias.', correcta: false }
-        ],
-        figuraId: figuraObj.id,
-        figuraNombre: figuraObj.nombre,
-        explicacion: 'Letra pendiente de análisis detallado por el servidor de IA local.',
-        pista: 'Pendiente de renderizado inteligente.'
-      }
-    ] : [
-      {
-        linea: 1,
-        texto: versoTexto.trim(),
-        palabrasDificiles: [],
-        preguntaComprension: versoPregunta.trim() || `¿Qué nos transmite este verso de ${nuevoArtista}?`,
-        opcionesComprension: [
-          { id: 'a', texto: versoOpcionA.trim() || 'Transmitir una emoción profunda con palabras poéticas.', correcta: true },
-          { id: 'b', texto: versoOpcionB.trim() || 'Un significado literal y sin ninguna imagen poética.', correcta: false }
-        ],
-        figuraId: figuraObj.id,
-        figuraNombre: figuraObj.nombre,
-        explicacion: versoExplicacion.trim() || `Este verso utiliza una ${figuraObj.nombre} para enriquecer el lenguaje.`,
-        pista: `Fíjate en cómo ${nuevoArtista} usa la expresión en el verso.`
-      }
-    ];
+    let versosConstruidos = [];
+    if (versosObtenidosAPI && versosObtenidosAPI.length > 0) {
+      versosConstruidos = versosObtenidosAPI;
+    } else if (solicitarIA) {
+      versosConstruidos = [
+        {
+          linea: 1,
+          texto: `[Letra pendiente de renderizar por IA para ${nuevoTitulo}]`,
+          palabrasDificiles: [],
+          preguntaComprension: `¿Qué transmite esta canción de ${nuevoArtista}?`,
+          opcionesComprension: [
+            { id: 'a', texto: 'Una historia poética llena de imaginación y emoción.', correcta: true },
+            { id: 'b', texto: 'Una descripción común sin imágenes literarias.', correcta: false }
+          ],
+          figuraId: figuraObj.id,
+          figuraNombre: figuraObj.nombre,
+          explicacion: 'Letra pendiente de análisis detallado por el servidor de IA local.',
+          pista: 'Pendiente de renderizado inteligente.'
+        }
+      ];
+    } else {
+      versosConstruidos = [
+        {
+          linea: 1,
+          texto: versoTexto.trim(),
+          palabrasDificiles: [],
+          preguntaComprension: versoPregunta.trim() || `¿Qué nos transmite este verso de ${nuevoArtista}?`,
+          opcionesComprension: [
+            { id: 'a', texto: versoOpcionA.trim() || 'Transmitir una emoción profunda con palabras poéticas.', correcta: true },
+            { id: 'b', texto: versoOpcionB.trim() || 'Un significado literal y sin ninguna imagen poética.', correcta: false }
+          ],
+          figuraId: figuraObj.id,
+          figuraNombre: figuraObj.nombre,
+          explicacion: versoExplicacion.trim() || `Este verso utiliza una ${figuraObj.nombre} para enriquecer el lenguaje.`,
+          pista: `Fíjate en cómo ${nuevoArtista} usa la expresión en el verso.`
+        }
+      ];
+    }
 
     const nuevaCancion = {
       id: `custom-${Date.now()}`,
@@ -114,25 +249,32 @@ export default function SongManager({ canciones, onGuardarCanciones, onRestaurar
     setVersoOpcionA('');
     setVersoOpcionB('');
     setVersoExplicacion('');
+    setVersosObtenidosAPI(null);
     setMostrarForm(false);
     setMostrarPromptLetraIA(false);
 
     setMensajeExito(
-      solicitarIA
-        ? '¡Canción guardada con éxito! Ha quedado registrada para que la IA (Ollama) renderice su letra en la próxima iteración.'
-        : '¡Nueva canción añadida correctamente al catálogo local con audio MP3 y letra!'
+      `¡«${nuevaCancion.titulo}» de ${nuevaCancion.artistaNombre} guardada y persistida en LocalStorage con ${nuevaCancion.versos.length} versos!`
     );
     setTimeout(() => setMensajeExito(''), 4000);
   };
 
-  const handleEliminarCancion = (id) => {
+  const handleSolicitarEliminar = (cancion) => {
     if (canciones.length <= 1) {
-      alert('Debe quedar al menos 1 canción en el catálogo.');
+      setErrorImport('Debe quedar al menos 1 canción en el catálogo.');
+      setTimeout(() => setErrorImport(''), 3000);
       return;
     }
-    if (window.confirm('¿Seguro que quieres eliminar esta canción del catálogo?')) {
-      const nuevoCat = canciones.filter(c => c.id !== id);
+    setCancionAEliminar(cancion);
+  };
+
+  const ejecutarEliminacionCancion = () => {
+    if (cancionAEliminar) {
+      const nuevoCat = canciones.filter(c => c.id !== cancionAEliminar.id);
       onGuardarCanciones(nuevoCat);
+      setMensajeExito(`Canción «${cancionAEliminar.titulo}» eliminada del catálogo.`);
+      setTimeout(() => setMensajeExito(''), 3000);
+      setCancionAEliminar(null);
     }
   };
 
@@ -236,11 +378,7 @@ export default function SongManager({ canciones, onGuardarCanciones, onRestaurar
           </label>
 
           <button
-            onClick={() => {
-              if (window.confirm('¿Deseas restaurar el catálogo predeterminado original?')) {
-                onRestaurarDefault();
-              }
-            }}
+            onClick={() => setMostrarConfirmRestaurar(true)}
             style={{
               padding: '8px 12px',
               borderRadius: '10px',
@@ -280,133 +418,316 @@ export default function SongManager({ canciones, onGuardarCanciones, onRestaurar
             <Sparkles size={16} /> Alta de Canción Karaoke (Audio MP3 + Letras)
           </h4>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '12px', marginBottom: '14px' }}>
-            <div>
-              <label style={{ fontSize: '0.8rem', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>Título de la Canción *</label>
-              <input type="text" required placeholder="Ej: El Río del Tiempo" value={nuevoTitulo} onChange={e => setNuevoTitulo(e.target.value)} style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', background: '#0f172a', color: '#fff', border: '1px solid #334155' }} />
-            </div>
-
-            <div>
-              <label style={{ fontSize: '0.8rem', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>Artista / Grupo *</label>
-              <input type="text" required placeholder="Ej: Banda Educativa" value={nuevoArtista} onChange={e => setNuevoArtista(e.target.value)} style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', background: '#0f172a', color: '#fff', border: '1px solid #334155' }} />
-            </div>
-
-            <div>
-              <label style={{ fontSize: '0.8rem', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>Álbum / Año</label>
-              <input type="text" placeholder="Ej: Detectives Poéticos (2024)" value={nuevoAlbum} onChange={e => setNuevoAlbum(e.target.value)} style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', background: '#0f172a', color: '#fff', border: '1px solid #334155' }} />
-            </div>
-
-            <div>
-              <label style={{ fontSize: '0.8rem', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>Tema o Emoción</label>
-              <select value={nuevoTemaId} onChange={e => setNuevoTemaId(e.target.value)} style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', background: '#0f172a', color: '#fff', border: '1px solid #334155' }}>
-                {TEMAS_EMOCIONES.filter(t => t.id !== 'todos').map(t => (
-                  <option key={t.id} value={t.id}>{t.icono} {t.nombre}</option>
-                ))}
-              </select>
-            </div>
+          {/* Step Progress Pills Header */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
+            {[
+              { step: 1, title: '1. Buscar Letra' },
+              { step: 2, title: '2. Enlazar Audio' },
+              { step: 3, title: '3. Emoción & Guardar' }
+            ].map(s => (
+              <div
+                key={s.step}
+                onClick={() => {
+                  if (s.step === 1 || (s.step === 2 && versosObtenidosAPI) || (s.step === 3 && (nuevoAudioUrl || archivoMp3Nombre))) {
+                    setPasoWizard(s.step);
+                  }
+                }}
+                style={{
+                  flex: 1,
+                  padding: '6px 10px',
+                  borderRadius: '8px',
+                  background: pasoWizard === s.step ? 'var(--primary)' : 'rgba(255, 255, 255, 0.06)',
+                  color: pasoWizard === s.step ? '#ffffff' : 'var(--text-muted)',
+                  fontSize: '0.78rem',
+                  fontWeight: 800,
+                  textAlign: 'center',
+                  cursor: 'pointer',
+                  border: pasoWizard === s.step ? '1px solid #c084fc' : '1px solid transparent'
+                }}
+              >
+                {s.title}
+              </div>
+            ))}
           </div>
 
-          <div style={{ marginBottom: '14px' }}>
-            <label style={{ fontSize: '0.8rem', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>Resumen Didáctico (¿De qué trata la historia?)</label>
-            <input type="text" placeholder="Ej: Canción sobre el paso del tiempo y las emociones." value={nuevoResumen} onChange={e => setNuevoResumen(e.target.value)} style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', background: '#0f172a', color: '#fff', border: '1px solid #334155' }} />
-          </div>
+          {/* PASO 1: Buscador Principal de Karaoke API */}
+          {pasoWizard === 1 && (
+            <div style={{ background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(236, 72, 153, 0.2))', padding: '16px', borderRadius: '12px', border: '1.5px solid #c084fc' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '10px', marginBottom: '12px' }}>
+                <div>
+                  <span style={{ fontSize: '0.95rem', fontWeight: 900, color: '#f472b6', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <Sparkles size={18} /> Paso 1: Buscar Letra (Karaoke API)
+                  </span>
+                  <span style={{ fontSize: '0.78rem', color: '#cbd5e1' }}>
+                    Escribe el título o artista para descargar los versos con marcas LRC oficiales.
+                  </span>
+                </div>
+                <button
+                  type="button"
+                  onClick={handleBuscarLetraKaraokeAPI}
+                  disabled={cargandoAPI}
+                  style={{
+                    padding: '9px 18px',
+                    borderRadius: '10px',
+                    background: cargandoAPI ? '#475569' : 'linear-gradient(135deg, #ec4899, #8b5cf6)',
+                    color: '#ffffff',
+                    fontWeight: 900,
+                    fontSize: '0.85rem',
+                    border: 'none',
+                    cursor: cargandoAPI ? 'wait' : 'pointer',
+                    boxShadow: '0 0 12px rgba(236, 72, 153, 0.4)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px'
+                  }}
+                >
+                  {cargandoAPI ? '⏳ Buscando...' : '🔍 Importar Letra de Karaoke API'}
+                </button>
+              </div>
 
-          {/* MP3 Audio File or URL Section */}
-          <div style={{ background: 'rgba(30, 41, 59, 0.4)', padding: '14px', borderRadius: '10px', border: '1px solid rgba(56, 189, 248, 0.2)', marginBottom: '16px' }}>
-            <label style={{ fontSize: '0.82rem', color: '#38bdf8', fontWeight: 800, display: 'block', marginBottom: '8px' }}>
-              🎵 Archivo de Audio MP3 de la Canción
-            </label>
-            
-            <div style={{ display: 'flex', gap: '12px', alignItems: 'center', flexWrap: 'wrap' }}>
-              <label style={{
-                padding: '8px 16px',
-                borderRadius: '8px',
-                background: 'linear-gradient(135deg, #0284c7, #38bdf8)',
-                color: '#ffffff',
-                fontWeight: 800,
-                fontSize: '0.85rem',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '6px',
-                cursor: 'pointer'
-              }}>
-                <Upload size={16} /> Seleccionar Archivo MP3 desde mi PC
-                <input type="file" accept="audio/*" onChange={handleMp3FileUpload} style={{ display: 'none' }} />
-              </label>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '12px' }}>
+                <div>
+                  <label style={{ fontSize: '0.8rem', color: '#f8fafc', fontWeight: 700, display: 'block', marginBottom: '4px' }}>Título de la Canción *</label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="Ej: Soldadito Marinero"
+                    value={nuevoTitulo}
+                    onChange={e => setNuevoTitulo(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault();
+                        handleBuscarLetraKaraokeAPI();
+                      }
+                    }}
+                    style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', background: '#0f172a', color: '#fff', border: '1px solid #334155' }}
+                  />
+                </div>
 
-              {archivoMp3Nombre && (
-                <span style={{ fontSize: '0.82rem', color: '#34d399', fontWeight: 700 }}>
-                  ✓ {archivoMp3Nombre} (Listo)
-                </span>
+                <div>
+                  <label style={{ fontSize: '0.8rem', color: '#f8fafc', fontWeight: 700, display: 'block', marginBottom: '4px' }}>Artista / Grupo (Opcional)</label>
+                  <input
+                    type="text"
+                    placeholder="Ej: Fito & Fitipaldis"
+                    value={nuevoArtista}
+                    onChange={e => setNuevoArtista(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault();
+                        handleBuscarLetraKaraokeAPI();
+                      }
+                    }}
+                    style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', background: '#0f172a', color: '#fff', border: '1px solid #334155' }}
+                  />
+                </div>
+              </div>
+
+              {versosObtenidosAPI && (
+                <div style={{ marginTop: '12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span style={{ fontSize: '0.82rem', color: '#34d399', fontWeight: 800 }}>
+                    ✓ Letra de «{nuevoTitulo}» ({versosObtenidosAPI.length} versos)
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => setPasoWizard(2)}
+                    style={{ padding: '6px 14px', borderRadius: '8px', background: '#10b981', color: '#fff', border: 'none', fontWeight: 800, cursor: 'pointer', fontSize: '0.82rem' }}
+                  >
+                    Avanzar al Paso 2 ➔
+                  </button>
+                </div>
               )}
             </div>
+          )}
 
-            <div style={{ marginTop: '10px' }}>
-              <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>O introduce una URL web de audio directa (.mp3):</span>
-              <input type="url" placeholder="https://..." value={nuevoAudioUrl} onChange={e => setNuevoAudioUrl(e.target.value)} style={{ width: '100%', marginTop: '4px', padding: '6px 10px', borderRadius: '6px', background: '#0f172a', color: '#fff', border: '1px solid #334155', fontSize: '0.85rem' }} />
-            </div>
-          </div>
-
-          {/* Section for Verse & Question */}
-          <div style={{ background: 'rgba(30, 41, 59, 0.5)', padding: '14px', borderRadius: '10px', border: '1px dashed rgba(255, 255, 255, 0.1)', marginBottom: '16px' }}>
-            <h5 style={{ fontSize: '0.9rem', fontWeight: 700, color: '#c084fc', marginBottom: '10px' }}>
-              📝 Verso y Reto Didáctico Inicial (Opcional - Si se omite, se pedirá confirmación)
-            </h5>
-            
-            <div style={{ marginBottom: '10px' }}>
-              <label style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>Texto del Verso Principal</label>
-              <input type="text" placeholder="Ej: El tiempo es un río suave que avanza sin descansar..." value={versoTexto} onChange={e => setVersoTexto(e.target.value)} style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', background: '#0f172a', color: '#fff', border: '1px solid #334155' }} />
-            </div>
-
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '10px', marginBottom: '10px' }}>
-              <div>
-                <label style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>Figura Literaria Principal</label>
-                <select value={versoFiguraId} onChange={e => setVersoFiguraId(e.target.value)} style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', background: '#0f172a', color: '#fff', border: '1px solid #334155' }}>
-                  {FIGURAS_LITERARIAS.map(f => (
-                    <option key={f.id} value={f.id}>{f.icono} {f.nombre}</option>
-                  ))}
-                </select>
+          {/* PASO 2: Vincular Música / Audio (YouTube o MP3) */}
+          {pasoWizard === 2 && (
+            <div style={{ background: 'rgba(30, 41, 59, 0.7)', padding: '16px', borderRadius: '12px', border: '1.5px solid #38bdf8' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
+                <span style={{ fontSize: '0.82rem', color: '#34d399', fontWeight: 700 }}>
+                  ✓ Paso 1 OK: Letra de «{nuevoTitulo}» por {nuevoArtista} ({versosObtenidosAPI?.length || 1} versos)
+                </span>
+                <button type="button" onClick={() => setPasoWizard(1)} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', fontSize: '0.75rem', cursor: 'pointer', textDecoration: 'underline' }}>
+                  ✏️ Cambiar canción
+                </button>
               </div>
 
-              <div>
-                <label style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>Pregunta de Comprensión del Verso</label>
-                <input type="text" placeholder="Ej: ¿Por qué se dice que el tiempo es un río suave?" value={versoPregunta} onChange={e => setVersoPregunta(e.target.value)} style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', background: '#0f172a', color: '#fff', border: '1px solid #334155' }} />
+              <span style={{ fontSize: '0.95rem', color: '#38bdf8', fontWeight: 900, display: 'block', marginBottom: '12px' }}>
+                🎵 Paso 2: Vincular la Música o Vídeo
+              </span>
+
+              <div style={{ display: 'flex', gap: '12px', alignItems: 'center', flexWrap: 'wrap', marginBottom: '14px' }}>
+                <a
+                  href={`https://www.youtube.com/results?search_query=${encodeURIComponent((nuevoArtista + ' ' + nuevoTitulo).trim())}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    padding: '9px 16px',
+                    borderRadius: '8px',
+                    background: 'linear-gradient(135deg, #ef4444, #dc2626)',
+                    color: '#ffffff',
+                    fontWeight: 800,
+                    fontSize: '0.85rem',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    textDecoration: 'none',
+                    boxShadow: '0 0 10px rgba(239, 68, 68, 0.4)'
+                  }}
+                >
+                  ▶️ Buscar audio en YouTube de «{(nuevoArtista + ' ' + nuevoTitulo).trim()}»
+                </a>
+
+                <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>o</span>
+
+                <label style={{
+                  padding: '8px 16px',
+                  borderRadius: '8px',
+                  background: 'rgba(56, 189, 248, 0.15)',
+                  color: '#38bdf8',
+                  border: '1px solid rgba(56, 189, 248, 0.4)',
+                  fontWeight: 800,
+                  fontSize: '0.85rem',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  cursor: 'pointer'
+                }}>
+                  <Upload size={16} /> Subir MP3 local
+                  <input type="file" accept="audio/*" onChange={handleMp3FileUpload} style={{ display: 'none' }} />
+                </label>
+
+                {archivoMp3Nombre && (
+                  <span style={{ fontSize: '0.82rem', color: '#34d399', fontWeight: 700 }}>
+                    ✓ {archivoMp3Nombre}
+                  </span>
+                )}
+              </div>
+
+              <div style={{ marginBottom: '14px' }}>
+                <label style={{ fontSize: '0.78rem', color: '#38bdf8', fontWeight: 700, display: 'block', marginBottom: '4px' }}>
+                  Pega el enlace de YouTube o URL y pulsa ENTER o el botón para extraer el audio a MP3:
+                </label>
+                <div style={{ display: 'flex', gap: '8px' }}>
+                  <input
+                    type="url"
+                    placeholder="Ej: https://www.youtube.com/watch?v=..."
+                    value={nuevoAudioUrl}
+                    onChange={e => setNuevoAudioUrl(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault();
+                        handleConvertirAudioYouTube();
+                      }
+                    }}
+                    style={{ flex: 1, padding: '8px 12px', borderRadius: '8px', background: '#0f172a', color: '#fff', border: '1px solid #334155', fontSize: '0.85rem' }}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => handleConvertirAudioYouTube()}
+                    disabled={cargandoAudioYouTube || !nuevoAudioUrl.trim()}
+                    style={{
+                      padding: '8px 16px',
+                      borderRadius: '8px',
+                      background: cargandoAudioYouTube ? '#475569' : 'linear-gradient(135deg, #0284c7, #38bdf8)',
+                      color: '#ffffff',
+                      fontWeight: 800,
+                      fontSize: '0.82rem',
+                      border: 'none',
+                      cursor: (cargandoAudioYouTube || !nuevoAudioUrl.trim()) ? 'not-allowed' : 'pointer',
+                      whiteSpace: 'nowrap'
+                    }}
+                  >
+                    {cargandoAudioYouTube ? '⏳ Procesando...' : '⚡ Convertir a MP3 Local'}
+                  </button>
+                </div>
+              </div>
+
+              {/* Indicador visual de trabajo en progreso para el padre/madre */}
+              {cargandoAudioYouTube && (
+                <div style={{
+                  background: 'rgba(2, 132, 199, 0.25)',
+                  padding: '12px 16px',
+                  borderRadius: '10px',
+                  border: '1px solid #38bdf8',
+                  color: '#38bdf8',
+                  fontSize: '0.85rem',
+                  marginBottom: '14px',
+                  fontWeight: 800,
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '10px',
+                  boxShadow: '0 0 16px rgba(56, 189, 248, 0.3)'
+                }}>
+                  <div className="spinner" style={{ width: '20px', height: '20px', border: '3px solid rgba(56, 189, 248, 0.3)', borderTop: '3px solid #38bdf8', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
+                  <span>⏳ Descargando y convirtiendo el audio del vídeo de YouTube a MP3... Por favor, espera unos segundos.</span>
+                </div>
+              )}
+
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <button type="button" onClick={() => setPasoWizard(1)} style={{ padding: '6px 12px', background: 'transparent', border: '1px solid #475569', borderRadius: '6px', color: '#94a3b8', fontSize: '0.8rem', cursor: 'pointer' }}>
+                  ⬅️ Atrás
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setPasoWizard(3)}
+                  disabled={!nuevoAudioUrl && !archivoMp3Nombre}
+                  style={{ padding: '8px 16px', borderRadius: '8px', background: (!nuevoAudioUrl && !archivoMp3Nombre) ? '#475569' : '#0284c7', color: '#fff', border: 'none', fontWeight: 800, cursor: 'pointer', fontSize: '0.82rem' }}
+                >
+                  Avanzar al Paso 3 ➔
+                </button>
               </div>
             </div>
+          )}
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '10px' }}>
-              <div>
-                <label style={{ fontSize: '0.75rem', color: '#34d399', display: 'block', marginBottom: '4px' }}>Opción Correcta (Respuesta didáctica)</label>
-                <input type="text" placeholder="Ej: Dejarse fluir por las cosas que ocurren en la vida." value={versoOpcionA} onChange={e => setVersoOpcionA(e.target.value)} style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', background: '#0f172a', color: '#fff', border: '1px solid #10b981' }} />
+          {/* PASO 3: Emoción Didáctica & Guardado Final */}
+          {pasoWizard === 3 && (
+            <div style={{ background: 'rgba(15, 23, 42, 0.9)', padding: '16px', borderRadius: '12px', border: '1.5px solid #10b981' }}>
+              <span style={{ fontSize: '0.95rem', color: '#34d399', fontWeight: 900, display: 'block', marginBottom: '12px' }}>
+                ✨ Paso 3: Emoción & Guardado Final
+              </span>
+
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '12px', marginBottom: '16px' }}>
+                <div>
+                  <label style={{ fontSize: '0.8rem', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>Tema o Emoción Predominante</label>
+                  <select value={nuevoTemaId} onChange={e => setNuevoTemaId(e.target.value)} style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', background: '#0f172a', color: '#fff', border: '1px solid #334155' }}>
+                    {TEMAS_EMOCIONES.filter(t => t.id !== 'todos').map(t => (
+                      <option key={t.id} value={t.id}>{t.icono} {t.nombre}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label style={{ fontSize: '0.8rem', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>Resumen Didáctico (¿De qué trata?)</label>
+                  <input type="text" placeholder="Ej: Canción sobre las decisiones y el camino de la vida." value={nuevoResumen} onChange={e => setNuevoResumen(e.target.value)} style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', background: '#0f172a', color: '#fff', border: '1px solid #334155' }} />
+                </div>
               </div>
-              <div>
-                <label style={{ fontSize: '0.75rem', color: '#f87171', display: 'block', marginBottom: '4px' }}>Opción Incorrecta (Falsa distracción)</label>
-                <input type="text" placeholder="Ej: Nadar muy rápido en el mar con traje de baño." value={versoOpcionB} onChange={e => setVersoOpcionB(e.target.value)} style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', background: '#0f172a', color: '#fff', border: '1px solid #ef4444' }} />
+
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <button type="button" onClick={() => setPasoWizard(2)} style={{ padding: '6px 12px', background: 'transparent', border: '1px solid #475569', borderRadius: '6px', color: '#94a3b8', fontSize: '0.8rem', cursor: 'pointer' }}>
+                  ⬅️ Atrás
+                </button>
+                <button
+                  type="submit"
+                  style={{
+                    padding: '10px 24px',
+                    borderRadius: '10px',
+                    background: 'linear-gradient(135deg, #10b981, #059669)',
+                    color: '#ffffff',
+                    fontWeight: 900,
+                    fontSize: '0.9rem',
+                    border: 'none',
+                    cursor: 'pointer',
+                    boxShadow: '0 0 16px rgba(16, 185, 129, 0.4)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px'
+                  }}
+                >
+                  <Check size={18} /> ✨ Guardar Canción en Catálogo (Disco)
+                </button>
               </div>
             </div>
-
-            <div>
-              <label style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>Explicación adaptada a 9 años</label>
-              <input type="text" placeholder="Ej: Es una metáfora que compara la vida con la fuerza del agua marina." value={versoExplicacion} onChange={e => setVersoExplicacion(e.target.value)} style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', background: '#0f172a', color: '#fff', border: '1px solid #334155' }} />
-            </div>
-          </div>
-
-          <button
-            type="submit"
-            style={{
-              padding: '10px 24px',
-              borderRadius: '10px',
-              background: 'linear-gradient(135deg, #10b981, #059669)',
-              color: '#ffffff',
-              fontWeight: 800,
-              fontSize: '0.9rem',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px'
-            }}
-          >
-            <Check size={18} /> Guardar Canción en el Catálogo Karaoke
-          </button>
+          )}
         </form>
       )}
 
@@ -519,7 +840,7 @@ export default function SongManager({ canciones, onGuardarCanciones, onRestaurar
               <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '8px' }}>
                 <h4 style={{ fontSize: '1rem', fontWeight: 800, color: '#ffffff' }}>🎵 {c.titulo}</h4>
                 <button
-                  onClick={() => handleEliminarCancion(c.id)}
+                  onClick={() => handleSolicitarEliminar(c)}
                   style={{ background: 'none', border: 'none', color: '#ef4444', padding: '4px', cursor: 'pointer' }}
                   title="Eliminar del catálogo"
                 >
@@ -550,6 +871,35 @@ export default function SongManager({ canciones, onGuardarCanciones, onRestaurar
           </div>
         ))}
       </div>
+
+      {/* Modal de confirmación para eliminar canción */}
+      <ConfirmModal
+        isOpen={Boolean(cancionAEliminar)}
+        titulo="¿Eliminar canción del catálogo?"
+        mensaje={`¿Estás seguro de que deseas eliminar «${cancionAEliminar?.titulo}» de ${cancionAEliminar?.artistaNombre}? Esta acción eliminará sus versos del archivo local.`}
+        textoConfirmar="Eliminar Canción"
+        textoCancelar="Conservar"
+        variante="peligro"
+        onConfirm={ejecutarEliminacionCancion}
+        onCancel={() => setCancionAEliminar(null)}
+      />
+
+      {/* Modal de confirmación para restaurar catálogo predeterminado */}
+      <ConfirmModal
+        isOpen={mostrarConfirmRestaurar}
+        titulo="¿Restaurar catálogo original?"
+        mensaje="Esta acción restablecerá las canciones iniciales por defecto. Las canciones personalizadas se mantendrán si están en el servidor."
+        textoConfirmar="Restaurar Catálogo"
+        textoCancelar="Cancelar"
+        variante="advertencia"
+        onConfirm={() => {
+          onRestaurarDefault();
+          setMostrarConfirmRestaurar(false);
+          setMensajeExito('Catálogo predeterminado restaurado.');
+          setTimeout(() => setMensajeExito(''), 3000);
+        }}
+        onCancel={() => setMostrarConfirmRestaurar(false)}
+      />
 
     </div>
   );

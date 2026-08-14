@@ -6,10 +6,10 @@ Documento de seguimiento del proyecto **LitMusical**. Este archivo es actualizad
 
 ## 📍 ESTADO ACTUAL DEL PROYECTO
 
-- **Estado de la Sesión:** 🟢 **SESIÓN 3 COMPLETADA CON ÉXITO** (v0.2.9c - Auto-Scroll Contenido, Letras Sincronizadas, Navegación de Estrofas & Reproducción Focalizada).
-- **Subversión Alcanzada:** `v0.2.9c (Auto-Scroll Interno Aislado, Versos Sincronizados, Tono Detective 9 Años, Menú Hamburguesa Compacto y Reproducción Focalizada por Estrofa)`
-- **📌 Punto de Reanudación para la SESIÓN 4 / Iteración 6:** 
-  > Al iniciar la **Sesión 4**, comenzar con la **Iteración 6 (v0.3.0)**: Cablear el cliente del servicio de IA `aiService.js` con Ollama local (`http://localhost:11434`), fallback offline inteligente y generación dinámica de retos.
+- **Estado de la Sesión:** 🟢 **SESIÓN 4 COMPLETADA CON ÉXITO** (v0.2.11 - Conversor de YouTube a MP3 Anti-403, Wizard de 3 Pasos con Tecla Enter, Modal Flotante Integrado & Retorno Rápido a Modo Detective).
+- **Subversión Alcanzada:** `v0.2.11 (Conversor de YouTube a MP3 local en backend con yt-dlp anti-403, Formulario Wizard en 3 pasos con soporte de tecla ENTER, indicador visual de trabajo para padres, botón directo de retorno a Modo Detective y ConfirmModal.jsx integrado)`.
+- **📌 Punto de Reanudación para la SESIÓN 5 / Iteración 7:** 
+  > Al iniciar la **Sesión 5**, continuar con la conexión del cliente Ollama (`http://localhost:11434`), pulido UX/UI o gamificación avanzada (insignias, efectos de sonido).
 
 ---
 

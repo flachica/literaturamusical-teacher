@@ -139,6 +139,1207 @@ export const DICCIONARIO_RAE = {
 
 export const CANCIONES = [
   {
+  "id": "corazon-de-mimbre",
+  "titulo": "Corazón de Mimbre",
+  "artistaId": "marea",
+  "artistaNombre": "Marea",
+  "album": "Revolcón (2000)",
+  "temaId": "protesta",
+  "temaNombre": "Valentía y Poesía Rock",
+  "youtubeId": "WdZcC0nowBs",
+  "audioPreviewUrl": "/audio/corazon-de-mimbre.webm",
+  "resumen_didactico": "Canción completa de Marea sincronizada mediante LRCLIB Karaoke API con 47 versos y sus timestamps oficiales.",
+  "versos": [
+    {
+      "linea": 1,
+      "estrofaNum": 1,
+      "texto": "Quieto parao', no te arrimes, ya son demasiados abriles",
+      "tiempoInicio": 14.55,
+      "tiempoFin": 21.93,
+      "palabrasDificiles": [
+        "abriles"
+      ],
+      "preguntaComprension": "¿Qué transmite esta imagen de la canción de Marea?",
+      "opcionesComprension": [
+        {
+          "id": "a",
+          "texto": "Expresa libertad, emoción poética y resiliencia.",
+          "correcta": true
+        },
+        {
+          "id": "b",
+          "texto": "Una descripción neutra sin emoción.",
+          "correcta": false
+        }
+      ],
+      "figuraId": "metafora",
+      "figuraNombre": "Metáfora",
+      "explicacion": "Marea utiliza potentes metáforas y expresiones líricas del rock.",
+      "pista": "Reflexionar sobre la emoción del verso."
+    },
+    {
+      "linea": 2,
+      "estrofaNum": 1,
+      "texto": "Para tu amanecer desbocao', mejor que me olvides",
+      "tiempoInicio": 21.93,
+      "tiempoFin": 29.51,
+      "palabrasDificiles": [
+        "desbocado"
+      ],
+      "preguntaComprension": "¿Qué transmite esta imagen de la canción de Marea?",
+      "opcionesComprension": [
+        {
+          "id": "a",
+          "texto": "Expresa libertad, emoción poética y resiliencia.",
+          "correcta": true
+        },
+        {
+          "id": "b",
+          "texto": "Una descripción neutra sin emoción.",
+          "correcta": false
+        }
+      ],
+      "figuraId": "metafora",
+      "figuraNombre": "Metáfora",
+      "explicacion": "Marea utiliza potentes metáforas y expresiones líricas del rock.",
+      "pista": "Reflexionar sobre la emoción del verso."
+    },
+    {
+      "linea": 3,
+      "estrofaNum": 1,
+      "texto": "Yo me quedo aquí a tender mi pena al sol",
+      "tiempoInicio": 29.51,
+      "tiempoFin": 35.49,
+      "palabrasDificiles": [],
+      "preguntaComprension": "¿Qué transmite esta imagen de la canción de Marea?",
+      "opcionesComprension": [
+        {
+          "id": "a",
+          "texto": "Expresa libertad, emoción poética y resiliencia.",
+          "correcta": true
+        },
+        {
+          "id": "b",
+          "texto": "Una descripción neutra sin emoción.",
+          "correcta": false
+        }
+      ],
+      "figuraId": "personificacion",
+      "figuraNombre": "Personificación",
+      "explicacion": "Marea utiliza potentes metáforas y expresiones líricas del rock.",
+      "pista": "Reflexionar sobre la emoción del verso."
+    },
+    {
+      "linea": 4,
+      "estrofaNum": 1,
+      "texto": "En la cuerda de tender desolación",
+      "tiempoInicio": 35.49,
+      "tiempoFin": 44.16,
+      "palabrasDificiles": [],
+      "preguntaComprension": "¿Qué transmite esta imagen de la canción de Marea?",
+      "opcionesComprension": [
+        {
+          "id": "a",
+          "texto": "Expresa libertad, emoción poética y resiliencia.",
+          "correcta": true
+        },
+        {
+          "id": "b",
+          "texto": "Una descripción neutra sin emoción.",
+          "correcta": false
+        }
+      ],
+      "figuraId": "personificacion",
+      "figuraNombre": "Personificación",
+      "explicacion": "Marea utiliza potentes metáforas y expresiones líricas del rock.",
+      "pista": "Reflexionar sobre la emoción del verso."
+    },
+    {
+      "linea": 5,
+      "estrofaNum": 1,
+      "texto": "Luego empezaré a coser te quieros en un papel",
+      "tiempoInicio": 44.16,
+      "tiempoFin": 51,
+      "palabrasDificiles": [],
+      "preguntaComprension": "¿Qué transmite esta imagen de la canción de Marea?",
+      "opcionesComprension": [
+        {
+          "id": "a",
+          "texto": "Expresa libertad, emoción poética y resiliencia.",
+          "correcta": true
+        },
+        {
+          "id": "b",
+          "texto": "Una descripción neutra sin emoción.",
+          "correcta": false
+        }
+      ],
+      "figuraId": "metafora",
+      "figuraNombre": "Metáfora",
+      "explicacion": "Marea utiliza potentes metáforas y expresiones líricas del rock.",
+      "pista": "Reflexionar sobre la emoción del verso."
+    },
+    {
+      "linea": 6,
+      "estrofaNum": 1,
+      "texto": "Y a barrer el querer con los pelos de un pincel",
+      "tiempoInicio": 51,
+      "tiempoFin": 57.87,
+      "palabrasDificiles": [],
+      "preguntaComprension": "¿Qué transmite esta imagen de la canción de Marea?",
+      "opcionesComprension": [
+        {
+          "id": "a",
+          "texto": "Expresa libertad, emoción poética y resiliencia.",
+          "correcta": true
+        },
+        {
+          "id": "b",
+          "texto": "Una descripción neutra sin emoción.",
+          "correcta": false
+        }
+      ],
+      "figuraId": "metafora",
+      "figuraNombre": "Metáfora",
+      "explicacion": "Marea utiliza potentes metáforas y expresiones líricas del rock.",
+      "pista": "Reflexionar sobre la emoción del verso."
+    },
+    {
+      "linea": 7,
+      "estrofaNum": 2,
+      "texto": "Y en cuanto acabó",
+      "tiempoInicio": 57.87,
+      "tiempoFin": 60.74,
+      "palabrasDificiles": [],
+      "preguntaComprension": "¿Qué transmite esta imagen de la canción de Marea?",
+      "opcionesComprension": [
+        {
+          "id": "a",
+          "texto": "Expresa libertad, emoción poética y resiliencia.",
+          "correcta": true
+        },
+        {
+          "id": "b",
+          "texto": "Una descripción neutra sin emoción.",
+          "correcta": false
+        }
+      ],
+      "figuraId": "metafora",
+      "figuraNombre": "Metáfora",
+      "explicacion": "Marea utiliza potentes metáforas y expresiones líricas del rock.",
+      "pista": "Reflexionar sobre la emoción del verso."
+    },
+    {
+      "linea": 8,
+      "estrofaNum": 2,
+      "texto": "De zurcir las heridas de las noches mal dormidas llegué yo",
+      "tiempoInicio": 60.74,
+      "tiempoFin": 65.99,
+      "palabrasDificiles": [
+        "zurcir"
+      ],
+      "preguntaComprension": "¿Qué transmite esta imagen de la canción de Marea?",
+      "opcionesComprension": [
+        {
+          "id": "a",
+          "texto": "Expresa libertad, emoción poética y resiliencia.",
+          "correcta": true
+        },
+        {
+          "id": "b",
+          "texto": "Una descripción neutra sin emoción.",
+          "correcta": false
+        }
+      ],
+      "figuraId": "metafora",
+      "figuraNombre": "Metáfora",
+      "explicacion": "Marea utiliza potentes metáforas y expresiones líricas del rock.",
+      "pista": "Reflexionar sobre la emoción del verso."
+    },
+    {
+      "linea": 9,
+      "estrofaNum": 2,
+      "texto": "Y le llené de flores el jergón para los dos",
+      "tiempoInicio": 65.99,
+      "tiempoFin": 71.31,
+      "palabrasDificiles": [
+        "jergón"
+      ],
+      "preguntaComprension": "¿Qué transmite esta imagen de la canción de Marea?",
+      "opcionesComprension": [
+        {
+          "id": "a",
+          "texto": "Expresa libertad, emoción poética y resiliencia.",
+          "correcta": true
+        },
+        {
+          "id": "b",
+          "texto": "Una descripción neutra sin emoción.",
+          "correcta": false
+        }
+      ],
+      "figuraId": "metafora",
+      "figuraNombre": "Metáfora",
+      "explicacion": "Marea utiliza potentes metáforas y expresiones líricas del rock.",
+      "pista": "Reflexionar sobre la emoción del verso."
+    },
+    {
+      "linea": 10,
+      "estrofaNum": 2,
+      "texto": "Sin espinas de colores que se rieguen cuando llore y cuando no",
+      "tiempoInicio": 71.31,
+      "tiempoFin": 76.57,
+      "palabrasDificiles": [],
+      "preguntaComprension": "¿Qué transmite esta imagen de la canción de Marea?",
+      "opcionesComprension": [
+        {
+          "id": "a",
+          "texto": "Expresa libertad, emoción poética y resiliencia.",
+          "correcta": true
+        },
+        {
+          "id": "b",
+          "texto": "Una descripción neutra sin emoción.",
+          "correcta": false
+        }
+      ],
+      "figuraId": "metafora",
+      "figuraNombre": "Metáfora",
+      "explicacion": "Marea utiliza potentes metáforas y expresiones líricas del rock.",
+      "pista": "Reflexionar sobre la emoción del verso."
+    },
+    {
+      "linea": 11,
+      "estrofaNum": 2,
+      "texto": "Las sulfatamos con nuestro sudor",
+      "tiempoInicio": 76.57,
+      "tiempoFin": 89.68,
+      "palabrasDificiles": [],
+      "preguntaComprension": "¿Qué transmite esta imagen de la canción de Marea?",
+      "opcionesComprension": [
+        {
+          "id": "a",
+          "texto": "Expresa libertad, emoción poética y resiliencia.",
+          "correcta": true
+        },
+        {
+          "id": "b",
+          "texto": "Una descripción neutra sin emoción.",
+          "correcta": false
+        }
+      ],
+      "figuraId": "metafora",
+      "figuraNombre": "Metáfora",
+      "explicacion": "Marea utiliza potentes metáforas y expresiones líricas del rock.",
+      "pista": "Reflexionar sobre la emoción del verso."
+    },
+    {
+      "linea": 12,
+      "estrofaNum": 2,
+      "texto": "Y me confesó,",
+      "tiempoInicio": 89.68,
+      "tiempoFin": 92.58,
+      "palabrasDificiles": [],
+      "preguntaComprension": "¿Qué transmite esta imagen de la canción de Marea?",
+      "opcionesComprension": [
+        {
+          "id": "a",
+          "texto": "Expresa libertad, emoción poética y resiliencia.",
+          "correcta": true
+        },
+        {
+          "id": "b",
+          "texto": "Una descripción neutra sin emoción.",
+          "correcta": false
+        }
+      ],
+      "figuraId": "metafora",
+      "figuraNombre": "Metáfora",
+      "explicacion": "Marea utiliza potentes metáforas y expresiones líricas del rock.",
+      "pista": "Reflexionar sobre la emoción del verso."
+    },
+    {
+      "linea": 13,
+      "estrofaNum": 3,
+      "texto": "Cuando quieras arrancamos que en las líneas de la mano lo leyó",
+      "tiempoInicio": 92.58,
+      "tiempoFin": 97.9,
+      "palabrasDificiles": [],
+      "preguntaComprension": "¿Qué transmite esta imagen de la canción de Marea?",
+      "opcionesComprension": [
+        {
+          "id": "a",
+          "texto": "Expresa libertad, emoción poética y resiliencia.",
+          "correcta": true
+        },
+        {
+          "id": "b",
+          "texto": "Una descripción neutra sin emoción.",
+          "correcta": false
+        }
+      ],
+      "figuraId": "metafora",
+      "figuraNombre": "Metáfora",
+      "explicacion": "Marea utiliza potentes metáforas y expresiones líricas del rock.",
+      "pista": "Reflexionar sobre la emoción del verso."
+    },
+    {
+      "linea": 14,
+      "estrofaNum": 3,
+      "texto": "Que se acabó el que la quemara el sol, pero se asustó",
+      "tiempoInicio": 97.9,
+      "tiempoFin": 103.23,
+      "palabrasDificiles": [],
+      "preguntaComprension": "¿Qué transmite esta imagen de la canción de Marea?",
+      "opcionesComprension": [
+        {
+          "id": "a",
+          "texto": "Expresa libertad, emoción poética y resiliencia.",
+          "correcta": true
+        },
+        {
+          "id": "b",
+          "texto": "Una descripción neutra sin emoción.",
+          "correcta": false
+        }
+      ],
+      "figuraId": "personificacion",
+      "figuraNombre": "Personificación",
+      "explicacion": "Marea utiliza potentes metáforas y expresiones líricas del rock.",
+      "pista": "Reflexionar sobre la emoción del verso."
+    },
+    {
+      "linea": 15,
+      "estrofaNum": 3,
+      "texto": "\"Cómo te retumba el pecho\" tranqui, solo es mi maltrecho corazón",
+      "tiempoInicio": 103.23,
+      "tiempoFin": 108.67,
+      "palabrasDificiles": [],
+      "preguntaComprension": "¿Qué transmite esta imagen de la canción de Marea?",
+      "opcionesComprension": [
+        {
+          "id": "a",
+          "texto": "Expresa libertad, emoción poética y resiliencia.",
+          "correcta": true
+        },
+        {
+          "id": "b",
+          "texto": "Una descripción neutra sin emoción.",
+          "correcta": false
+        }
+      ],
+      "figuraId": "personificacion",
+      "figuraNombre": "Personificación",
+      "explicacion": "Marea utiliza potentes metáforas y expresiones líricas del rock.",
+      "pista": "Reflexionar sobre la emoción del verso."
+    },
+    {
+      "linea": 16,
+      "estrofaNum": 3,
+      "texto": "Que se encabrita cuando oye tu voz el muy cabrón",
+      "tiempoInicio": 108.67,
+      "tiempoFin": 112.35,
+      "palabrasDificiles": [],
+      "preguntaComprension": "¿Qué transmite esta imagen de la canción de Marea?",
+      "opcionesComprension": [
+        {
+          "id": "a",
+          "texto": "Expresa libertad, emoción poética y resiliencia.",
+          "correcta": true
+        },
+        {
+          "id": "b",
+          "texto": "Una descripción neutra sin emoción.",
+          "correcta": false
+        }
+      ],
+      "figuraId": "metafora",
+      "figuraNombre": "Metáfora",
+      "explicacion": "Marea utiliza potentes metáforas y expresiones líricas del rock.",
+      "pista": "Reflexionar sobre la emoción del verso."
+    },
+    {
+      "linea": 17,
+      "estrofaNum": 3,
+      "texto": "¿Qué coño le pasará que ya no sale a volar?",
+      "tiempoInicio": 112.35,
+      "tiempoFin": 117.64,
+      "palabrasDificiles": [],
+      "preguntaComprension": "¿Qué transmite esta imagen de la canción de Marea?",
+      "opcionesComprension": [
+        {
+          "id": "a",
+          "texto": "Expresa libertad, emoción poética y resiliencia.",
+          "correcta": true
+        },
+        {
+          "id": "b",
+          "texto": "Una descripción neutra sin emoción.",
+          "correcta": false
+        }
+      ],
+      "figuraId": "metafora",
+      "figuraNombre": "Metáfora",
+      "explicacion": "Marea utiliza potentes metáforas y expresiones líricas del rock.",
+      "pista": "Reflexionar sobre la emoción del verso."
+    },
+    {
+      "linea": 18,
+      "estrofaNum": 3,
+      "texto": "¿Tal vez le mojó las plumas el relente de la luna?",
+      "tiempoInicio": 117.64,
+      "tiempoFin": 123.01,
+      "palabrasDificiles": [],
+      "preguntaComprension": "¿Qué transmite esta imagen de la canción de Marea?",
+      "opcionesComprension": [
+        {
+          "id": "a",
+          "texto": "Expresa libertad, emoción poética y resiliencia.",
+          "correcta": true
+        },
+        {
+          "id": "b",
+          "texto": "Una descripción neutra sin emoción.",
+          "correcta": false
+        }
+      ],
+      "figuraId": "personificacion",
+      "figuraNombre": "Personificación",
+      "explicacion": "Marea utiliza potentes metáforas y expresiones líricas del rock.",
+      "pista": "Reflexionar sobre la emoción del verso."
+    },
+    {
+      "linea": 19,
+      "estrofaNum": 4,
+      "texto": "Le volvió loca el soní'o de las gotas de rocío",
+      "tiempoInicio": 123.01,
+      "tiempoFin": 128.22,
+      "palabrasDificiles": [],
+      "preguntaComprension": "¿Qué transmite esta imagen de la canción de Marea?",
+      "opcionesComprension": [
+        {
+          "id": "a",
+          "texto": "Expresa libertad, emoción poética y resiliencia.",
+          "correcta": true
+        },
+        {
+          "id": "b",
+          "texto": "Una descripción neutra sin emoción.",
+          "correcta": false
+        }
+      ],
+      "figuraId": "metafora",
+      "figuraNombre": "Metáfora",
+      "explicacion": "Marea utiliza potentes metáforas y expresiones líricas del rock.",
+      "pista": "Reflexionar sobre la emoción del verso."
+    },
+    {
+      "linea": 20,
+      "estrofaNum": 4,
+      "texto": "Cuando empieza a clarear y aún no se ha dormí'o",
+      "tiempoInicio": 128.22,
+      "tiempoFin": 142.79,
+      "palabrasDificiles": [],
+      "preguntaComprension": "¿Qué transmite esta imagen de la canción de Marea?",
+      "opcionesComprension": [
+        {
+          "id": "a",
+          "texto": "Expresa libertad, emoción poética y resiliencia.",
+          "correcta": true
+        },
+        {
+          "id": "b",
+          "texto": "Una descripción neutra sin emoción.",
+          "correcta": false
+        }
+      ],
+      "figuraId": "metafora",
+      "figuraNombre": "Metáfora",
+      "explicacion": "Marea utiliza potentes metáforas y expresiones líricas del rock.",
+      "pista": "Reflexionar sobre la emoción del verso."
+    },
+    {
+      "linea": 21,
+      "estrofaNum": 4,
+      "texto": "Y me enamoró, ya ves",
+      "tiempoInicio": 142.79,
+      "tiempoFin": 145.76,
+      "palabrasDificiles": [],
+      "preguntaComprension": "¿Qué transmite esta imagen de la canción de Marea?",
+      "opcionesComprension": [
+        {
+          "id": "a",
+          "texto": "Expresa libertad, emoción poética y resiliencia.",
+          "correcta": true
+        },
+        {
+          "id": "b",
+          "texto": "Una descripción neutra sin emoción.",
+          "correcta": false
+        }
+      ],
+      "figuraId": "metafora",
+      "figuraNombre": "Metáfora",
+      "explicacion": "Marea utiliza potentes metáforas y expresiones líricas del rock.",
+      "pista": "Reflexionar sobre la emoción del verso."
+    },
+    {
+      "linea": 22,
+      "estrofaNum": 4,
+      "texto": "Aunque era un hada alada y yo seguía siendo nada no importó",
+      "tiempoInicio": 145.76,
+      "tiempoFin": 151.07,
+      "palabrasDificiles": [],
+      "preguntaComprension": "¿Qué transmite esta imagen de la canción de Marea?",
+      "opcionesComprension": [
+        {
+          "id": "a",
+          "texto": "Expresa libertad, emoción poética y resiliencia.",
+          "correcta": true
+        },
+        {
+          "id": "b",
+          "texto": "Una descripción neutra sin emoción.",
+          "correcta": false
+        }
+      ],
+      "figuraId": "metafora",
+      "figuraNombre": "Metáfora",
+      "explicacion": "Marea utiliza potentes metáforas y expresiones líricas del rock.",
+      "pista": "Reflexionar sobre la emoción del verso."
+    },
+    {
+      "linea": 23,
+      "estrofaNum": 4,
+      "texto": "Éramos parte del mismo colchón hasta que juró,",
+      "tiempoInicio": 151.07,
+      "tiempoFin": 156.37,
+      "palabrasDificiles": [],
+      "preguntaComprension": "¿Qué transmite esta imagen de la canción de Marea?",
+      "opcionesComprension": [
+        {
+          "id": "a",
+          "texto": "Expresa libertad, emoción poética y resiliencia.",
+          "correcta": true
+        },
+        {
+          "id": "b",
+          "texto": "Una descripción neutra sin emoción.",
+          "correcta": false
+        }
+      ],
+      "figuraId": "metafora",
+      "figuraNombre": "Metáfora",
+      "explicacion": "Marea utiliza potentes metáforas y expresiones líricas del rock.",
+      "pista": "Reflexionar sobre la emoción del verso."
+    },
+    {
+      "linea": 24,
+      "estrofaNum": 4,
+      "texto": "\"Nos querremos más que nadie pa' que no corra ni el aire entre tú y yo\"",
+      "tiempoInicio": 156.37,
+      "tiempoFin": 161.43,
+      "palabrasDificiles": [],
+      "preguntaComprension": "¿Qué transmite esta imagen de la canción de Marea?",
+      "opcionesComprension": [
+        {
+          "id": "a",
+          "texto": "Expresa libertad, emoción poética y resiliencia.",
+          "correcta": true
+        },
+        {
+          "id": "b",
+          "texto": "Una descripción neutra sin emoción.",
+          "correcta": false
+        }
+      ],
+      "figuraId": "metafora",
+      "figuraNombre": "Metáfora",
+      "explicacion": "Marea utiliza potentes metáforas y expresiones líricas del rock.",
+      "pista": "Reflexionar sobre la emoción del verso."
+    },
+    {
+      "linea": 25,
+      "estrofaNum": 5,
+      "texto": "Sentí que me iba faltando el calor y digo yo",
+      "tiempoInicio": 161.43,
+      "tiempoFin": 165.11,
+      "palabrasDificiles": [],
+      "preguntaComprension": "¿Qué transmite esta imagen de la canción de Marea?",
+      "opcionesComprension": [
+        {
+          "id": "a",
+          "texto": "Expresa libertad, emoción poética y resiliencia.",
+          "correcta": true
+        },
+        {
+          "id": "b",
+          "texto": "Una descripción neutra sin emoción.",
+          "correcta": false
+        }
+      ],
+      "figuraId": "metafora",
+      "figuraNombre": "Metáfora",
+      "explicacion": "Marea utiliza potentes metáforas y expresiones líricas del rock.",
+      "pista": "Reflexionar sobre la emoción del verso."
+    },
+    {
+      "linea": 26,
+      "estrofaNum": 5,
+      "texto": "¿Qué coño le pasará que ya no sale a volar?",
+      "tiempoInicio": 165.11,
+      "tiempoFin": 170.42,
+      "palabrasDificiles": [],
+      "preguntaComprension": "¿Qué transmite esta imagen de la canción de Marea?",
+      "opcionesComprension": [
+        {
+          "id": "a",
+          "texto": "Expresa libertad, emoción poética y resiliencia.",
+          "correcta": true
+        },
+        {
+          "id": "b",
+          "texto": "Una descripción neutra sin emoción.",
+          "correcta": false
+        }
+      ],
+      "figuraId": "metafora",
+      "figuraNombre": "Metáfora",
+      "explicacion": "Marea utiliza potentes metáforas y expresiones líricas del rock.",
+      "pista": "Reflexionar sobre la emoción del verso."
+    },
+    {
+      "linea": 27,
+      "estrofaNum": 5,
+      "texto": "¿Tal vez le mojó las plumas el relente de la luna?",
+      "tiempoInicio": 170.42,
+      "tiempoFin": 175.8,
+      "palabrasDificiles": [],
+      "preguntaComprension": "¿Qué transmite esta imagen de la canción de Marea?",
+      "opcionesComprension": [
+        {
+          "id": "a",
+          "texto": "Expresa libertad, emoción poética y resiliencia.",
+          "correcta": true
+        },
+        {
+          "id": "b",
+          "texto": "Una descripción neutra sin emoción.",
+          "correcta": false
+        }
+      ],
+      "figuraId": "personificacion",
+      "figuraNombre": "Personificación",
+      "explicacion": "Marea utiliza potentes metáforas y expresiones líricas del rock.",
+      "pista": "Reflexionar sobre la emoción del verso."
+    },
+    {
+      "linea": 28,
+      "estrofaNum": 5,
+      "texto": "Le volvió loca el soní'o de las gotas de rocío",
+      "tiempoInicio": 175.8,
+      "tiempoFin": 181.01,
+      "palabrasDificiles": [],
+      "preguntaComprension": "¿Qué transmite esta imagen de la canción de Marea?",
+      "opcionesComprension": [
+        {
+          "id": "a",
+          "texto": "Expresa libertad, emoción poética y resiliencia.",
+          "correcta": true
+        },
+        {
+          "id": "b",
+          "texto": "Una descripción neutra sin emoción.",
+          "correcta": false
+        }
+      ],
+      "figuraId": "metafora",
+      "figuraNombre": "Metáfora",
+      "explicacion": "Marea utiliza potentes metáforas y expresiones líricas del rock.",
+      "pista": "Reflexionar sobre la emoción del verso."
+    },
+    {
+      "linea": 29,
+      "estrofaNum": 5,
+      "texto": "Cuando empieza a clarear y aún no se ha dormí'o",
+      "tiempoInicio": 181.01,
+      "tiempoFin": 186.26,
+      "palabrasDificiles": [],
+      "preguntaComprension": "¿Qué transmite esta imagen de la canción de Marea?",
+      "opcionesComprension": [
+        {
+          "id": "a",
+          "texto": "Expresa libertad, emoción poética y resiliencia.",
+          "correcta": true
+        },
+        {
+          "id": "b",
+          "texto": "Una descripción neutra sin emoción.",
+          "correcta": false
+        }
+      ],
+      "figuraId": "metafora",
+      "figuraNombre": "Metáfora",
+      "explicacion": "Marea utiliza potentes metáforas y expresiones líricas del rock.",
+      "pista": "Reflexionar sobre la emoción del verso."
+    },
+    {
+      "linea": 30,
+      "estrofaNum": 5,
+      "texto": "Y le hizo un trato al colchón, con su espuma se forró el corazón",
+      "tiempoInicio": 186.26,
+      "tiempoFin": 190.92,
+      "palabrasDificiles": [],
+      "preguntaComprension": "¿Qué transmite esta imagen de la canción de Marea?",
+      "opcionesComprension": [
+        {
+          "id": "a",
+          "texto": "Expresa libertad, emoción poética y resiliencia.",
+          "correcta": true
+        },
+        {
+          "id": "b",
+          "texto": "Una descripción neutra sin emoción.",
+          "correcta": false
+        }
+      ],
+      "figuraId": "personificacion",
+      "figuraNombre": "Personificación",
+      "explicacion": "Marea utiliza potentes metáforas y expresiones líricas del rock.",
+      "pista": "Reflexionar sobre la emoción del verso."
+    },
+    {
+      "linea": 31,
+      "estrofaNum": 6,
+      "texto": "Anoche era de piedra y al alba era de mimbre",
+      "tiempoInicio": 190.92,
+      "tiempoFin": 195.82,
+      "palabrasDificiles": [
+        "mimbre"
+      ],
+      "preguntaComprension": "¿Qué transmite esta imagen de la canción de Marea?",
+      "opcionesComprension": [
+        {
+          "id": "a",
+          "texto": "Expresa libertad, emoción poética y resiliencia.",
+          "correcta": true
+        },
+        {
+          "id": "b",
+          "texto": "Una descripción neutra sin emoción.",
+          "correcta": false
+        }
+      ],
+      "figuraId": "metafora",
+      "figuraNombre": "Metáfora",
+      "explicacion": "Marea utiliza potentes metáforas y expresiones líricas del rock.",
+      "pista": "Reflexionar sobre la emoción del verso."
+    },
+    {
+      "linea": 32,
+      "estrofaNum": 6,
+      "texto": "Que se dobla antes que partirse, que se dobla antes que partirse, que partirse",
+      "tiempoInicio": 195.82,
+      "tiempoFin": 203.42,
+      "palabrasDificiles": [],
+      "preguntaComprension": "¿Qué transmite esta imagen de la canción de Marea?",
+      "opcionesComprension": [
+        {
+          "id": "a",
+          "texto": "Expresa libertad, emoción poética y resiliencia.",
+          "correcta": true
+        },
+        {
+          "id": "b",
+          "texto": "Una descripción neutra sin emoción.",
+          "correcta": false
+        }
+      ],
+      "figuraId": "anafora",
+      "figuraNombre": "Anáfora / Lección de Mimbre",
+      "explicacion": "Marea utiliza potentes metáforas y expresiones líricas del rock.",
+      "pista": "Reflexionar sobre la emoción del verso."
+    },
+    {
+      "linea": 33,
+      "estrofaNum": 6,
+      "texto": "Que partirse",
+      "tiempoInicio": 203.42,
+      "tiempoFin": 260.52,
+      "palabrasDificiles": [],
+      "preguntaComprension": "¿Qué transmite esta imagen de la canción de Marea?",
+      "opcionesComprension": [
+        {
+          "id": "a",
+          "texto": "Expresa libertad, emoción poética y resiliencia.",
+          "correcta": true
+        },
+        {
+          "id": "b",
+          "texto": "Una descripción neutra sin emoción.",
+          "correcta": false
+        }
+      ],
+      "figuraId": "anafora",
+      "figuraNombre": "Anáfora / Lección de Mimbre",
+      "explicacion": "Marea utiliza potentes metáforas y expresiones líricas del rock.",
+      "pista": "Reflexionar sobre la emoción del verso."
+    },
+    {
+      "linea": 34,
+      "estrofaNum": 6,
+      "texto": "Amaneció",
+      "tiempoInicio": 260.52,
+      "tiempoFin": 263.4,
+      "palabrasDificiles": [],
+      "preguntaComprension": "¿Qué transmite esta imagen de la canción de Marea?",
+      "opcionesComprension": [
+        {
+          "id": "a",
+          "texto": "Expresa libertad, emoción poética y resiliencia.",
+          "correcta": true
+        },
+        {
+          "id": "b",
+          "texto": "Una descripción neutra sin emoción.",
+          "correcta": false
+        }
+      ],
+      "figuraId": "metafora",
+      "figuraNombre": "Metáfora",
+      "explicacion": "Marea utiliza potentes metáforas y expresiones líricas del rock.",
+      "pista": "Reflexionar sobre la emoción del verso."
+    },
+    {
+      "linea": 35,
+      "estrofaNum": 6,
+      "texto": "La vi irse sonriendo con lo puesto por la puerta del balcón,",
+      "tiempoInicio": 263.4,
+      "tiempoFin": 268.74,
+      "palabrasDificiles": [],
+      "preguntaComprension": "¿Qué transmite esta imagen de la canción de Marea?",
+      "opcionesComprension": [
+        {
+          "id": "a",
+          "texto": "Expresa libertad, emoción poética y resiliencia.",
+          "correcta": true
+        },
+        {
+          "id": "b",
+          "texto": "Una descripción neutra sin emoción.",
+          "correcta": false
+        }
+      ],
+      "figuraId": "metafora",
+      "figuraNombre": "Metáfora",
+      "explicacion": "Marea utiliza potentes metáforas y expresiones líricas del rock.",
+      "pista": "Reflexionar sobre la emoción del verso."
+    },
+    {
+      "linea": 36,
+      "estrofaNum": 6,
+      "texto": "El pelo al viento diciendome \"Adiós\"",
+      "tiempoInicio": 268.74,
+      "tiempoFin": 271.36,
+      "palabrasDificiles": [],
+      "preguntaComprension": "¿Qué transmite esta imagen de la canción de Marea?",
+      "opcionesComprension": [
+        {
+          "id": "a",
+          "texto": "Expresa libertad, emoción poética y resiliencia.",
+          "correcta": true
+        },
+        {
+          "id": "b",
+          "texto": "Una descripción neutra sin emoción.",
+          "correcta": false
+        }
+      ],
+      "figuraId": "metafora",
+      "figuraNombre": "Metáfora",
+      "explicacion": "Marea utiliza potentes metáforas y expresiones líricas del rock.",
+      "pista": "Reflexionar sobre la emoción del verso."
+    },
+    {
+      "linea": 37,
+      "estrofaNum": 7,
+      "texto": "Porque decidió",
+      "tiempoInicio": 271.36,
+      "tiempoFin": 274.3,
+      "palabrasDificiles": [],
+      "preguntaComprension": "¿Qué transmite esta imagen de la canción de Marea?",
+      "opcionesComprension": [
+        {
+          "id": "a",
+          "texto": "Expresa libertad, emoción poética y resiliencia.",
+          "correcta": true
+        },
+        {
+          "id": "b",
+          "texto": "Una descripción neutra sin emoción.",
+          "correcta": false
+        }
+      ],
+      "figuraId": "metafora",
+      "figuraNombre": "Metáfora",
+      "explicacion": "Marea utiliza potentes metáforas y expresiones líricas del rock.",
+      "pista": "Reflexionar sobre la emoción del verso."
+    },
+    {
+      "linea": 38,
+      "estrofaNum": 7,
+      "texto": "Que ya estaba hasta las tetas de poetas de bragueta y revolcón",
+      "tiempoInicio": 274.3,
+      "tiempoFin": 279.68,
+      "palabrasDificiles": [],
+      "preguntaComprension": "¿Qué transmite esta imagen de la canción de Marea?",
+      "opcionesComprension": [
+        {
+          "id": "a",
+          "texto": "Expresa libertad, emoción poética y resiliencia.",
+          "correcta": true
+        },
+        {
+          "id": "b",
+          "texto": "Una descripción neutra sin emoción.",
+          "correcta": false
+        }
+      ],
+      "figuraId": "metafora",
+      "figuraNombre": "Metáfora",
+      "explicacion": "Marea utiliza potentes metáforas y expresiones líricas del rock.",
+      "pista": "Reflexionar sobre la emoción del verso."
+    },
+    {
+      "linea": 39,
+      "estrofaNum": 7,
+      "texto": "De trovadores de contenedor",
+      "tiempoInicio": 279.68,
+      "tiempoFin": 283.12,
+      "palabrasDificiles": [],
+      "preguntaComprension": "¿Qué transmite esta imagen de la canción de Marea?",
+      "opcionesComprension": [
+        {
+          "id": "a",
+          "texto": "Expresa libertad, emoción poética y resiliencia.",
+          "correcta": true
+        },
+        {
+          "id": "b",
+          "texto": "Una descripción neutra sin emoción.",
+          "correcta": false
+        }
+      ],
+      "figuraId": "metafora",
+      "figuraNombre": "Metáfora",
+      "explicacion": "Marea utiliza potentes metáforas y expresiones líricas del rock.",
+      "pista": "Reflexionar sobre la emoción del verso."
+    },
+    {
+      "linea": 40,
+      "estrofaNum": 7,
+      "texto": "¿Qué coño le pasará que ya no sale a volar?",
+      "tiempoInicio": 283.12,
+      "tiempoFin": 288.7,
+      "palabrasDificiles": [],
+      "preguntaComprension": "¿Qué transmite esta imagen de la canción de Marea?",
+      "opcionesComprension": [
+        {
+          "id": "a",
+          "texto": "Expresa libertad, emoción poética y resiliencia.",
+          "correcta": true
+        },
+        {
+          "id": "b",
+          "texto": "Una descripción neutra sin emoción.",
+          "correcta": false
+        }
+      ],
+      "figuraId": "metafora",
+      "figuraNombre": "Metáfora",
+      "explicacion": "Marea utiliza potentes metáforas y expresiones líricas del rock.",
+      "pista": "Reflexionar sobre la emoción del verso."
+    },
+    {
+      "linea": 41,
+      "estrofaNum": 7,
+      "texto": "¿Tal vez le mojó las plumas el relente de la luna?",
+      "tiempoInicio": 288.7,
+      "tiempoFin": 293.83,
+      "palabrasDificiles": [],
+      "preguntaComprension": "¿Qué transmite esta imagen de la canción de Marea?",
+      "opcionesComprension": [
+        {
+          "id": "a",
+          "texto": "Expresa libertad, emoción poética y resiliencia.",
+          "correcta": true
+        },
+        {
+          "id": "b",
+          "texto": "Una descripción neutra sin emoción.",
+          "correcta": false
+        }
+      ],
+      "figuraId": "personificacion",
+      "figuraNombre": "Personificación",
+      "explicacion": "Marea utiliza potentes metáforas y expresiones líricas del rock.",
+      "pista": "Reflexionar sobre la emoción del verso."
+    },
+    {
+      "linea": 42,
+      "estrofaNum": 7,
+      "texto": "Le volvió loca el soní'o de las gotas de rocío",
+      "tiempoInicio": 293.83,
+      "tiempoFin": 299.05,
+      "palabrasDificiles": [],
+      "preguntaComprension": "¿Qué transmite esta imagen de la canción de Marea?",
+      "opcionesComprension": [
+        {
+          "id": "a",
+          "texto": "Expresa libertad, emoción poética y resiliencia.",
+          "correcta": true
+        },
+        {
+          "id": "b",
+          "texto": "Una descripción neutra sin emoción.",
+          "correcta": false
+        }
+      ],
+      "figuraId": "metafora",
+      "figuraNombre": "Metáfora",
+      "explicacion": "Marea utiliza potentes metáforas y expresiones líricas del rock.",
+      "pista": "Reflexionar sobre la emoción del verso."
+    },
+    {
+      "linea": 43,
+      "estrofaNum": 8,
+      "texto": "Cuando empieza a clarear y aún no se ha dormí'o",
+      "tiempoInicio": 299.05,
+      "tiempoFin": 304.31,
+      "palabrasDificiles": [],
+      "preguntaComprension": "¿Qué transmite esta imagen de la canción de Marea?",
+      "opcionesComprension": [
+        {
+          "id": "a",
+          "texto": "Expresa libertad, emoción poética y resiliencia.",
+          "correcta": true
+        },
+        {
+          "id": "b",
+          "texto": "Una descripción neutra sin emoción.",
+          "correcta": false
+        }
+      ],
+      "figuraId": "metafora",
+      "figuraNombre": "Metáfora",
+      "explicacion": "Marea utiliza potentes metáforas y expresiones líricas del rock.",
+      "pista": "Reflexionar sobre la emoción del verso."
+    },
+    {
+      "linea": 44,
+      "estrofaNum": 8,
+      "texto": "Y le hizo un trato al colchón, con su espuma se forró el corazón",
+      "tiempoInicio": 304.31,
+      "tiempoFin": 309.03,
+      "palabrasDificiles": [],
+      "preguntaComprension": "¿Qué transmite esta imagen de la canción de Marea?",
+      "opcionesComprension": [
+        {
+          "id": "a",
+          "texto": "Expresa libertad, emoción poética y resiliencia.",
+          "correcta": true
+        },
+        {
+          "id": "b",
+          "texto": "Una descripción neutra sin emoción.",
+          "correcta": false
+        }
+      ],
+      "figuraId": "personificacion",
+      "figuraNombre": "Personificación",
+      "explicacion": "Marea utiliza potentes metáforas y expresiones líricas del rock.",
+      "pista": "Reflexionar sobre la emoción del verso."
+    },
+    {
+      "linea": 45,
+      "estrofaNum": 8,
+      "texto": "Anoche era de piedra y al alba era de mimbre",
+      "tiempoInicio": 309.03,
+      "tiempoFin": 314.09,
+      "palabrasDificiles": [
+        "mimbre"
+      ],
+      "preguntaComprension": "¿Qué transmite esta imagen de la canción de Marea?",
+      "opcionesComprension": [
+        {
+          "id": "a",
+          "texto": "Expresa libertad, emoción poética y resiliencia.",
+          "correcta": true
+        },
+        {
+          "id": "b",
+          "texto": "Una descripción neutra sin emoción.",
+          "correcta": false
+        }
+      ],
+      "figuraId": "metafora",
+      "figuraNombre": "Metáfora",
+      "explicacion": "Marea utiliza potentes metáforas y expresiones líricas del rock.",
+      "pista": "Reflexionar sobre la emoción del verso."
+    },
+    {
+      "linea": 46,
+      "estrofaNum": 8,
+      "texto": "Que se dobla antes que partirse, que se dobla antes que partirse, que partirse",
+      "tiempoInicio": 314.09,
+      "tiempoFin": 321.55,
+      "palabrasDificiles": [],
+      "preguntaComprension": "¿Qué transmite esta imagen de la canción de Marea?",
+      "opcionesComprension": [
+        {
+          "id": "a",
+          "texto": "Expresa libertad, emoción poética y resiliencia.",
+          "correcta": true
+        },
+        {
+          "id": "b",
+          "texto": "Una descripción neutra sin emoción.",
+          "correcta": false
+        }
+      ],
+      "figuraId": "anafora",
+      "figuraNombre": "Anáfora / Lección de Mimbre",
+      "explicacion": "Marea utiliza potentes metáforas y expresiones líricas del rock.",
+      "pista": "Reflexionar sobre la emoción del verso."
+    },
+    {
+      "linea": 47,
+      "estrofaNum": 8,
+      "texto": "Que partirse",
+      "tiempoInicio": 321.55,
+      "tiempoFin": 326.55,
+      "palabrasDificiles": [],
+      "preguntaComprension": "¿Qué transmite esta imagen de la canción de Marea?",
+      "opcionesComprension": [
+        {
+          "id": "a",
+          "texto": "Expresa libertad, emoción poética y resiliencia.",
+          "correcta": true
+        },
+        {
+          "id": "b",
+          "texto": "Una descripción neutra sin emoción.",
+          "correcta": false
+        }
+      ],
+      "figuraId": "anafora",
+      "figuraNombre": "Anáfora / Lección de Mimbre",
+      "explicacion": "Marea utiliza potentes metáforas y expresiones líricas del rock.",
+      "pista": "Reflexionar sobre la emoción del verso."
+    }
+  ]
+},
+  {
     id: "el-rio-del-tiempo",
     titulo: "El Río del Tiempo",
     artistaId: "banda-educativa",

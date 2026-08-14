@@ -30,6 +30,8 @@ export default function PlayerWidget({
     return { id: i, heightPercent, isFigureMarker };
   });
 
+  const isDraggingRef = React.useRef(false);
+
   // Sync HTML5 audio playback state
   useEffect(() => {
     if (audioRef?.current && audioSrc) {
@@ -44,13 +46,13 @@ export default function PlayerWidget({
     }
   }, [isPlaying, audioSrc, audioRef, setIsPlaying]);
 
-  // Handle native audio time updates
+  // Handle native audio time updates (only update slider when not dragging)
   const handleTimeUpdate = () => {
     if (audioRef?.current) {
       const cur = audioRef.current.currentTime || 0;
       const dur = audioRef.current.duration || 180;
       setCurrentTime(cur);
-      if (dur > 0) {
+      if (dur > 0 && !isDraggingRef.current) {
         setDuration(dur);
         const pct = (cur / dur) * 100;
         setPosicion(pct);
@@ -58,17 +60,34 @@ export default function PlayerWidget({
     }
   };
 
+  // Perform smooth seek on HTML5 audio DOM element
+  const executeSeek = (targetPos) => {
+    const targetDuration = duration || 180;
+    const targetSeconds = (targetPos / 100) * targetDuration;
+    if (audioRef?.current) {
+      audioRef.current.currentTime = targetSeconds;
+    }
+    setCurrentTime(targetSeconds);
+    if (onSeekTime) {
+      onSeekTime(targetSeconds);
+    }
+  };
+
   // Handle seeking via range slider or clicking waveform
   const handleSliderChange = (e) => {
     const newPos = Number(e.target.value);
     setPosicion(newPos);
-    const targetDuration = duration || 180;
-    const targetSeconds = (newPos / 100) * targetDuration;
-    if (audioRef?.current) {
-      audioRef.current.currentTime = targetSeconds;
-    }
-    if (onSeekTime) {
-      onSeekTime(targetSeconds);
+    executeSeek(newPos);
+  };
+
+  const handlePointerDown = () => {
+    isDraggingRef.current = true;
+  };
+
+  const handlePointerUp = () => {
+    if (isDraggingRef.current) {
+      isDraggingRef.current = false;
+      executeSeek(posicion);
     }
   };
 
@@ -107,8 +126,8 @@ export default function PlayerWidget({
         />
       )}
 
-      {/* Row 1: Unified Header (Song Title + Step Dots 1 2 3 4 + Full Lyrics Toggle) */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px', flexWrap: 'wrap', gap: '10px' }}>
+      {/* Row 1: Unified Header (Song Title + Top Center Prominent Timer + Step Dots + Full Lyrics Toggle) */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px', flexWrap: 'wrap', gap: '12px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           <Disc size={20} color="#ec4899" className={isPlaying ? 'spin-animation' : ''} />
           <div>
@@ -116,6 +135,26 @@ export default function PlayerWidget({
               {cancion.titulo} <span style={{ fontWeight: 400, color: 'var(--text-muted)', fontSize: '0.9rem' }}>— {cancion.artistaNombre}</span>
             </h3>
           </div>
+        </div>
+
+        {/* Top Center Prominent Timer Counter */}
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '6px',
+          background: 'rgba(15, 23, 42, 0.95)',
+          padding: '6px 16px',
+          borderRadius: '9999px',
+          border: '1.5px solid rgba(251, 191, 36, 0.4)',
+          boxShadow: '0 0 14px rgba(251, 191, 36, 0.25)'
+        }}>
+          <span style={{ fontSize: '0.85rem' }}>⏱️</span>
+          <span style={{ fontWeight: 900, fontSize: '1.18rem', color: '#fbbf24', fontFamily: 'monospace', letterSpacing: '0.05em' }}>
+            {formatearTiempo(currentTime)}
+          </span>
+          <span style={{ fontSize: '0.88rem', color: '#94a3b8', fontWeight: 700 }}>
+            / {formatearTiempo(duration || 180)}
+          </span>
         </div>
 
         {/* Unified Step Indicator Dots (1 2 3 4) + Lyrics Toggle */}
@@ -172,7 +211,7 @@ export default function PlayerWidget({
         </div>
       </div>
 
-      {/* Row 2: Unified Controls + Integrated Waveform Scrubber + Timer */}
+      {/* Row 2: Unified Controls + Integrated Waveform Scrubber */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '12px', background: 'rgba(15, 23, 42, 0.95)', padding: '10px 14px', borderRadius: '14px', border: '1px solid rgba(139, 92, 246, 0.3)' }}>
         
         {/* Single Play / Pause Button */}
@@ -265,6 +304,9 @@ export default function PlayerWidget({
             step="0.1"
             value={posicion}
             onChange={handleSliderChange}
+            onPointerDown={handlePointerDown}
+            onPointerUp={handlePointerUp}
+            onTouchEnd={handlePointerUp}
             style={{
               position: 'absolute',
               inset: 0,
@@ -275,16 +317,6 @@ export default function PlayerWidget({
               zIndex: 20
             }}
           />
-        </div>
-
-        {/* Single Timer Counter */}
-        <div style={{ flexShrink: 0, textAlign: 'right', minWidth: '70px' }}>
-          <span style={{ fontWeight: 900, fontSize: '0.95rem', color: '#fbbf24', fontFamily: 'monospace' }}>
-            {formatearTiempo(currentTime)}
-          </span>
-          <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)', display: 'block' }}>
-            / {formatearTiempo(duration || 180)}
-          </span>
         </div>
 
       </div>

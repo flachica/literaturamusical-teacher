@@ -36,8 +36,14 @@ export function loadUserProgress() {
 export function saveUserProgress(progress) {
   try {
     localStorage.setItem(PROGRESS_KEY, JSON.stringify(progress));
+    // Persistir directamente en el fichero JSON del disco duro (public/data/user_progress.json)
+    fetch('/api/progress', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(progress)
+    }).catch(err => console.warn('Aviso: Servidor estático sin API de fichero en disco:', err.message));
   } catch (err) {
-    console.error('Error guardando progreso en LocalStorage:', err);
+    console.error('Error guardando progreso:', err);
   }
 }
 
@@ -47,6 +53,11 @@ export function saveUserProgress(progress) {
 export function resetUserProgress() {
   try {
     localStorage.removeItem(PROGRESS_KEY);
+    fetch('/api/progress', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(DEFAULT_PROGRESS)
+    }).catch(() => {});
   } catch (err) {
     console.error('Error reseteando progreso:', err);
   }
@@ -81,23 +92,17 @@ export function loadSongsCatalog() {
     if (saved) {
       const parsed = JSON.parse(saved);
       if (Array.isArray(parsed) && parsed.length > 0) {
-        return parsed.map(savedSong => {
-          const defaultSong = CANCIONES.find(c => c.id === savedSong.id);
-          const rawVersos = (defaultSong && defaultSong.versos && defaultSong.versos.length !== savedSong.versos?.length)
-            ? defaultSong.versos
-            : (savedSong.versos || defaultSong?.versos);
-
-          if (defaultSong) {
-            return {
-              ...savedSong,
-              youtubeId: defaultSong.youtubeId,
-              audioPreviewUrl: defaultSong.audioPreviewUrl || savedSong.audioPreviewUrl,
-              versos: sanitizeSongVerses(rawVersos)
-            };
+        return parsed.map(s => {
+          // Si el elemento tenía guardada una URL directa de YouTube no reproducible, limpiar la URL de vista previa
+          let fixedAudioUrl = s.audioPreviewUrl || s.audioUrl;
+          if (fixedAudioUrl && (fixedAudioUrl.includes('youtube.com') || fixedAudioUrl.includes('youtu.be') || fixedAudioUrl.endsWith('.mp4'))) {
+            fixedAudioUrl = `/audio/${s.id}.webm`;
           }
           return {
-            ...savedSong,
-            versos: sanitizeSongVerses(savedSong.versos)
+            ...s,
+            audioPreviewUrl: fixedAudioUrl,
+            audioUrl: fixedAudioUrl,
+            versos: sanitizeSongVerses(s.versos)
           };
         });
       }
@@ -105,18 +110,27 @@ export function loadSongsCatalog() {
   } catch (err) {
     console.error('Error cargando canciones de LocalStorage:', err);
   }
-  return CANCIONES.map(c => ({
+  
+  const initialCatalog = CANCIONES.map(c => ({
     ...c,
     versos: sanitizeSongVerses(c.versos)
   }));
+  saveSongsCatalog(initialCatalog);
+  return initialCatalog;
 }
 
 /**
- * Guarda el catálogo completo de canciones en LocalStorage
+ * Guarda el catálogo completo de canciones en LocalStorage y en el fichero JSON del disco
  */
 export function saveSongsCatalog(songs) {
   try {
     localStorage.setItem(SONGS_KEY, JSON.stringify(songs));
+    // Persistir directamente en el fichero JSON del disco duro (public/data/songs_catalog.json)
+    fetch('/api/songs', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(songs)
+    }).catch(err => console.warn('Aviso: Servidor estático sin API de fichero en disco:', err.message));
   } catch (err) {
     console.error('Error guardando catálogo de canciones:', err);
   }

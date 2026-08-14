@@ -40,6 +40,22 @@ export default function App() {
   const [paso, setPaso] = useState(1);
   const [mostrarLetraCompleta, setMostrarLetraCompleta] = useState(true);
 
+  // Fetch latest catalog from disk endpoint (/api/songs) on mount
+  useEffect(() => {
+    fetch('/api/songs')
+      .then(res => res.json())
+      .then(diskSongs => {
+        if (Array.isArray(diskSongs) && diskSongs.length > 0) {
+          setCanciones(diskSongs);
+          setCancionActual(prev => {
+            const match = diskSongs.find(s => s.id === prev?.id);
+            return match || diskSongs[0];
+          });
+        }
+      })
+      .catch(err => console.warn('Aviso al cargar canciones de disco:', err));
+  }, []);
+
   // Reset playback position and detective step on song change
   useEffect(() => {
     setIsPlaying(false);

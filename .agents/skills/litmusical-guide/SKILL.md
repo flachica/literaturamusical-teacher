@@ -54,17 +54,34 @@ Al finalizar una sesión o antes de pausar el desarrollo:
 ### ✅ Iniciativas Aprobadas
 - **Frontend SPA Gamificado:** React + Vite con interfaz neón/vibrante tipo "Escuela de Detectives Literarios".
 - **Lyric Highlighter:** Resaltador de versos interactivo con explicaciones adaptadas a 9 años.
-- **Modo Detective Proactivo:** Botón para marcar descubrimientos propios de figuras literarias en cualquier estrofa o proponer nuevas categorías al Buzón Familiar.
+- **Modo Detective Proactivo:** Botón para marcar descubrimien### 🛠️ Protocolo de Carga de Canciones Educativas (Audio Local y Karaoke API)
+Cuando el usuario o la IA soliciten cargar o sincronizar una nueva canción educativa en el catálogo:
 
-### 🛠️ Protocolo de Carga de Canciones Educativas (Audio MP3 Local)
-Cuando el usuario o la IA soliciten cargar una nueva canción educativa en el catálogo:
-1. Asignar o subir el archivo de audio local MP3 en `public/audio/` o mediante selector de archivo local en Modo Admin.
-2. Definir la lista de versos con marcas de tiempo en segundos (`tiempoInicio`), `palabrasDificiles`, `preguntaComprension`, y `figuraId`.
-3. **Normalización de Estrofas:** Garantizar la asignación de `estrofaNum` agrupando los versos en bloques naturales (`estrofaNum = Math.floor(idx / 4) + 1`).
+1. **Obtención de Letras y Timestamps Oficiales (LRCLIB Karaoke API):**
+   - **NUNCA** hacer web scraping ni adivinar marcas de tiempo a ojo.
+   - Consultar la **API abierta y gratuita de Karaoke LRCLIB**: `https://lrclib.net/api/search?q=ARTISTA+TITULO` (o Endpoint `/api/get`).
+   - **Aprendizaje Clave de Desambiguación:** Al seleccionar los marcadores LRC de la API, verificar que corresponden a la **versión de estudio oficial del álbum** (ej. `28.87s` para Fito) y no a versiones de directo/teatro (ej. `39.81s`), para evitar desfases con el audio.
+   - Extraer la propiedad `syncedLyrics` que contiene las marcas de tiempo oficiales LRC `[mm:ss.xx]` exactas al milisegundo.
+   - Convertir los marcadores `[mm:ss.xx]` a segundos (`tiempoInicio` y `tiempoFin`) para la sincronización perfecta del reproductor HTML5.
+
+2. **Descarga de Audio Local Segura (Audio Puro WebM/M4A & Protección en Git):**
+   - El plugin backend `jsonStoragePlugin` en `vite.config.js` provee `/api/download-audio`.
+   - **Formato de Audio Puro:** Usar siempre `-f "251/249/140/139/ba"` para descargar únicamente corrientes de sonido en `.webm` (Opus) o `.m4a` (AAC) compatibles al 100% con `<audio>` HTML5 y Web Audio API. (Evitar formatos de vídeo `.mp4` 18).
+   - Invocación de `yt-dlp` con banderas de vídeo único y anti-403: `yt-dlp --no-playlist -f "251/249/140/139/ba" -o "public/audio/<id>.<ext>" "<url-o-busqueda>"`.
+   - **Regla Legal e Integridad de Git:** Los archivos de audio (`*.webm`, `*.m4a`, `*.mp3`, `public/audio/*`) **NUNCA deben subirse a Git**. Estrictamente incluidos en `.gitignore`.
+
+3. **Formulario Wizard en 3 Pasos Secuenciales (Ahorro de Espacio Vertical):**
+   - Paso 1: Únicamente búsqueda de Letra (LRCLIB Karaoke API).
+   - Paso 2: Vincular / Convertir Audio (YouTube o MP3 local).
+   - Paso 3: Categoría de Emoción Didáctica & Guardado Final.
+   - **Criterio UX Global:** Todos los campos de entrada de texto deben responder a la tecla `ENTER` ejecutando la acción correspondiente sin recargar la página.
+
+4. **Componente de Confirmación Flotante (`ConfirmModal.jsx`):**
+   - Sin diálogos nativos del navegador (`window.confirm`). Diálogos emergentes integrados con estética dark-glassmorphism.
 
 ### ❌ Iniciativas Descartadas
 - **Integración con Spotify:** Descartada definitivamente para evitar dependencias de API o cuentas externas.
-- **Addon de Odoo:** Descartado definitivamente para priorizar una arquitectura ligera, portable y local-first.
+- **Addon de Odoo:** Descartada definitivamente para priorizar una arquitectura ligera, portable y local-first.
 
 ---
 
@@ -74,5 +91,7 @@ Cuando el usuario o la IA soliciten cargar una nueva canción educativa en el ca
 - **v0.1.2:** Motor de preguntas/respuestas de la Trivia de Detectives y puntos.
 - **v0.2.0 / v0.2.1:** Persistencia Local-First (archivos JSON y LocalStorage) + Editor de canciones. [COMPLETADO - SESIÓN 2]
 - **v0.2.9 / v0.2.9c:** Refactorización Karaoke HTML5, Versos Sincronizados, Auto-Scroll Aislado, Tono Respetuoso 9 Años, Menú Hamburguesa Compacto, Navegación de Estrofas y Reproducción Focalizada. [COMPLETADO CON ÉXITO - SESIÓN 3]
-- **v0.3.0:** Conexión activa con Ollama local y fallback offline inteligente. [PRÓXIMO OBJETIVO - SESIÓN 4]
+- **v0.2.10:** Scrubber sin retardo (`isDraggingRef`), Temporizador ⏱️ en cabecera superior centrada, Karaoke continuo por estrofas/versos conjuntos en panel izquierdo, descarga de audio local segura (`yt-dlp` + `deno` ignorada en git) e integración con LRCLIB Karaoke API (47 versos de Marea Corazón de Mimbre). [COMPLETADO CON ÉXITO - SESIÓN 4]
+- **v0.2.11:** Conversor de YouTube a MP3 local en backend (`yt-dlp` con banderas anti-403), Formulario Wizard en 3 pasos con tecla `ENTER`, indicador visual de trabajo para padres, retorno rápido a Modo Detective y `ConfirmModal.jsx` integrado. [COMPLETADO CON ÉXITO - SESIÓN 4]
+- **v0.3.0:** Conexión activa con Ollama local y fallback offline inteligente. [PRÓXIMO OBJETIVO - SESIÓN 5]
 - **v0.4.0:** Gamificación avanzada, insignias y efectos de sonido.

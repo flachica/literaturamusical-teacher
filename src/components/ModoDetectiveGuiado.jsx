@@ -22,10 +22,25 @@ export default function ModoDetectiveGuiado({
   const [palabraRaeActiva, setPalabraRaeActiva] = useState(null);
   const [opcionComprension, setOpcionComprension] = useState(null);
   const [opcionFigura, setOpcionFigura] = useState(null);
-  const versosDomRefs = React.useRef({});
+  const estrofasDomRefs = React.useRef({});
   const lyricsContainerRef = React.useRef(null);
 
   const totalEstrofas = Math.max(...(cancion.versos?.map(v => v.estrofaNum || 1) || [1]));
+
+  // Group verses by estrofaNum for continuous Karaoke display
+  const estrofasAgrupadas = React.useMemo(() => {
+    if (!cancion?.versos) return [];
+    const map = {};
+    cancion.versos.forEach(v => {
+      const num = v.estrofaNum || 1;
+      if (!map[num]) map[num] = [];
+      map[num].push(v);
+    });
+    return Object.entries(map).map(([num, versos]) => ({
+      estrofaNum: Number(num),
+      versos
+    }));
+  }, [cancion?.versos]);
 
   const handlePlayEstrofa = (tiempoInicio) => {
     if (typeof tiempoInicio === 'number' && onSeekTime) {
@@ -42,23 +57,22 @@ export default function ModoDetectiveGuiado({
       setOpcionComprension(null);
       setOpcionFigura(null);
 
-      // Sync audio position to the new stanza start to keep audio and UI 100% aligned
       if (onSeekTime && typeof primerVersoDeEstrofa.tiempoInicio === 'number') {
         onSeekTime(primerVersoDeEstrofa.tiempoInicio);
       }
     }
   };
 
-  // Auto-scroll ONLY the internal lyrics panel container, NEVER moving window or page
+  // Auto-scroll ONLY when changing stanzas (preventing scroll jitter on every single line)
   React.useEffect(() => {
-    if (versoActual?.linea && versosDomRefs.current[versoActual.linea] && lyricsContainerRef.current) {
+    const activeEstrofaNum = versoActual?.estrofaNum || 1;
+    if (activeEstrofaNum && estrofasDomRefs.current[activeEstrofaNum] && lyricsContainerRef.current) {
       const container = lyricsContainerRef.current;
-      const element = versosDomRefs.current[versoActual.linea];
+      const element = estrofasDomRefs.current[activeEstrofaNum];
 
       const containerRect = container.getBoundingClientRect();
       const elementRect = element.getBoundingClientRect();
 
-      // Desired offset to center the active verse inside the internal lyrics container
       const targetScrollTop = container.scrollTop + (elementRect.top - containerRect.top) - (container.clientHeight / 2) + (element.clientHeight / 2);
 
       container.scrollTo({
@@ -66,7 +80,7 @@ export default function ModoDetectiveGuiado({
         behavior: 'smooth'
       });
     }
-  }, [versoActual?.linea]);
+  }, [versoActual?.estrofaNum]);
 
   // Automatically sync active verse smoothly based on real audio currentTime with 350ms anticipation lead
   React.useEffect(() => {
@@ -76,8 +90,8 @@ export default function ModoDetectiveGuiado({
     const tieneTimestamps = cancion.versos.some(v => typeof v.tiempoInicio === 'number');
 
     if (tieneTimestamps) {
-      // 350ms lead offset so focus shifts right as vocals begin
-      const effectiveTime = currentTime + 0.35;
+      // Offset de anticipación poética de +1.85s para leer cómodamente un instante antes de cantar
+      const effectiveTime = currentTime + 1.85;
       const validos = cancion.versos.filter(v => typeof v.tiempoInicio === 'number');
       for (let i = validos.length - 1; i >= 0; i--) {
         if (effectiveTime >= validos[i].tiempoInicio) {
@@ -85,12 +99,10 @@ export default function ModoDetectiveGuiado({
           break;
         }
       }
-      // If audio is in intro before first verse, keep first verse
       if (!versoCorrespondiente && effectiveTime < validos[0].tiempoInicio) {
         versoCorrespondiente = validos[0];
       }
     } else {
-      // Fallback only for songs without any timestamps
       const idx = Math.min(
         Math.floor((posicion / 100) * cancion.versos.length),
         cancion.versos.length - 1
@@ -99,10 +111,13 @@ export default function ModoDetectiveGuiado({
     }
 
     if (versoCorrespondiente && versoCorrespondiente.linea !== versoActual?.linea) {
+      const cambioDeEstrofa = (versoCorrespondiente.estrofaNum || 1) !== (versoActual?.estrofaNum || 1);
       setVersoActual(versoCorrespondiente);
-      setPaso(1);
-      setOpcionComprension(null);
-      setOpcionFigura(null);
+      if (cambioDeEstrofa) {
+        setPaso(1);
+        setOpcionComprension(null);
+        setOpcionFigura(null);
+      }
     }
   }, [currentTime, cancion, versoActual?.linea, setPaso]);
 
@@ -141,7 +156,7 @@ export default function ModoDetectiveGuiado({
       transition: 'all 0.35s cubic-bezier(0.4, 0, 0.2, 1)'
     }}>
       
-      {/* COLUMN 1: 100% FULL SONG LYRICS (LEFT PANEL - VISIBLE WHEN TOGGLED ON) */}
+      {/* COLUMN 1: 100% FULL SONG LYRICS GROUPED BY STANZAS (LEFT PANEL) */}
       {mostrarLetraCompleta && (
         <div ref={lyricsContainerRef} className="glass-panel" style={{
           padding: '18px 20px',
@@ -151,50 +166,79 @@ export default function ModoDetectiveGuiado({
           background: 'rgba(15, 23, 42, 0.85)',
           border: '1px solid rgba(56, 189, 248, 0.3)'
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
             <h4 style={{ fontSize: '0.92rem', fontWeight: 800, color: '#38bdf8', margin: 0, display: 'flex', alignItems: 'center', gap: '6px' }}>
               📜 Lectura Completa — «{cancion.titulo}»
             </h4>
             <span style={{ fontSize: '0.78rem', color: '#38bdf8', fontWeight: 800 }}>
-              Verso {versoActual.linea} de {cancion.versos.length}
+              Estrofa {versoActual.estrofaNum || 1} de {totalEstrofas}
             </span>
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            {cancion.versos.map((v) => {
-              const isSelected = v.linea === versoActual.linea;
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            {estrofasAgrupadas.map(({ estrofaNum, versos }) => {
+              const isEstrofaActiva = estrofaNum === (versoActual?.estrofaNum || 1);
+              const primerTiempo = versos[0]?.tiempoInicio;
+
               return (
                 <div
-                  key={v.linea}
-                  ref={(el) => (versosDomRefs.current[v.linea] = el)}
+                  key={estrofaNum}
+                  ref={(el) => (estrofasDomRefs.current[estrofaNum] = el)}
+                  onClick={() => {
+                    if (typeof primerTiempo === 'number' && onSeekTime) {
+                      onSeekTime(primerTiempo);
+                    }
+                  }}
                   style={{
-                    padding: '12px 16px',
-                    borderRadius: '10px',
-                    background: isSelected ? 'linear-gradient(135deg, rgba(139, 92, 246, 0.35), rgba(236, 72, 153, 0.25))' : 'rgba(30, 41, 59, 0.5)',
-                    border: `1px solid ${isSelected ? '#ec4899' : 'rgba(255, 255, 255, 0.06)'}`,
-                    color: isSelected ? '#ffffff' : '#cbd5e1',
-                    fontWeight: isSelected ? 800 : 500,
-                    fontSize: isSelected ? '1.02rem' : '0.92rem',
-                    lineHeight: 1.45,
-                    wordBreak: 'break-word',
-                    whiteSpace: 'normal',
+                    padding: '14px 16px',
+                    borderRadius: '12px',
+                    background: isEstrofaActiva
+                      ? 'linear-gradient(135deg, rgba(139, 92, 246, 0.3), rgba(236, 72, 153, 0.2))'
+                      : 'rgba(30, 41, 59, 0.4)',
+                    border: `1.5px solid ${isEstrofaActiva ? '#ec4899' : 'rgba(255, 255, 255, 0.07)'}`,
+                    cursor: 'pointer',
+                    transition: 'all 0.25s ease',
+                    boxShadow: isEstrofaActiva ? '0 0 16px rgba(236, 72, 153, 0.3)' : 'none',
                     display: 'flex',
-                    alignItems: 'flex-start',
-                    justifyContent: 'space-between',
-                    gap: '10px',
-                    transition: 'all 0.15s ease',
-                    boxShadow: isSelected ? '0 0 12px rgba(236, 72, 153, 0.3)' : 'none'
+                    flexDirection: 'column',
+                    gap: '6px'
                   }}
                 >
-                  <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
-                    <span style={{ fontSize: '0.78rem', color: isSelected ? '#ec4899' : 'var(--text-muted)', fontWeight: 800, marginTop: '2px', flexShrink: 0 }}>#{v.linea}</span>
-                    <span>«{v.texto}»</span>
-                  </div>
-                  {isSelected && (
-                    <span style={{ fontSize: '0.68rem', background: '#ec4899', color: '#fff', padding: '2px 8px', borderRadius: '9999px', fontWeight: 800, flexShrink: 0, marginTop: '2px' }}>
-                      Leyendo 🔍
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '2px' }}>
+                    <span style={{ fontSize: '0.75rem', color: isEstrofaActiva ? '#ec4899' : '#94a3b8', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                      Estrofa #{estrofaNum}
                     </span>
-                  )}
+                    {isEstrofaActiva && (
+                      <span style={{ fontSize: '0.68rem', background: '#ec4899', color: '#fff', padding: '2px 8px', borderRadius: '9999px', fontWeight: 800 }}>
+                        Karaoke Activo 🎵
+                      </span>
+                    )}
+                  </div>
+
+                  {versos.map((v) => {
+                    const isCurrentLine = v.linea === versoActual?.linea;
+                    return (
+                      <div
+                        key={v.linea}
+                        style={{
+                          fontSize: isCurrentLine ? '1.02rem' : '0.94rem',
+                          fontWeight: isCurrentLine ? 800 : 500,
+                          color: isCurrentLine ? '#ffffff' : isEstrofaActiva ? '#f1f5f9' : '#cbd5e1',
+                          padding: '3px 6px',
+                          borderRadius: '6px',
+                          background: isCurrentLine ? 'rgba(236, 72, 153, 0.2)' : 'transparent',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          gap: '8px',
+                          transition: 'all 0.15s ease'
+                        }}
+                      >
+                        <span>«{v.texto}»</span>
+                        {isCurrentLine && <span style={{ fontSize: '0.75rem', color: '#ec4899', flexShrink: 0 }}>▶</span>}
+                      </div>
+                    );
+                  })}
                 </div>
               );
             })}

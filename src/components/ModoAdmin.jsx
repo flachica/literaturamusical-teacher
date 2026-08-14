@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import FamilySuggestions from './FamilySuggestions';
 import SongManager from './SongManager';
+import ConfirmModal from './ConfirmModal';
 import { Settings, Database, Bot, Check, RotateCcw, Trophy, Star, Shield } from 'lucide-react';
 
 export default function ModoAdmin({
@@ -18,6 +19,7 @@ export default function ModoAdmin({
   const [ollamaModel, setOllamaModel] = useState('llama3');
   const [guardado, setGuardado] = useState(false);
   const [mensajeProgreso, setMensajeProgreso] = useState('');
+  const [mostrarConfirmReset, setMostrarConfirmReset] = useState(false);
 
   const handleGuardarConfig = (e) => {
     e.preventDefault();
@@ -25,12 +27,11 @@ export default function ModoAdmin({
     setTimeout(() => setGuardado(false), 2000);
   };
 
-  const handleResetProgreso = () => {
-    if (window.confirm('¿Seguro que quieres reiniciar las puntuaciones, nivel y estrellas de la detective?')) {
-      onResetProgreso();
-      setMensajeProgreso('¡Progreso reiniciado correctamente!');
-      setTimeout(() => setMensajeProgreso(''), 3000);
-    }
+  const ejecutarResetProgreso = () => {
+    onResetProgreso();
+    setMostrarConfirmReset(false);
+    setMensajeProgreso('¡Progreso reiniciado correctamente!');
+    setTimeout(() => setMensajeProgreso(''), 3000);
   };
 
   return (
@@ -72,7 +73,7 @@ export default function ModoAdmin({
 
         <div>
           <button
-            onClick={handleResetProgreso}
+            onClick={() => setMostrarConfirmReset(true)}
             style={{
               padding: '8px 14px',
               borderRadius: '10px',
@@ -196,6 +197,18 @@ export default function ModoAdmin({
 
       {/* Family Suggestions Section */}
       <FamilySuggestions />
+
+      {/* Modal de confirmación para reiniciar progreso */}
+      <ConfirmModal
+        isOpen={mostrarConfirmReset}
+        titulo="¿Reiniciar progreso de la detective?"
+        mensaje="¿Seguro que quieres reiniciar las puntuaciones, nivel y estrellas acumuladas a 0? Esta acción borrará el progreso almacenado en el disco."
+        textoConfirmar="Sí, reiniciar todo"
+        textoCancelar="Cancelar"
+        variante="peligro"
+        onConfirm={ejecutarResetProgreso}
+        onCancel={() => setMostrarConfirmReset(false)}
+      />
 
     </div>
   );

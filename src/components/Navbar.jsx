@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Shield, Star, Award, Bot, WifiOff, Sparkles, Music, BookOpen, Settings, Menu, X, RotateCcw, FileText, Code2 } from 'lucide-react';
+import ConfirmModal from './ConfirmModal';
 
 export default function Navbar({
   modoIA,
@@ -12,6 +13,7 @@ export default function Navbar({
   onResetProgreso
 }) {
   const [menuAbierto, setMenuAbierto] = useState(false);
+  const [mostrarConfirmReset, setMostrarConfirmReset] = useState(false);
   const menuRef = useRef(null);
 
   const esAdmin = modoPrincipal === 'admin';
@@ -78,29 +80,52 @@ export default function Navbar({
           </div>
         )}
 
-        {/* Action Buttons: 1-Click Visible Dictionary + Hamburger Menu for Parents */}
+        {/* Action Buttons: Return to Game / Dictionary + Hamburger Menu for Parents */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px', position: 'relative' }} ref={menuRef}>
           
-          {/* Direct 1-Click Dictionary Button for Daughter */}
-          <button
-            onClick={() => setModoPrincipal(modoPrincipal === 'diccionario' ? 'detective' : 'diccionario')}
-            style={{
-              padding: '8px 16px',
-              borderRadius: '10px',
-              fontWeight: 800,
-              fontSize: '0.85rem',
-              background: modoPrincipal === 'diccionario' ? 'linear-gradient(135deg, #06b6d4, #3b82f6)' : 'rgba(6, 182, 212, 0.2)',
-              color: modoPrincipal === 'diccionario' ? '#ffffff' : '#38bdf8',
-              border: '1px solid rgba(6, 182, 212, 0.4)',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px',
-              cursor: 'pointer',
-              boxShadow: modoPrincipal === 'diccionario' ? '0 0 12px rgba(6, 182, 212, 0.4)' : 'none'
-            }}
-          >
-            <BookOpen size={16} /> {modoPrincipal === 'diccionario' ? '👧 Volver al Juego' : '📖 Diccionario'}
-          </button>
+          {/* Direct Return Button to Detective Mode when in Admin Mode */}
+          {esAdmin ? (
+            <button
+              onClick={() => setModoPrincipal('detective')}
+              style={{
+                padding: '8px 16px',
+                borderRadius: '10px',
+                fontWeight: 900,
+                fontSize: '0.85rem',
+                background: 'linear-gradient(135deg, #10b981, #059669)',
+                color: '#ffffff',
+                border: 'none',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                cursor: 'pointer',
+                boxShadow: '0 0 14px rgba(16, 185, 129, 0.4)'
+              }}
+            >
+              🕵️‍♀️ Volver al Juego de Detective
+            </button>
+          ) : (
+            /* Direct 1-Click Dictionary Button for Daughter */
+            <button
+              onClick={() => setModoPrincipal(modoPrincipal === 'diccionario' ? 'detective' : 'diccionario')}
+              style={{
+                padding: '8px 16px',
+                borderRadius: '10px',
+                fontWeight: 800,
+                fontSize: '0.85rem',
+                background: modoPrincipal === 'diccionario' ? 'linear-gradient(135deg, #06b6d4, #3b82f6)' : 'rgba(6, 182, 212, 0.2)',
+                color: modoPrincipal === 'diccionario' ? '#ffffff' : '#38bdf8',
+                border: '1px solid rgba(6, 182, 212, 0.4)',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                cursor: 'pointer',
+                boxShadow: modoPrincipal === 'diccionario' ? '0 0 12px rgba(6, 182, 212, 0.4)' : 'none'
+              }}
+            >
+              <BookOpen size={16} /> {modoPrincipal === 'diccionario' ? '👧 Volver al Juego' : '📖 Diccionario'}
+            </button>
+          )}
 
           {/* Hamburger / Parent Settings Button */}
           <button
@@ -137,21 +162,22 @@ export default function Navbar({
               zIndex: 200
             }}>
               <div style={{ padding: '6px 10px', fontSize: '0.75rem', fontWeight: 800, color: '#f59e0b', borderBottom: '1px solid rgba(255,255,255,0.08)', marginBottom: '8px' }}>
-                👨‍👩‍👧 Menú de Padres y Gestión
+                👨‍👩‍👧 Cambiar Modo de Pantalla
               </div>
 
+              {/* Botón Modo Detective */}
               <button
                 onClick={() => {
-                  setModoPrincipal('admin');
+                  setModoPrincipal('detective');
                   setMenuAbierto(false);
                 }}
                 style={{
                   width: '100%',
                   padding: '10px 12px',
                   borderRadius: '8px',
-                  background: modoPrincipal === 'admin' ? 'rgba(245, 158, 11, 0.2)' : 'transparent',
-                  color: '#ffffff',
-                  border: 'none',
+                  background: modoPrincipal === 'detective' ? 'rgba(16, 185, 129, 0.25)' : 'transparent',
+                  color: modoPrincipal === 'detective' ? '#34d399' : '#ffffff',
+                  border: modoPrincipal === 'detective' ? '1px solid #10b981' : 'none',
                   fontWeight: 700,
                   fontSize: '0.85rem',
                   display: 'flex',
@@ -162,7 +188,33 @@ export default function Navbar({
                   marginBottom: '4px'
                 }}
               >
-                <Settings size={16} color="#fbbf24" /> Modo Admin y Editor
+                <Shield size={16} color="#10b981" /> 🕵️‍♀️ Modo Detective (Juego)
+              </button>
+
+              {/* Botón Modo Admin */}
+              <button
+                onClick={() => {
+                  setModoPrincipal('admin');
+                  setMenuAbierto(false);
+                }}
+                style={{
+                  width: '100%',
+                  padding: '10px 12px',
+                  borderRadius: '8px',
+                  background: modoPrincipal === 'admin' ? 'rgba(245, 158, 11, 0.25)' : 'transparent',
+                  color: modoPrincipal === 'admin' ? '#fbbf24' : '#ffffff',
+                  border: modoPrincipal === 'admin' ? '1px solid #f59e0b' : 'none',
+                  fontWeight: 700,
+                  fontSize: '0.85rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  cursor: 'pointer',
+                  textAlign: 'left',
+                  marginBottom: '4px'
+                }}
+              >
+                <Settings size={16} color="#fbbf24" /> ⚙️ Modo Admin y Editor
               </button>
 
               <div style={{ padding: '6px 10px', borderTop: '1px solid rgba(255,255,255,0.08)', marginTop: '6px', paddingTop: '8px' }}>
@@ -238,10 +290,8 @@ export default function Navbar({
                 <div style={{ borderTop: '1px solid rgba(255,255,255,0.08)', marginTop: '8px', paddingTop: '8px' }}>
                   <button
                     onClick={() => {
-                      if (window.confirm('¿Reiniciar puntos y nivel de usuario?')) {
-                        onResetProgreso();
-                        setMenuAbierto(false);
-                      }
+                      setMostrarConfirmReset(true);
+                      setMenuAbierto(false);
                     }}
                     style={{
                       width: '100%',
@@ -267,6 +317,22 @@ export default function Navbar({
         </div>
 
       </div>
+
+      {/* Modal de confirmación integrado para reiniciar puntos */}
+      <ConfirmModal
+        isOpen={mostrarConfirmReset}
+        titulo="¿Reiniciar puntos de la detective?"
+        mensaje="Esta acción restablecerá las estrellas, el nivel y las puntuaciones acumuladas."
+        textoConfirmar="Sí, reiniciar"
+        textoCancelar="Cancelar"
+        variante="peligro"
+        onConfirm={() => {
+          onResetProgreso();
+          setMostrarConfirmReset(false);
+        }}
+        onCancel={() => setMostrarConfirmReset(false)}
+      />
+
     </header>
   );
 }
