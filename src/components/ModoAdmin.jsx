@@ -22,7 +22,6 @@ export default function ModoAdmin({
   onRenombrarDetective,
   onEliminarDetective
 }) {
-  const [mensajeProgreso, setMensajeProgreso] = useState('');
   const [mostrarConfirmReset, setMostrarConfirmReset] = useState(false);
 
   // Estados locales para la gestión multidetective
@@ -30,14 +29,15 @@ export default function ModoAdmin({
   const [nuevoAvatarDet, setNuevoAvatarDet] = useState('🕵️‍♀️');
   const [detectiveEditandoId, setDetectiveEditandoId] = useState(null);
   const [nombreEditando, setNombreEditando] = useState('');
+  const [detectiveAReiniciar, setDetectiveAReiniciar] = useState(null);
 
   const avataresDisponibles = ['🕵️‍♀️', '🦊', '🦁', '🐼', '🦄', '🐨', '🦖', '🐯', '🐸', '🦉', '🐙', '🐵'];
 
   const ejecutarResetProgreso = () => {
-    onResetProgreso();
+    if (!detectiveAReiniciar) return;
+    onResetProgreso(detectiveAReiniciar.id);
     setMostrarConfirmReset(false);
-    setMensajeProgreso('¡Progreso reiniciado correctamente!');
-    setTimeout(() => setMensajeProgreso(''), 3000);
+    setDetectiveAReiniciar(null);
   };
 
   const handleCrearNuevoDetective = (e) => {
@@ -224,7 +224,6 @@ export default function ModoAdmin({
 
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
 
-
                         {!estaEditando && (
                           <button
                             onClick={() => handleIniciarRenombrar(det)}
@@ -244,6 +243,28 @@ export default function ModoAdmin({
                           </button>
                         )}
 
+                        {!estaEditando && (
+                          <button
+                            onClick={() => {
+                              setDetectiveAReiniciar(det);
+                              setMostrarConfirmReset(true);
+                            }}
+                            style={{
+                              padding: '6px',
+                              borderRadius: '8px',
+                              background: 'rgba(245, 158, 11, 0.1)',
+                              color: '#fbbf24',
+                              border: '1px solid rgba(245, 158, 11, 0.25)',
+                              cursor: 'pointer',
+                              display: 'flex',
+                              alignItems: 'center'
+                            }}
+                            title="Reiniciar progreso de este detective"
+                          >
+                            <RotateCcw size={12} />
+                          </button>
+                        )}
+
                         {detectives.length > 1 && (
                           <button
                             onClick={() => onEliminarDetective(det.id)}
@@ -251,7 +272,7 @@ export default function ModoAdmin({
                               padding: '6px',
                               borderRadius: '8px',
                               background: 'rgba(239, 68, 68, 0.1)',
-                              color: '#f87171',
+                              color: '#fca5a5',
                               border: '1px solid rgba(239, 68, 68, 0.2)',
                               cursor: 'pointer',
                               display: 'flex',
@@ -347,51 +368,6 @@ export default function ModoAdmin({
 
           </div>
 
-          {/* Tarjeta de Control y Reseteo */}
-          <div style={{
-            background: 'rgba(30, 41, 59, 0.3)',
-            border: '1px solid rgba(255, 255, 255, 0.06)',
-            borderRadius: '16px',
-            padding: '24px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            flexWrap: 'wrap',
-            gap: '20px'
-          }}>
-            <div style={{ maxWidth: '600px' }}>
-              <h4 style={{ fontSize: '1.05rem', fontWeight: 800, color: '#ffffff', marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                ⚠️ Zona de Peligro: Reiniciar Datos de Juego
-              </h4>
-              <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: 1.5 }}>
-                Esta acción borrará de forma irreversible todo el progreso actual del detective activo (<span style={{ color: '#a78bfa' }}>{detectiveActivo?.nombre}</span>), restableciendo sus estadísticas a cero.
-              </p>
-            </div>
-            
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '4px' }}>
-              <button
-                onClick={() => setMostrarConfirmReset(true)}
-                style={{
-                  padding: '12px 20px',
-                  borderRadius: '12px',
-                  background: 'rgba(239, 68, 68, 0.1)',
-                  color: '#f87171',
-                  border: '1px solid rgba(239, 68, 68, 0.25)',
-                  fontWeight: 800,
-                  fontSize: '0.85rem',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  cursor: 'pointer',
-                  transition: 'all 0.2s'
-                }}
-              >
-                <RotateCcw size={16} /> Reiniciar Historial
-              </button>
-              {mensajeProgreso && (
-                <span style={{ fontSize: '0.82rem', color: '#34d399', fontWeight: 700, display: 'block', marginTop: '4px' }}>{mensajeProgreso}</span>
-              )}
-            </div>
           </div>
 
         </div>
@@ -400,13 +376,16 @@ export default function ModoAdmin({
       {/* Modal de confirmación para reiniciar progreso */}
       <ConfirmModal
         isOpen={mostrarConfirmReset}
-        titulo={`¿Reiniciar progreso de ${detectiveActivo?.nombre}?`}
-        mensaje={`¿Seguro que quieres reiniciar las puntuaciones, nivel y estrellas acumuladas de ${detectiveActivo?.nombre} a 0? Esta acción no se podrá deshacer.`}
+        titulo={`¿Reiniciar progreso de ${detectiveAReiniciar?.nombre}?`}
+        mensaje={`¿Seguro que quieres reiniciar las puntuaciones, nivel y estrellas acumuladas de ${detectiveAReiniciar?.nombre} a 0? Esta acción borrará permanentemente sus estadísticas.`}
         textoConfirmar="Sí, reiniciar todo"
         textoCancelar="Cancelar"
         variante="peligro"
         onConfirm={ejecutarResetProgreso}
-        onCancel={() => setMostrarConfirmReset(false)}
+        onCancel={() => {
+          setMostrarConfirmReset(false);
+          setDetectiveAReiniciar(null);
+        }}
       />
 
     </div>

@@ -191,11 +191,12 @@ export default function useLocalCatalog(cancionActual, setCancionActual) {
     });
   };
 
-  // Resetear el progreso del detective activo
-  const handleResetProgreso = () => {
+  // Resetear el progreso de un detective específico (o el activo por defecto)
+  const handleResetProgreso = (id) => {
+    const targetId = id || detectiveActivo.id;
     setDetectives(prev => {
       const listaActualizada = prev.map(d => {
-        if (d.id === detectiveActivo.id) {
+        if (d.id === targetId) {
           return {
             ...d,
             puntos: 0,
