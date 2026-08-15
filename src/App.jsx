@@ -69,6 +69,8 @@ export default function App() {
         pestanaActiva={pestanaActiva}
         setPestanaActiva={setPestanaActiva}
         detectiveActivo={detectiveActivo}
+        detectives={detectives}
+        onSeleccionarDetective={handleSeleccionarDetective}
       />
 
       {/* VIEW 1: MODO DETECTIVE GUIADO (LIMPIO Y PASO A PASO PARA 9 AÑOS) */}

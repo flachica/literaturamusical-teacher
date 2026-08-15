@@ -223,24 +223,7 @@ export default function ModoAdmin({
                       </div>
 
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        {!esActivo && !estaEditando && (
-                          <button
-                            onClick={() => onSeleccionarDetective(det.id)}
-                            style={{
-                              padding: '5px 10px',
-                              borderRadius: '8px',
-                              background: 'rgba(255,255,255,0.05)',
-                              color: '#cbd5e1',
-                              border: '1px solid rgba(255,255,255,0.1)',
-                              fontSize: '0.75rem',
-                              fontWeight: 700,
-                              cursor: 'pointer',
-                              transition: 'all 0.2s'
-                            }}
-                          >
-                            Seleccionar
-                          </button>
-                        )}
+
 
                         {!estaEditando && (
                           <button
