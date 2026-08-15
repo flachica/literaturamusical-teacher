@@ -1054,50 +1054,43 @@ export default function SongManager({ canciones, audioStatus, onGuardarCanciones
         {canciones.map((c) => (
           <div
             key={c.id}
-            style={{
-              background: 'rgba(15, 23, 42, 0.7)',
-              padding: '16px',
-              borderRadius: '12px',
-              border: '1px solid rgba(255, 255, 255, 0.08)',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'space-between'
-            }}
+            className="admin-song-card"
           >
             <div>
               <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '8px' }}>
-                <h4 style={{ fontSize: '1rem', fontWeight: 800, color: '#ffffff' }}>🎵 {c.titulo}</h4>
+                <h4 style={{ fontSize: '1.18rem', fontWeight: 800, color: '#ffffff', letterSpacing: '0.01em', marginBottom: '2px' }}>🎵 {c.titulo}</h4>
                 <button
                   onClick={() => handleSolicitarEliminar(c)}
-                  style={{ background: 'none', border: 'none', color: '#ef4444', padding: '4px', cursor: 'pointer' }}
+                  className="btn-trash"
+                  style={{ background: 'none', border: 'none', padding: '4px', cursor: 'pointer' }}
                   title="Eliminar del catálogo"
                 >
                   <Trash2 size={16} />
                 </button>
               </div>
-              <p style={{ fontSize: '0.85rem', color: 'var(--primary)', fontWeight: 700, marginTop: '2px' }}>
+              <p style={{ fontSize: '0.92rem', color: '#fbbf24', fontWeight: 700, marginTop: '2px' }}>
                 {c.artistaNombre} <span style={{ color: 'var(--text-muted)', fontWeight: 400 }}>({c.album})</span>
               </p>
 
               {/* Indicador de estado del audio */}
-              <div style={{ marginTop: '8px', display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
+              <div style={{ marginTop: '10px', display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
                 {audioStatus[c.id] === 'disponible' && (
-                  <span style={{ fontSize: '0.72rem', background: 'rgba(16, 185, 129, 0.15)', color: '#34d399', padding: '2px 8px', borderRadius: '6px', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                  <span style={{ fontSize: '0.78rem', background: 'rgba(16, 185, 129, 0.15)', color: '#34d399', padding: '3px 8px', borderRadius: '8px', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
                     🟢 Audio en disco
                   </span>
                 )}
                 {audioStatus[c.id] === 'red' && (
-                  <span style={{ fontSize: '0.72rem', background: 'rgba(56, 189, 248, 0.15)', color: '#38bdf8', padding: '2px 8px', borderRadius: '6px', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                  <span style={{ fontSize: '0.78rem', background: 'rgba(56, 189, 248, 0.15)', color: '#38bdf8', padding: '3px 8px', borderRadius: '8px', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
                     🌐 Audio en Red
                   </span>
                 )}
                 {audioStatus[c.id] === 'perdido' && (
-                  <span style={{ fontSize: '0.72rem', background: 'rgba(239, 68, 68, 0.15)', color: '#f87171', border: '1px solid rgba(239, 68, 68, 0.3)', padding: '2px 8px', borderRadius: '6px', fontWeight: 800, display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                  <span style={{ fontSize: '0.78rem', background: 'rgba(239, 68, 68, 0.15)', color: '#f87171', border: '1px solid rgba(239, 68, 68, 0.25)', padding: '3px 8px', borderRadius: '8px', fontWeight: 800, display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
                     ⚠️ Audio no encontrado
                   </span>
                 )}
                 {audioStatus[c.id] === 'checking' && (
-                  <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                  <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
                     🔍 Comprobando audio...
                   </span>
                 )}
@@ -1108,13 +1101,13 @@ export default function SongManager({ canciones, audioStatus, onGuardarCanciones
                     onClick={() => handleRecuperarAudio(c)}
                     disabled={reparandoSongId === c.id || reparandoGlobal}
                     style={{
-                      padding: '2px 8px',
+                      padding: '3px 8px',
                       borderRadius: '6px',
                       background: reparandoSongId === c.id ? '#475569' : 'linear-gradient(135deg, #f59e0b, #d97706)',
                       color: '#ffffff',
                       border: 'none',
                       fontWeight: 800,
-                      fontSize: '0.72rem',
+                      fontSize: '0.75rem',
                       cursor: (reparandoSongId === c.id || reparandoGlobal) ? 'wait' : 'pointer',
                       display: 'inline-flex',
                       alignItems: 'center',
@@ -1126,14 +1119,14 @@ export default function SongManager({ canciones, audioStatus, onGuardarCanciones
                 )}
               </div>
 
-              <p style={{ fontSize: '0.8rem', color: '#cbd5e1', marginTop: '8px', lineHeight: 1.4 }}>
+              <p style={{ fontSize: '0.88rem', color: '#cbd5e1', marginTop: '12px', lineHeight: 1.5 }}>
                 {c.resumen_didactico}
               </p>
             </div>
 
-            <div style={{ marginTop: '12px', paddingTop: '8px', borderTop: '1px solid rgba(255, 255, 255, 0.06)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+            <div style={{ marginTop: '14px', paddingTop: '10px', borderTop: '1px solid rgba(255, 255, 255, 0.06)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '0.82rem', color: 'var(--text-muted)' }}>
               <span>Versos interactivos: <strong>{c.versos ? c.versos.length : 0}</strong></span>
-              <span style={{ background: 'rgba(139, 92, 246, 0.2)', color: '#c084fc', padding: '2px 8px', borderRadius: '9999px', fontWeight: 700 }}>
+              <span style={{ background: 'rgba(245, 158, 11, 0.15)', color: '#fbbf24', border: '1px solid rgba(245, 158, 11, 0.3)', padding: '2px 8px', borderRadius: '8px', fontWeight: 700 }}>
                 {c.temaNombre || 'Poesía'}
               </span>
             </div>

@@ -175,3 +175,36 @@ button:active {
 .animate-pulse-subtle {
   animation: pulse-subtle 3s infinite ease-in-out;
 }
+
+/* Tarjetas de gestión de canciones para padres */
+.admin-song-card {
+  background: rgba(15, 23, 42, 0.5);
+  padding: 20px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.admin-song-card:hover {
+  transform: translateY(-3px);
+  background: rgba(15, 23, 42, 0.7);
+  border-color: rgba(245, 158, 11, 0.35);
+  box-shadow: 0 12px 24px -10px rgba(0, 0, 0, 0.6), 0 0 15px rgba(245, 158, 11, 0.05);
+}
+
+.admin-song-card .btn-trash {
+  color: #64748b;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.admin-song-card:hover .btn-trash {
+  color: #94a3b8;
+}
+
+.admin-song-card .btn-trash:hover {
+  color: #ef4444;
+  transform: scale(1.1);
+}
