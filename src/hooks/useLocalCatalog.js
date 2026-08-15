@@ -143,21 +143,24 @@ export default function useLocalCatalog(cancionActual, setCancionActual) {
 
   // Crear un nuevo detective
   const handleCrearDetective = (nombre, avatar = '🕵️‍♀️') => {
-    const nuevoDet = {
-      id: `detective_${Date.now()}`,
-      nombre: nombre.trim() || 'Nuevo Detective',
-      puntos: 0,
-      nivel: 1,
-      estrellas: 0,
-      avatar,
-      activo: false
-    };
+    let nuevoDetCreado;
     setDetectives(prev => {
+      const esElPrimero = prev.length === 0;
+      const nuevoDet = {
+        id: `detective_${Date.now()}`,
+        nombre: nombre.trim() || 'Nuevo Detective',
+        puntos: 0,
+        nivel: 1,
+        estrellas: 0,
+        avatar,
+        activo: esElPrimero
+      };
+      nuevoDetCreado = nuevoDet;
       const listaActualizada = [...prev, nuevoDet];
       saveDetectives(listaActualizada);
       return listaActualizada;
     });
-    return nuevoDet;
+    return nuevoDetCreado;
   };
 
   // Renombrar un detective
@@ -177,10 +180,6 @@ export default function useLocalCatalog(cancionActual, setCancionActual) {
   // Eliminar un detective
   const handleEliminarDetective = (id) => {
     setDetectives(prev => {
-      if (prev.length <= 1) {
-        alert('⚠️ No puedes eliminar el único detective registrado.');
-        return prev;
-      }
       const estabaActivo = prev.find(d => d.id === id)?.activo;
       const listaActualizada = prev.filter(d => d.id !== id);
       if (estabaActivo && listaActualizada.length > 0) {
