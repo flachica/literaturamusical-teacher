@@ -359,6 +359,7 @@ export default function Navbar({
         textoConfirmar="Sí, reiniciar"
         textoCancelar="Cancelar"
         variante="peligro"
+        requiereCheck={true}
         onConfirm={() => {
           onResetProgreso();
           setMostrarConfirmReset(false);

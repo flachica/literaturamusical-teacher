@@ -8,9 +8,18 @@ export default function ConfirmModal({
   textoConfirmar = 'Sí, continuar',
   textoCancelar = 'Cancelar',
   variante = 'peligro', // 'peligro' | 'advertencia'
+  requiereCheck = false,
   onConfirm,
   onCancel
 }) {
+  const [confirmadoCheck, setConfirmadoCheck] = React.useState(false);
+
+  React.useEffect(() => {
+    if (!isOpen) {
+      setConfirmadoCheck(false);
+    }
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   const colorBorder = variante === 'peligro' ? '#ef4444' : '#f59e0b';
@@ -60,9 +69,33 @@ export default function ConfirmModal({
           </div>
         </div>
 
-        <p style={{ fontSize: '0.9rem', color: '#cbd5e1', lineHeight: 1.5, marginBottom: '22px' }}>
+        <p style={{ fontSize: '0.9rem', color: '#cbd5e1', lineHeight: 1.5, marginBottom: '20px' }}>
           {mensaje}
         </p>
+
+        {requiereCheck && (
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            marginBottom: '20px',
+            background: 'rgba(239, 68, 68, 0.05)',
+            padding: '10px 14px',
+            borderRadius: '10px',
+            border: '1px solid rgba(239, 68, 68, 0.15)'
+          }}>
+            <input
+              type="checkbox"
+              id="confirm-modal-checkbox"
+              checked={confirmadoCheck}
+              onChange={e => setConfirmadoCheck(e.target.checked)}
+              style={{ cursor: 'pointer', width: '16px', height: '16px', accentColor: colorBorder }}
+            />
+            <label htmlFor="confirm-modal-checkbox" style={{ fontSize: '0.82rem', color: '#fca5a5', fontWeight: 700, cursor: 'pointer', userSelect: 'none' }}>
+              Entiendo que esta acción es permanente
+            </label>
+          </div>
+        )}
 
         <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
           <button
@@ -86,6 +119,7 @@ export default function ConfirmModal({
 
           <button
             onClick={onConfirm}
+            disabled={requiereCheck && !confirmadoCheck}
             style={{
               padding: '9px 20px',
               borderRadius: '10px',
@@ -94,11 +128,13 @@ export default function ConfirmModal({
               border: 'none',
               fontWeight: 800,
               fontSize: '0.85rem',
-              cursor: 'pointer',
-              boxShadow: `0 0 14px ${colorGlow}`,
+              cursor: (requiereCheck && !confirmadoCheck) ? 'not-allowed' : 'pointer',
+              opacity: (requiereCheck && !confirmadoCheck) ? 0.45 : 1,
+              boxShadow: (requiereCheck && !confirmadoCheck) ? 'none' : `0 0 14px ${colorGlow}`,
               display: 'flex',
               alignItems: 'center',
-              gap: '6px'
+              gap: '6px',
+              transition: 'all 0.2s'
             }}
           >
             <Check size={16} /> {textoConfirmar}

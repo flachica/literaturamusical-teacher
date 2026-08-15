@@ -45,50 +45,111 @@ export default function ModoAdmin({
       )}
 
       {pestanaActiva === 'ajustes' && (
-        <div className="glass-panel" style={{ padding: '20px', marginBottom: '24px' }}>
-          <h3 style={{ fontSize: '1.05rem', fontWeight: 800, color: '#ec4899', display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
-            <Trophy size={18} /> Progreso de la Detective Guardado en Local
-          </h3>
-          <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '16px' }}>
-            Visualiza el avance del perfil de la niña o restablece sus estadísticas a cero en caso de ser necesario.
-          </p>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px', background: 'rgba(15, 23, 42, 0.4)', padding: '16px', borderRadius: '12px', border: '1px solid rgba(255, 255, 255, 0.05)' }}>
-            <div style={{ display: 'flex', gap: '20px', fontSize: '0.95rem', flexWrap: 'wrap' }}>
-              <span style={{ color: '#f59e0b', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '6px' }}>
-                🏆 Puntos: {puntos}
-              </span>
-              <span style={{ color: '#8b5cf6', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '6px' }}>
-                ⚡ Nivel: {nivel}
-              </span>
-              <span style={{ color: '#ec4899', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '6px' }}>
-                ✨ Estrellas: {estrellas}
-              </span>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+          
+          {/* Grid de Estadísticas de la Detective */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px' }}>
+            
+            {/* Tarjeta 1: Puntos */}
+            <div style={{
+              background: 'rgba(245, 158, 11, 0.06)',
+              border: '1px solid rgba(245, 158, 11, 0.2)',
+              borderRadius: '16px',
+              padding: '20px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '16px'
+            }}>
+              <div style={{ fontSize: '2.2rem' }}>🏆</div>
+              <div>
+                <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)', display: 'block', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Puntos Totales</span>
+                <span style={{ fontSize: '1.5rem', fontWeight: 900, color: '#fbbf24' }}>{puntos} PTS</span>
+              </div>
             </div>
-            <div>
+
+            {/* Tarjeta 2: Nivel */}
+            <div style={{
+              background: 'rgba(139, 92, 246, 0.06)',
+              border: '1px solid rgba(139, 92, 246, 0.2)',
+              borderRadius: '16px',
+              padding: '20px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '16px'
+            }}>
+              <div style={{ fontSize: '2.2rem' }}>⚡</div>
+              <div>
+                <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)', display: 'block', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Nivel de Rango</span>
+                <span style={{ fontSize: '1.5rem', fontWeight: 900, color: '#c084fc' }}>Nivel {nivel}</span>
+              </div>
+            </div>
+
+            {/* Tarjeta 3: Estrellas */}
+            <div style={{
+              background: 'rgba(236, 72, 153, 0.06)',
+              border: '1px solid rgba(236, 72, 153, 0.2)',
+              borderRadius: '16px',
+              padding: '20px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '16px'
+            }}>
+              <div style={{ fontSize: '2.2rem' }}>✨</div>
+              <div>
+                <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)', display: 'block', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Estrellas Obtenidas</span>
+                <span style={{ fontSize: '1.5rem', fontWeight: 900, color: '#f472b6' }}>{estrellas} ★</span>
+              </div>
+            </div>
+
+          </div>
+
+          {/* Tarjeta de Control y Reseteo */}
+          <div style={{
+            background: 'rgba(30, 41, 59, 0.3)',
+            border: '1px solid rgba(255, 255, 255, 0.06)',
+            borderRadius: '16px',
+            padding: '24px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+            gap: '20px'
+          }}>
+            <div style={{ maxWidth: '600px' }}>
+              <h4 style={{ fontSize: '1.05rem', fontWeight: 800, color: '#ffffff', marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                ⚠️ Zona de Peligro: Reiniciar Datos de Juego
+              </h4>
+              <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: 1.5 }}>
+                Esta acción borrará de forma irreversible todo el progreso actual de la detective (puntuación, nivel, estrellas acumuladas y medallas obtenidas) restableciendo el perfil a cero. Se solicitará confirmación de seguridad con checkbox.
+              </p>
+            </div>
+            
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '4px' }}>
               <button
                 onClick={() => setMostrarConfirmReset(true)}
                 style={{
-                  padding: '10px 16px',
-                  borderRadius: '10px',
-                  background: 'rgba(239, 68, 68, 0.15)',
+                  padding: '12px 20px',
+                  borderRadius: '12px',
+                  background: 'rgba(239, 68, 68, 0.1)',
                   color: '#f87171',
-                  border: '1px solid rgba(239, 68, 68, 0.3)',
-                  fontWeight: 700,
+                  border: '1px solid rgba(239, 68, 68, 0.25)',
+                  fontWeight: 800,
                   fontSize: '0.85rem',
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '6px',
+                  gap: '8px',
                   cursor: 'pointer',
                   transition: 'all 0.2s'
                 }}
               >
-                <RotateCcw size={14} /> Reiniciar Progreso
+                <RotateCcw size={16} /> Reiniciar Historial
               </button>
               {mensajeProgreso && (
-                <span style={{ fontSize: '0.75rem', color: '#34d399', display: 'block', marginTop: '4px', textAlign: 'right' }}>{mensajeProgreso}</span>
+                <span style={{ fontSize: '0.82rem', color: '#34d399', fontWeight: 700, display: 'block', marginTop: '4px' }}>{mensajeProgreso}</span>
               )}
             </div>
           </div>
+
         </div>
       )}
 
@@ -102,6 +163,7 @@ export default function ModoAdmin({
         textoConfirmar="Sí, reiniciar todo"
         textoCancelar="Cancelar"
         variante="peligro"
+        requiereCheck={true}
         onConfirm={ejecutarResetProgreso}
         onCancel={() => setMostrarConfirmReset(false)}
       />
