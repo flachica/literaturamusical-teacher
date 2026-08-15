@@ -190,7 +190,7 @@ export default function Navbar({
                   boxShadow: pestanaActiva === 'ajustes' ? '0 0 10px rgba(245, 158, 11, 0.15)' : 'none'
                 }}
               >
-                ⚙️ Ajustes
+                🕵️‍♂️ Detectives
               </button>
 
               <button
