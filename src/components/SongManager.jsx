@@ -959,13 +959,13 @@ export default function SongManager({ canciones, audioStatus, onGuardarCanciones
               </button>
 
               <button
-                onClick={() => guardarCancionFinal(true)}
+                onClick={() => guardarCancionFinal(false)}
                 style={{
                   padding: '12px 16px',
                   borderRadius: '12px',
-                  background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.3), rgba(236, 72, 153, 0.3))',
+                  background: 'rgba(255, 255, 255, 0.05)',
                   color: '#ffffff',
-                  border: '1px solid #c084fc',
+                  border: '1px solid rgba(255, 255, 255, 0.15)',
                   fontWeight: 800,
                   fontSize: '0.9rem',
                   display: 'flex',
@@ -975,10 +975,10 @@ export default function SongManager({ canciones, audioStatus, onGuardarCanciones
                   cursor: 'pointer'
                 }}
               >
-                <Bot size={20} color="#c084fc" />
+                <Music size={20} color="#94a3b8" />
                 <div>
-                  <div>🤖 Guardar y pedir a la IA que la renderice</div>
-                  <div style={{ fontSize: '0.75rem', fontWeight: 400, color: '#e2e8f0' }}>Dejar lista para generación de letra por Ollama en v0.3.0</div>
+                  <div>💾 Guardar sin letra (modo borrador)</div>
+                  <div style={{ fontSize: '0.75rem', fontWeight: 400, color: 'var(--text-muted)' }}>La canción se guardará y podrás editar su letra más tarde.</div>
                 </div>
               </button>
             </div>
@@ -1002,7 +1002,7 @@ export default function SongManager({ canciones, audioStatus, onGuardarCanciones
               background: 'rgba(15, 23, 42, 0.7)',
               padding: '16px',
               borderRadius: '12px',
-              border: `1px solid ${c.letraPendienteIA ? 'rgba(192, 132, 252, 0.4)' : 'rgba(255, 255, 255, 0.08)'}`,
+              border: '1px solid rgba(255, 255, 255, 0.08)',
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'space-between'
@@ -1022,12 +1022,6 @@ export default function SongManager({ canciones, audioStatus, onGuardarCanciones
               <p style={{ fontSize: '0.85rem', color: 'var(--primary)', fontWeight: 700, marginTop: '2px' }}>
                 {c.artistaNombre} <span style={{ color: 'var(--text-muted)', fontWeight: 400 }}>({c.album})</span>
               </p>
-
-              {c.letraPendienteIA && (
-                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', marginTop: '6px', fontSize: '0.75rem', background: 'rgba(139, 92, 246, 0.25)', color: '#c084fc', border: '1px solid #8b5cf6', padding: '2px 8px', borderRadius: '6px', fontWeight: 800 }}>
-                  <Bot size={12} /> 🤖 Pendiente de IA (v0.3.0)
-                </span>
-              )}
 
               {/* Indicador de estado del audio */}
               <div style={{ marginTop: '8px', display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>

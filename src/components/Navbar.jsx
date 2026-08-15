@@ -180,6 +180,7 @@ export default function Navbar({
                 ⚙️ Ajustes Técnicos
               </div>
 
+              {/* Servidor de IA Local (Ollama) - Ocultado temporalmente por reducción de ruido visual en v0.2.14
               <div style={{ padding: '6px 10px', marginTop: '4px' }}>
                 <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', display: 'block', marginBottom: '6px' }}>Servidor de IA Local (Ollama):</span>
                 <button
@@ -203,6 +204,7 @@ export default function Navbar({
                   {modoIA ? 'IA Activa (Ollama)' : 'Modo Sin IA (Offline)'}
                 </button>
               </div>
+              */}
 
               {/* Proyecto y Documentación */}
               <div style={{ padding: '6px 10px', borderTop: '1px solid rgba(255,255,255,0.08)', marginTop: '8px', paddingTop: '8px' }}>
