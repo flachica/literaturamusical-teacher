@@ -368,8 +368,6 @@ export default function ModoAdmin({
 
           </div>
 
-          </div>
-
         </div>
       )}
 
