@@ -188,7 +188,11 @@ export default function SongManager({ canciones, audioStatus, onGuardarCanciones
       targetUrl = `${nuevoArtista.trim()} ${nuevoTitulo.trim()}`.trim();
     }
     if (!targetUrl) {
-      alert('Introduce el nombre del tema o una URL de YouTube.');
+      setModalAlerta({
+        titulo: 'Falta información',
+        mensaje: 'Introduce el nombre del tema o una URL de YouTube para poder descargar el audio.',
+        variante: 'advertencia'
+      });
       return;
     }
     setCargandoAudioYouTube(true);
@@ -205,10 +209,18 @@ export default function SongManager({ canciones, audioStatus, onGuardarCanciones
         setYoutubeUrlOriginal(targetUrl);
         setMensajeExito(`¡Audio procesado! Se ha descargado y convertido a ${data.filename} para reproducir en LitMusical.`);
       } else {
-        alert(data.error || 'No se pudo convertir el audio de YouTube.');
+        setModalAlerta({
+          titulo: 'Error de conversión',
+          mensaje: data.error || 'No se pudo descargar o convertir el audio de YouTube. Verifica el enlace e inténtalo de nuevo.',
+          variante: 'peligro'
+        });
       }
     } catch (err) {
-      alert('Error de conexión con el servidor de conversión: ' + err.message);
+      setModalAlerta({
+        titulo: 'Error de conexión',
+        mensaje: 'Error de conexión con el servidor de conversión: ' + err.message,
+        variante: 'peligro'
+      });
     } finally {
       setCargandoAudioYouTube(false);
     }
@@ -221,7 +233,11 @@ export default function SongManager({ canciones, audioStatus, onGuardarCanciones
   const handleBuscarLetraKaraokeAPI = async () => {
     const queryText = `${nuevoArtista.trim()} ${nuevoTitulo.trim()}`.trim();
     if (!queryText) {
-      alert('Escribe al menos el Título de la canción o el Artista para buscar.');
+      setModalAlerta({
+        titulo: 'Falta información',
+        mensaje: 'Por favor, escribe al menos el Título de la canción o el Artista para poder buscar en la Karaoke API.',
+        variante: 'advertencia'
+      });
       return;
     }
     setCargandoAPI(true);
@@ -292,10 +308,18 @@ export default function SongManager({ canciones, audioStatus, onGuardarCanciones
           setMensajeExito(`¡Encontrada! «${tituloFinal}» de ${artistaFinal} (${versos.length} versos). Avanzando al Paso 2...`);
         }
       } else {
-        alert(`No se encontraron resultados en la Karaoke API para "${queryText}".`);
+        setModalAlerta({
+          titulo: 'Sin resultados',
+          mensaje: `No se encontraron resultados en la Karaoke API para "${queryText}". Intenta refinar la búsqueda con el nombre exacto de la canción o el artista.`,
+          variante: 'advertencia'
+        });
       }
     } catch (err) {
-      alert('Error al conectar con la Karaoke API: ' + err.message);
+      setModalAlerta({
+        titulo: 'Error de conexión',
+        mensaje: 'Error al conectar con la Karaoke API: ' + err.message,
+        variante: 'peligro'
+      });
     } finally {
       setCargandoAPI(false);
     }
@@ -313,7 +337,11 @@ export default function SongManager({ canciones, audioStatus, onGuardarCanciones
   const handleValidarSubmit = (e) => {
     e.preventDefault();
     if (!nuevoTitulo.trim() || !nuevoArtista.trim()) {
-      alert('Por favor, rellenar como mínimo el título y el artista de la canción.');
+      setModalAlerta({
+        titulo: 'Falta información',
+        mensaje: 'Por favor, rellena como mínimo el Título y el Artista de la canción antes de continuar.',
+        variante: 'advertencia'
+      });
       return;
     }
 
