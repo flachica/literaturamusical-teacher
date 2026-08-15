@@ -30,6 +30,15 @@ export default function ModoAdmin({
   const [detectiveEditandoId, setDetectiveEditandoId] = useState(null);
   const [nombreEditando, setNombreEditando] = useState('');
   const [detectiveAReiniciar, setDetectiveAReiniciar] = useState(null);
+  const [detectiveAEliminar, setDetectiveAEliminar] = useState(null);
+  const [mostrarConfirmEliminar, setMostrarConfirmEliminar] = useState(false);
+
+  const ejecutarEliminarDetective = () => {
+    if (!detectiveAEliminar) return;
+    onEliminarDetective(detectiveAEliminar.id);
+    setMostrarConfirmEliminar(false);
+    setDetectiveAEliminar(null);
+  };
 
   const avataresDisponibles = ['🕵️‍♀️', '🦊', '🦁', '🐼', '🦄', '🐨', '🦖', '🐯', '🐸', '🦉', '🐙', '🐵'];
 
@@ -265,20 +274,25 @@ export default function ModoAdmin({
                           </button>
                         )}
 
-                        {detectives.length > 1 && (
+                        {!estaEditando && (
                           <button
-                            onClick={() => onEliminarDetective(det.id)}
+                            disabled={detectives.length <= 1}
+                            onClick={() => {
+                              setDetectiveAEliminar(det);
+                              setMostrarConfirmEliminar(true);
+                            }}
                             style={{
                               padding: '6px',
                               borderRadius: '8px',
-                              background: 'rgba(239, 68, 68, 0.1)',
-                              color: '#fca5a5',
-                              border: '1px solid rgba(239, 68, 68, 0.2)',
-                              cursor: 'pointer',
+                              background: detectives.length <= 1 ? 'rgba(255, 255, 255, 0.02)' : 'rgba(239, 68, 68, 0.1)',
+                              color: detectives.length <= 1 ? '#475569' : '#fca5a5',
+                              border: `1px solid ${detectives.length <= 1 ? 'rgba(255, 255, 255, 0.05)' : 'rgba(239, 68, 68, 0.2)'}`,
+                              cursor: detectives.length <= 1 ? 'not-allowed' : 'pointer',
                               display: 'flex',
-                              alignItems: 'center'
+                              alignItems: 'center',
+                              opacity: detectives.length <= 1 ? 0.35 : 1
                             }}
-                            title="Eliminar detective"
+                            title={detectives.length <= 1 ? "No puedes eliminar el único detective registrado" : "Eliminar detective"}
                           >
                             <Trash2 size={12} />
                           </button>
@@ -383,6 +397,21 @@ export default function ModoAdmin({
         onCancel={() => {
           setMostrarConfirmReset(false);
           setDetectiveAReiniciar(null);
+        }}
+      />
+
+      {/* Modal de confirmación para eliminar detective */}
+      <ConfirmModal
+        isOpen={mostrarConfirmEliminar}
+        titulo={`¿Eliminar al detective ${detectiveAEliminar?.nombre}?`}
+        mensaje={`¿Seguro que quieres eliminar a ${detectiveAEliminar?.nombre}? Se perderán definitivamente todos sus puntos, nivel y estrellas. Esta acción no se puede deshacer.`}
+        textoConfirmar="Sí, eliminar"
+        textoCancelar="Cancelar"
+        variante="peligro"
+        onConfirm={ejecutarEliminarDetective}
+        onCancel={() => {
+          setMostrarConfirmEliminar(false);
+          setDetectiveAEliminar(null);
         }}
       />
 
