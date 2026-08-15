@@ -66,48 +66,62 @@ export default function Navbar({
 
         {/* User Stats Bar for Daughter (Visible in Detective & Diccionario modes) */}
         {!esAdmin && (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', background: 'rgba(15, 23, 42, 0.7)', padding: '6px 16px', borderRadius: '9999px', border: '1px solid rgba(255, 255, 255, 0.1)' }}>
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '8px',
+            background: 'rgba(15, 23, 42, 0.55)',
+            padding: '10px 18px',
+            borderRadius: '20px',
+            border: '1px solid rgba(255, 255, 255, 0.08)',
+            boxShadow: '0 4px 20px rgba(0, 0, 0, 0.25)'
+          }}>
             
+            {/* Detective Activo (Encima y más grande) */}
             {detectiveActivo && (
-              <>
-                <div
-                  onClick={() => setMostrarSelectorDetectives(true)}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '6px',
-                    marginRight: '2px',
-                    cursor: 'pointer',
-                    padding: '2px 8px',
-                    borderRadius: '8px',
-                    background: 'rgba(255, 255, 255, 0.04)',
-                    border: '1px solid rgba(255, 255, 255, 0.08)',
-                    transition: 'all 0.2s'
-                  }}
-                  title="Cambiar de detective"
-                  className="btn-detective-selector"
-                >
-                  <span style={{ fontSize: '1.05rem', lineHeight: 1 }}>{detectiveActivo.avatar}</span>
-                  <span style={{ fontWeight: 900, color: '#a78bfa', fontSize: '0.85rem' }}>{detectiveActivo.nombre} ▾</span>
-                </div>
-                <div style={{ width: '1px', height: '14px', background: 'rgba(255, 255, 255, 0.2)' }} />
-              </>
+              <div
+                onClick={() => setMostrarSelectorDetectives(true)}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  cursor: 'pointer',
+                  padding: '4px 14px',
+                  borderRadius: '12px',
+                  background: 'rgba(139, 92, 246, 0.12)',
+                  border: '1.5px solid rgba(139, 92, 246, 0.35)',
+                  transition: 'all 0.2s',
+                  boxShadow: '0 2px 10px rgba(139, 92, 246, 0.1)'
+                }}
+                title="Haz clic para cambiar de detective"
+                className="btn-detective-selector"
+              >
+                <span style={{ fontSize: '1.3rem', lineHeight: 1 }}>{detectiveActivo.avatar}</span>
+                <span style={{ fontWeight: 900, color: '#c084fc', fontSize: '0.98rem', letterSpacing: '0.02em' }}>
+                  {detectiveActivo.nombre} <span style={{ fontSize: '0.85rem', color: '#a78bfa' }}>▾</span>
+                </span>
+              </div>
             )}
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <Award size={16} color="#f59e0b" />
-              <span style={{ fontWeight: 800, color: '#fbbf24', fontSize: '0.85rem' }}>Nivel {nivel}</span>
+            {/* Sub-fila compacta con estadísticas de juego */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '14px', fontSize: '0.82rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                <Award size={14} color="#f59e0b" />
+                <span style={{ fontWeight: 800, color: '#fbbf24' }}>Nivel {nivel}</span>
+              </div>
+              <div style={{ width: '1px', height: '10px', background: 'rgba(255, 255, 255, 0.15)' }} />
+              <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                <Star size={14} color="#ec4899" fill="#ec4899" />
+                <span style={{ fontWeight: 800, color: '#f472b6' }}>{estrellas} Estrellas</span>
+              </div>
+              <div style={{ width: '1px', height: '10px', background: 'rgba(255, 255, 255, 0.15)' }} />
+              <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                <Sparkles size={14} color="#38bdf8" />
+                <span style={{ fontWeight: 800, color: '#38bdf8' }}>{puntos} PTS</span>
+              </div>
             </div>
-            <div style={{ width: '1px', height: '14px', background: 'rgba(255, 255, 255, 0.2)' }} />
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <Star size={16} color="#ec4899" fill="#ec4899" />
-              <span style={{ fontWeight: 800, color: '#f472b6', fontSize: '0.85rem' }}>{estrellas} Estrellas</span>
-            </div>
-            <div style={{ width: '1px', height: '14px', background: 'rgba(255, 255, 255, 0.2)' }} />
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <Sparkles size={16} color="#38bdf8" />
-              <span style={{ fontWeight: 800, color: '#38bdf8', fontSize: '0.85rem' }}>{puntos} PTS</span>
-            </div>
+
           </div>
         )}
 
