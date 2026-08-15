@@ -14,12 +14,11 @@ export default function ModoAdmin({
   puntos,
   nivel,
   estrellas,
-  onResetProgreso
+  onResetProgreso,
+  pestanaActiva
 }) {
-  const [pestanaActiva, setPestanaActiva] = useState('canciones');
   const [mensajeProgreso, setMensajeProgreso] = useState('');
   const [mostrarConfirmReset, setMostrarConfirmReset] = useState(false);
-  const [hoveredTab, setHoveredTab] = useState(null);
 
   const ejecutarResetProgreso = () => {
     onResetProgreso();
@@ -30,43 +29,6 @@ export default function ModoAdmin({
 
   return (
     <div style={{ maxWidth: '1000px', margin: '0 auto', paddingTop: '10px' }}>
-
-      {/* Selector de Pestañas de Administración (Tab Bar) */}
-      <div style={{ display: 'flex', gap: '8px', borderBottom: '1px solid rgba(255, 255, 255, 0.08)', paddingBottom: '12px', marginBottom: '24px', flexWrap: 'wrap' }}>
-        {[
-          { id: 'canciones', label: 'Gestión de Canciones' },
-          { id: 'figuras', label: 'Diccionario de Figuras' },
-          { id: 'ajustes', label: 'Ajustes' }
-        ].map(tab => {
-          const isActive = pestanaActiva === tab.id;
-          return (
-            <button
-              key={tab.id}
-              onClick={() => setPestanaActiva(tab.id)}
-              onMouseEnter={() => setHoveredTab(tab.id)}
-              onMouseLeave={() => setHoveredTab(null)}
-              style={{
-                padding: '10px 20px',
-                borderRadius: '12px',
-                background: isActive 
-                  ? 'rgba(245, 158, 11, 0.18)' 
-                  : (hoveredTab === tab.id ? 'rgba(255, 255, 255, 0.05)' : 'rgba(255, 255, 255, 0.01)'),
-                color: isActive ? '#fbbf24' : '#cbd5e1',
-                border: '1.5px solid',
-                borderColor: isActive ? 'rgba(245, 158, 11, 0.6)' : 'rgba(255, 255, 255, 0.08)',
-                fontWeight: 700,
-                fontSize: '0.85rem',
-                cursor: 'pointer',
-                transition: 'all 0.25s ease',
-                boxShadow: isActive ? '0 0 12px rgba(245, 158, 11, 0.2)' : 'none',
-                transform: hoveredTab === tab.id && !isActive ? 'translateY(-1px)' : 'none'
-              }}
-            >
-              {tab.label}
-            </button>
-          );
-        })}
-      </div>
 
       {/* Renderizado Condicional por Pestaña */}
       {pestanaActiva === 'canciones' && (

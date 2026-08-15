@@ -12,6 +12,7 @@ export default function App() {
   const [modoIA, setModoIA] = useState(true);
   const [modoPrincipal, setModoPrincipal] = useState('detective'); // 'detective' | 'admin' | 'diccionario'
   const [cancionActual, setCancionActual] = useState(null);
+  const [pestanaActiva, setPestanaActiva] = useState('canciones'); // 'canciones' | 'figuras' | 'ajustes'
 
   // Custom hook for catalogs, physical audio checks and user progress
   const {
@@ -61,6 +62,8 @@ export default function App() {
         modoPrincipal={modoPrincipal}
         setModoPrincipal={setModoPrincipal}
         onResetProgreso={handleResetProgreso}
+        pestanaActiva={pestanaActiva}
+        setPestanaActiva={setPestanaActiva}
       />
 
       {/* VIEW 1: MODO DETECTIVE GUIADO (LIMPIO Y PASO A PASO PARA 9 AÑOS) */}
@@ -146,8 +149,6 @@ export default function App() {
       {/* VIEW 3: MODO ADMIN / PADRES */}
       {modoPrincipal === 'admin' && (
         <ModoAdmin
-          modoIA={modoIA}
-          setModoIA={setModoIA}
           canciones={canciones}
           figuras={figuras}
           audioStatus={audioStatus}
@@ -158,6 +159,7 @@ export default function App() {
           nivel={nivel}
           estrellas={estrellas}
           onResetProgreso={handleResetProgreso}
+          pestanaActiva={pestanaActiva}
         />
       )}
 

@@ -10,7 +10,9 @@ export default function Navbar({
   estrellas,
   modoPrincipal,
   setModoPrincipal,
-  onResetProgreso
+  onResetProgreso,
+  pestanaActiva,
+  setPestanaActiva
 }) {
   const [menuAbierto, setMenuAbierto] = useState(false);
   const [mostrarConfirmReset, setMostrarConfirmReset] = useState(false);
@@ -85,22 +87,88 @@ export default function Navbar({
           
           {/* Direct Return Button to Detective Mode when in Admin Mode */}
           {esAdmin ? (
-            <button
-              onClick={() => setModoPrincipal('detective')}
-              style={{
-                padding: '8px 16px',
-                borderRadius: '10px',
-                fontWeight: 800,
-                fontSize: '0.85rem',
-                background: 'linear-gradient(135deg, #10b981, #059669)',
-                color: '#ffffff',
-                border: 'none',
-                cursor: 'pointer',
-                boxShadow: '0 0 14px rgba(16, 185, 129, 0.4)'
-              }}
-            >
-              Volver al Juego
-            </button>
+            <>
+              {/* Pestañas de administración en la Navbar para reducir el ruido */}
+              <button
+                onClick={() => setPestanaActiva('canciones')}
+                style={{
+                  padding: '8px 14px',
+                  borderRadius: '10px',
+                  fontWeight: 800,
+                  fontSize: '0.85rem',
+                  background: pestanaActiva === 'canciones' ? 'rgba(245, 158, 11, 0.18)' : 'rgba(255, 255, 255, 0.02)',
+                  color: pestanaActiva === 'canciones' ? '#fbbf24' : '#cbd5e1',
+                  border: `1.5px solid ${pestanaActiva === 'canciones' ? 'rgba(245, 158, 11, 0.6)' : 'rgba(255, 255, 255, 0.15)'}`,
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  transition: 'all 0.2s ease',
+                  boxShadow: pestanaActiva === 'canciones' ? '0 0 10px rgba(245, 158, 11, 0.15)' : 'none'
+                }}
+              >
+                🎵 Canciones
+              </button>
+
+              <button
+                onClick={() => setPestanaActiva('figuras')}
+                style={{
+                  padding: '8px 14px',
+                  borderRadius: '10px',
+                  fontWeight: 800,
+                  fontSize: '0.85rem',
+                  background: pestanaActiva === 'figuras' ? 'rgba(245, 158, 11, 0.18)' : 'rgba(255, 255, 255, 0.02)',
+                  color: pestanaActiva === 'figuras' ? '#fbbf24' : '#cbd5e1',
+                  border: `1.5px solid ${pestanaActiva === 'figuras' ? 'rgba(245, 158, 11, 0.6)' : 'rgba(255, 255, 255, 0.15)'}`,
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  transition: 'all 0.2s ease',
+                  boxShadow: pestanaActiva === 'figuras' ? '0 0 10px rgba(245, 158, 11, 0.15)' : 'none'
+                }}
+              >
+                📖 Diccionario
+              </button>
+
+              <button
+                onClick={() => setPestanaActiva('ajustes')}
+                style={{
+                  padding: '8px 14px',
+                  borderRadius: '10px',
+                  fontWeight: 800,
+                  fontSize: '0.85rem',
+                  background: pestanaActiva === 'ajustes' ? 'rgba(245, 158, 11, 0.18)' : 'rgba(255, 255, 255, 0.02)',
+                  color: pestanaActiva === 'ajustes' ? '#fbbf24' : '#cbd5e1',
+                  border: `1.5px solid ${pestanaActiva === 'ajustes' ? 'rgba(245, 158, 11, 0.6)' : 'rgba(255, 255, 255, 0.15)'}`,
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  transition: 'all 0.2s ease',
+                  boxShadow: pestanaActiva === 'ajustes' ? '0 0 10px rgba(245, 158, 11, 0.15)' : 'none'
+                }}
+              >
+                ⚙️ Ajustes
+              </button>
+
+              <button
+                onClick={() => setModoPrincipal('detective')}
+                style={{
+                  padding: '8px 16px',
+                  borderRadius: '10px',
+                  fontWeight: 800,
+                  fontSize: '0.85rem',
+                  background: 'linear-gradient(135deg, #10b981, #059669)',
+                  color: '#ffffff',
+                  border: 'none',
+                  cursor: 'pointer',
+                  boxShadow: '0 0 14px rgba(16, 185, 129, 0.4)'
+                }}
+              >
+                Volver al Juego
+              </button>
+            </>
           ) : (
             <>
               {/* Direct 1-Click Dictionary Button for Daughter */}
