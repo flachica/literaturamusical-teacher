@@ -429,51 +429,93 @@ export default function SongManager({ canciones, audioStatus, onGuardarCanciones
     reader.readAsText(file);
   };
 
-  return (
-    <div className="glass-panel" style={{ padding: '24px', marginBottom: '24px' }}>
-      
-      {/* Header section */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px', marginBottom: '20px' }}>
-        <div>
-          <h3 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#f59e0b', display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <Music size={20} /> Gestión y Edición Local del Catálogo Karaoke
-          </h3>
-          <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-            Añade tus propias canciones descargando el MP3 y su letra en texto, edita el catálogo y exporta/importa en JSON local.
-          </p>
-        </div>
+  const hayAudiosPerdidos = canciones.some(c => audioStatus[c.id] === 'perdido');
 
-        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+  return (
+    <div style={{ marginBottom: '24px' }}>
+      
+      {/* Barra de herramientas compacta de Gestión de Canciones */}
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        flexWrap: 'wrap',
+        gap: '12px',
+        marginBottom: '20px',
+        padding: '8px 0',
+        borderBottom: '1px solid rgba(255, 255, 255, 0.05)'
+      }}>
+        
+        {/* Lado izquierdo: Añadir Nueva Canción (principal) */}
+        <div>
           <button
             onClick={() => setMostrarForm(!mostrarForm)}
             style={{
-              padding: '8px 14px',
-              borderRadius: '10px',
-              background: mostrarForm ? '#334155' : 'linear-gradient(135deg, #10b981, #059669)',
+              padding: '10px 18px',
+              borderRadius: '12px',
+              background: mostrarForm ? 'rgba(255, 255, 255, 0.1)' : 'linear-gradient(135deg, #10b981, #059669)',
               color: '#ffffff',
-              fontWeight: 700,
+              fontWeight: 800,
               fontSize: '0.85rem',
+              border: mostrarForm ? '1px solid rgba(255, 255, 255, 0.2)' : 'none',
               display: 'flex',
               alignItems: 'center',
-              gap: '6px'
+              gap: '6px',
+              cursor: 'pointer',
+              boxShadow: mostrarForm ? 'none' : '0 0 14px rgba(16, 185, 129, 0.35)',
+              transition: 'all 0.2s'
             }}
           >
-            <Plus size={16} /> {mostrarForm ? 'Cancelar' : 'Añadir Nueva Canción'}
+            <Plus size={16} /> {mostrarForm ? 'Cancelar' : 'Añadir Canción'}
           </button>
+        </div>
+
+        {/* Lado derecho: Acciones de catálogo e importación/exportación */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+          
+          {/* Botón de Reparar audios (solo si hay audios perdidos) */}
+          {hayAudiosPerdidos && (
+            <button
+              onClick={handleRepararTodosLosAudiosPerdidos}
+              disabled={reparandoGlobal}
+              style={{
+                padding: '8px 14px',
+                borderRadius: '10px',
+                background: reparandoGlobal
+                  ? 'rgba(71, 85, 105, 0.4)'
+                  : 'linear-gradient(135deg, #f59e0b, #d97706)',
+                color: '#ffffff',
+                border: 'none',
+                fontWeight: 800,
+                fontSize: '0.85rem',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                cursor: reparandoGlobal ? 'not-allowed' : 'pointer',
+                boxShadow: '0 0 12px rgba(245, 158, 11, 0.35)'
+              }}
+              title="Descarga los archivos de audio perdidos a partir de sus enlaces de YouTube"
+            >
+              <RotateCcw size={14} style={{ animation: reparandoGlobal ? 'spin 2s linear infinite' : 'none' }} />
+              {reparandoGlobal ? '⏳ Reparando...' : '🔄 Reparar Audios'}
+            </button>
+          )}
 
           <button
             onClick={handleExportarJSON}
             style={{
               padding: '8px 14px',
               borderRadius: '10px',
-              background: 'rgba(6, 182, 212, 0.2)',
-              color: '#38bdf8',
-              border: '1px solid rgba(6, 182, 212, 0.4)',
+              background: 'rgba(255, 255, 255, 0.03)',
+              color: '#cbd5e1',
+              border: '1px solid rgba(255, 255, 255, 0.1)',
               fontWeight: 700,
               fontSize: '0.85rem',
               display: 'flex',
               alignItems: 'center',
-              gap: '6px'
+              gap: '6px',
+              cursor: 'pointer',
+              transition: 'all 0.2s'
             }}
           >
             <Download size={14} /> Exportar JSON
@@ -482,63 +524,40 @@ export default function SongManager({ canciones, audioStatus, onGuardarCanciones
           <label style={{
             padding: '8px 14px',
             borderRadius: '10px',
-            background: 'rgba(139, 92, 246, 0.2)',
-            color: '#c084fc',
-            border: '1px solid rgba(139, 92, 246, 0.4)',
+            background: 'rgba(255, 255, 255, 0.03)',
+            color: '#cbd5e1',
+            border: '1px solid rgba(255, 255, 255, 0.1)',
             fontWeight: 700,
             fontSize: '0.85rem',
             display: 'inline-flex',
             alignItems: 'center',
             gap: '6px',
-            cursor: 'pointer'
+            cursor: 'pointer',
+            transition: 'all 0.2s'
           }}>
             <Upload size={14} /> Importar JSON
             <input type="file" accept=".json" onChange={handleImportarJSON} style={{ display: 'none' }} />
           </label>
 
           <button
-            onClick={handleRepararTodosLosAudiosPerdidos}
-            disabled={reparandoGlobal || !canciones.some(c => audioStatus[c.id] === 'perdido')}
+            onClick={() => setMostrarConfirmRestaurar(true)}
             style={{
               padding: '8px 14px',
               borderRadius: '10px',
-              background: reparandoGlobal
-                ? 'rgba(71, 85, 105, 0.4)'
-                : canciones.some(c => audioStatus[c.id] === 'perdido')
-                  ? 'linear-gradient(135deg, #f59e0b, #d97706)'
-                  : 'rgba(245, 158, 11, 0.1)',
-              color: canciones.some(c => audioStatus[c.id] === 'perdido') ? '#ffffff' : '#f59e0b',
-              border: `1px solid ${canciones.some(c => audioStatus[c.id] === 'perdido') ? 'transparent' : 'rgba(245, 158, 11, 0.3)'}`,
+              background: 'rgba(239, 68, 68, 0.08)',
+              color: '#fca5a5',
+              border: '1px solid rgba(239, 68, 68, 0.25)',
               fontWeight: 700,
               fontSize: '0.85rem',
               display: 'flex',
               alignItems: 'center',
               gap: '6px',
-              cursor: (!canciones.some(c => audioStatus[c.id] === 'perdido') || reparandoGlobal) ? 'not-allowed' : 'pointer'
-            }}
-            title="Escanea y descarga los archivos de audio locales perdidos a partir de sus enlaces de YouTube"
-          >
-            <RotateCcw size={14} style={{ animation: reparandoGlobal ? 'spin 2s linear infinite' : 'none' }} />
-            {reparandoGlobal ? '⏳ Reparando...' : '🔄 Reparar Audios Perdidos'}
-          </button>
-
-          <button
-            onClick={() => setMostrarConfirmRestaurar(true)}
-            style={{
-              padding: '8px 12px',
-              borderRadius: '10px',
-              background: 'rgba(239, 68, 68, 0.15)',
-              color: '#f87171',
-              border: '1px solid rgba(239, 68, 68, 0.3)',
-              fontWeight: 700,
-              fontSize: '0.85rem',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px'
+              cursor: 'pointer',
+              transition: 'all 0.2s'
             }}
             title="Restaurar canciones iniciales por defecto"
           >
-            <RotateCcw size={14} /> Restaurar
+            <RotateCcw size={14} /> Restaurar Catálogo
           </button>
         </div>
       </div>
