@@ -11,7 +11,8 @@ export default function Navbar({
   modoPrincipal,
   setModoPrincipal,
   pestanaActiva,
-  setPestanaActiva
+  setPestanaActiva,
+  detectiveActivo
 }) {
   const [menuAbierto, setMenuAbierto] = useState(false);
   const menuRef = useRef(null);
@@ -63,6 +64,17 @@ export default function Navbar({
         {/* User Stats Bar for Daughter (Visible in Detective & Diccionario modes) */}
         {!esAdmin && (
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', background: 'rgba(15, 23, 42, 0.7)', padding: '6px 16px', borderRadius: '9999px', border: '1px solid rgba(255, 255, 255, 0.1)' }}>
+            
+            {detectiveActivo && (
+              <>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginRight: '2px' }}>
+                  <span style={{ fontSize: '1.05rem', lineHeight: 1 }}>{detectiveActivo.avatar}</span>
+                  <span style={{ fontWeight: 900, color: '#a78bfa', fontSize: '0.85rem' }}>{detectiveActivo.nombre}</span>
+                </div>
+                <div style={{ width: '1px', height: '14px', background: 'rgba(255, 255, 255, 0.2)' }} />
+              </>
+            )}
+
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
               <Award size={16} color="#f59e0b" />
               <span style={{ fontWeight: 800, color: '#fbbf24', fontSize: '0.85rem' }}>Nivel {nivel}</span>

@@ -1,24 +1,25 @@
 import { useState, useEffect } from 'react';
 import {
-  loadUserProgress,
-  saveUserProgress,
-  resetUserProgress,
   loadSongsCatalog,
   saveSongsCatalog,
-  resetSongsCatalog,
   loadFiguresCatalog,
-  saveFiguresCatalog
+  saveFiguresCatalog,
+  loadDetectives,
+  saveDetectives
 } from '../utils/storage';
 
 /**
- * Hook personalizado para gestionar el progreso de la detective,
+ * Hook personalizado para gestionar el progreso de los detectives (multi-jugador),
  * el catálogo de canciones, el catálogo de figuras literarias,
  * la persistencia local-first y la verificación física de audios.
  */
 export default function useLocalCatalog(cancionActual, setCancionActual) {
-  // User progress state (Persisted in LocalStorage)
-  const [progreso, setProgreso] = useState(() => loadUserProgress());
-  const { puntos, nivel, estrellas } = progreso;
+  // Lista de detectives (persistencia local y disco)
+  const [detectives, setDetectives] = useState(() => loadDetectives());
+
+  // Detective activo actual
+  const detectiveActivo = detectives.find(d => d.activo) || detectives[0];
+  const { puntos, nivel, estrellas } = detectiveActivo || { puntos: 0, nivel: 1, estrellas: 0 };
 
   // Catalog states (Songs & Literary Figures)
   const [canciones, setCanciones] = useState(() => loadSongsCatalog());
@@ -76,12 +77,16 @@ export default function useLocalCatalog(cancionActual, setCancionActual) {
         }
       })
       .catch(err => console.warn('Aviso al cargar figuras de disco:', err));
-  }, []);
 
-  // Sync user progress when changed
-  useEffect(() => {
-    saveUserProgress(progreso);
-  }, [progreso]);
+    fetch('/api/detectives')
+      .then(res => res.json())
+      .then(diskDetectives => {
+        if (Array.isArray(diskDetectives) && diskDetectives.length > 0) {
+          setDetectives(diskDetectives);
+        }
+      })
+      .catch(err => console.warn('Aviso al cargar detectives de disco:', err));
+  }, []);
 
   // Sync songs catalog when changed
   useEffect(() => {
@@ -102,20 +107,97 @@ export default function useLocalCatalog(cancionActual, setCancionActual) {
     saveFiguresCatalog(figuras);
   }, [figuras]);
 
+  // Sumar puntos al detective activo y subir de nivel
   const handleSumarPuntos = (cantidad) => {
     const nuevosPuntos = puntos + cantidad;
-    const nuevoNivel = Math.floor(nuevosPuntos / 300) + 1; // 300 pts per level
+    const nuevoNivel = Math.floor(nuevosPuntos / 300) + 1; // 300 pts por nivel
     const nuevasEstrellas = estrellas + Math.floor(cantidad / 100);
-    setProgreso({
-      puntos: nuevosPuntos,
-      nivel: nuevoNivel,
-      estrellas: nuevasEstrellas
+
+    const listaActualizada = detectives.map(d => {
+      if (d.id === detectiveActivo.id) {
+        return {
+          ...d,
+          puntos: nuevosPuntos,
+          nivel: nuevoNivel,
+          estrellas: nuevasEstrellas
+        };
+      }
+      return d;
     });
+
+    setDetectives(listaActualizada);
+    saveDetectives(listaActualizada);
   };
 
+  // Cambiar el detective activo
+  const handleSeleccionarDetective = (id) => {
+    const listaActualizada = detectives.map(d => ({
+      ...d,
+      activo: d.id === id
+    }));
+    setDetectives(listaActualizada);
+    saveDetectives(listaActualizada);
+  };
+
+  // Crear un nuevo detective
+  const handleCrearDetective = (nombre, avatar = '🕵️‍♀️') => {
+    const nuevoDet = {
+      id: `detective_${Date.now()}`,
+      nombre: nombre.trim() || 'Nuevo Detective',
+      puntos: 0,
+      nivel: 1,
+      estrellas: 0,
+      avatar,
+      activo: false
+    };
+    const listaActualizada = [...detectives, nuevoDet];
+    setDetectives(listaActualizada);
+    saveDetectives(listaActualizada);
+    return nuevoDet;
+  };
+
+  // Renombrar un detective
+  const handleRenombrarDetective = (id, nuevoNombre) => {
+    const listaActualizada = detectives.map(d => {
+      if (d.id === id) {
+        return { ...d, nombre: nuevoNombre.trim() || d.nombre };
+      }
+      return d;
+    });
+    setDetectives(listaActualizada);
+    saveDetectives(listaActualizada);
+  };
+
+  // Eliminar un detective
+  const handleEliminarDetective = (id) => {
+    if (detectives.length <= 1) {
+      alert('⚠️ No puedes eliminar el único detective registrado.');
+      return;
+    }
+    const estabaActivo = detectives.find(d => d.id === id)?.activo;
+    const listaActualizada = detectives.filter(d => d.id !== id);
+    if (estabaActivo && listaActualizada.length > 0) {
+      listaActualizada[0].activo = true;
+    }
+    setDetectives(listaActualizada);
+    saveDetectives(listaActualizada);
+  };
+
+  // Resetear el progreso del detective activo
   const handleResetProgreso = () => {
-    const defaultProgress = resetUserProgress();
-    setProgreso(defaultProgress);
+    const listaActualizada = detectives.map(d => {
+      if (d.id === detectiveActivo.id) {
+        return {
+          ...d,
+          puntos: 0,
+          nivel: 1,
+          estrellas: 0
+        };
+      }
+      return d;
+    });
+    setDetectives(listaActualizada);
+    saveDetectives(listaActualizada);
   };
 
   const handleGuardarCanciones = (nuevoCat) => {
@@ -128,8 +210,15 @@ export default function useLocalCatalog(cancionActual, setCancionActual) {
     figuras,
     setFiguras,
     audioStatus,
-    progreso,
-    setProgreso,
+    detectives,
+    detectiveActivo,
+    handleSeleccionarDetective,
+    handleCrearDetective,
+    handleRenombrarDetective,
+    handleEliminarDetective,
+    puntos,
+    nivel,
+    estrellas,
     comprobarDisponibilidadAudios,
     handleSumarPuntos,
     handleResetProgreso,

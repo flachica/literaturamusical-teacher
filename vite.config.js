@@ -189,6 +189,37 @@ function jsonStoragePlugin() {
           }
         }
 
+        if (pathname === '/api/detectives') {
+          const detectivesFilePath = path.join(dataDir, 'detectives.json')
+
+          if (req.method === 'GET') {
+            res.setHeader('Content-Type', 'application/json')
+            if (fs.existsSync(detectivesFilePath)) {
+              return res.end(fs.readFileSync(detectivesFilePath, 'utf8'))
+            }
+            return res.end(JSON.stringify([]))
+          }
+
+          if (req.method === 'POST') {
+            let body = ''
+            req.on('data', chunk => { body += chunk })
+            req.on('end', () => {
+              try {
+                if (!fs.existsSync(dataDir)) {
+                  fs.mkdirSync(dataDir, { recursive: true })
+                }
+                fs.writeFileSync(detectivesFilePath, body, 'utf8')
+                res.setHeader('Content-Type', 'application/json')
+                res.end(JSON.stringify({ success: true, message: 'Fichero detectives.json guardado en disco.' }))
+              } catch (err) {
+                res.statusCode = 500
+                res.end(JSON.stringify({ error: err.message }))
+              }
+            })
+            return
+          }
+        }
+
         next()
       })
     }

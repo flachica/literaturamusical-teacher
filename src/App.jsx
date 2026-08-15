@@ -14,20 +14,25 @@ export default function App() {
   const [cancionActual, setCancionActual] = useState(null);
   const [pestanaActiva, setPestanaActiva] = useState('canciones'); // 'canciones' | 'figuras' | 'ajustes'
 
-  // Custom hook for catalogs, physical audio checks and user progress
+  // Custom hook for catalogs, physical audio checks, user progress and multi-detectives
   const {
     canciones,
     figuras,
     setFiguras,
     audioStatus,
-    progreso,
+    detectives,
+    detectiveActivo,
+    handleSeleccionarDetective,
+    handleCrearDetective,
+    handleRenombrarDetective,
+    handleEliminarDetective,
+    puntos,
+    nivel,
+    estrellas,
     handleSumarPuntos,
     handleResetProgreso,
-    handleGuardarCanciones,
-    handleRestaurarCanciones
+    handleGuardarCanciones
   } = useLocalCatalog(cancionActual, setCancionActual);
-
-  const { puntos, nivel, estrellas } = progreso;
 
   // Custom hook for unified audio player playback state
   const {
@@ -63,6 +68,7 @@ export default function App() {
         setModoPrincipal={setModoPrincipal}
         pestanaActiva={pestanaActiva}
         setPestanaActiva={setPestanaActiva}
+        detectiveActivo={detectiveActivo}
       />
 
       {/* VIEW 1: MODO DETECTIVE GUIADO (LIMPIO Y PASO A PASO PARA 9 AÑOS) */}
@@ -158,6 +164,12 @@ export default function App() {
           estrellas={estrellas}
           onResetProgreso={handleResetProgreso}
           pestanaActiva={pestanaActiva}
+          detectives={detectives}
+          detectiveActivo={detectiveActivo}
+          onSeleccionarDetective={handleSeleccionarDetective}
+          onCrearDetective={handleCrearDetective}
+          onRenombrarDetective={handleRenombrarDetective}
+          onEliminarDetective={handleEliminarDetective}
         />
       )}
 

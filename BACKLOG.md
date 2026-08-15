@@ -37,12 +37,21 @@ Documento de seguimiento del desarrollo interactivo de **LitMusical** estructura
   * Refinamiento estético y de legibilidad de las tarjetas de canciones: tipografía un 20% más grande y elegante, mejores interlineados, efecto de elevación suave (hover) y papelera de borrado atenuada que solo brilla en rojo cuando el cursor pasa por encima.
   * Implementación de la **edición en caliente** del Diccionario de Figuras Poéticas (`FigureCatalog.jsx`) en Modo Admin mediante un modal interactivo que permite modificar la definición, el icono emoji, el consejo y los puntos de detective asociados.
 
-> 💡 **Reflexión de Diseño (Pendiente)**:
-> * **Persistencia Activa e Indicador Multi-Detective:** Analizar el cambio de progreso local único a soporte multi-detective (múltiples perfiles infantiles seleccionables en el mismo dispositivo) y su impacto en el almacenamiento local y la interfaz del Modo Detective.
+> 💡 **Reflexión de Diseño (Completada)**:
+> * **Persistencia Activa e Indicador Multi-Detective:** Resuelta mediante la creación del catálogo de perfiles de detectives interactivo en Ajustes.
 
 ---
 
-### 🔍 `v0.2.15` - Iteración de Usabilidad: Optimización del Modo Detective Guiado (PLANIFICADA)
+### 👥 `v0.2.15` - Persistencia Activa e Indicador Multi-Detective (COMPLETADA - SESIÓN 6)
+* **Objetivo**: Permitir que múltiples niños puedan jugar de forma independiente en el mismo dispositivo, gestionando sus propios puntos, estrellas y niveles con nombres y avatares personalizados.
+* **Entregables**:
+  * Implementación del almacén de datos multidetective en `storage.js` y `useLocalCatalog.js` con migración transparente del progreso previo de la niña "Valeria".
+  * Integración en el panel de **Ajustes** de la administración de perfiles: visualización en cuadrícula de los detectives registrados con sus estadísticas individuales, adición de nuevos perfiles con selector de emoji y renombrado/eliminación en caliente.
+  * Visualización dinámica del avatar emoji y el nombre del detective activo actual en la barra de estadísticas de la Navbar para feedback directo de la niña durante el juego.
+
+---
+
+### 🔍 `v0.2.16` - Iteración de Usabilidad: Optimización del Modo Detective Guiado (PLANIFICADA)
 * **Objetivo**: Mejorar la experiencia interactiva del juego para la niña de 9 años, asegurando que el flujo didáctico sea fluido y sin distracciones.
 * **Entregables**:
   * Ajustes en la interfaz del visualizador de ondas y scroll de letras para asegurar una perfecta coherencia visual y de respuesta en pantallas táctiles y escritorio.

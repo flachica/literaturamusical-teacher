@@ -198,3 +198,53 @@ export function resetFiguresCatalog() {
   }
   return FIGURAS_LITERARIAS;
 }
+
+const DETECTIVES_KEY = 'litmusical_detectives_v1';
+
+/**
+ * Carga el catálogo de detectives desde LocalStorage, migrando el progreso antiguo si es necesario.
+ */
+export function loadDetectives() {
+  try {
+    const saved = localStorage.getItem(DETECTIVES_KEY);
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        return parsed;
+      }
+    }
+  } catch (err) {
+    console.error('Error cargando detectives de LocalStorage:', err);
+  }
+
+  // Migración o creación del primer detective por defecto si no existen datos previos
+  const progresoAntiguo = loadUserProgress();
+  const defaultDetective = {
+    id: 'detective_valeria',
+    nombre: 'Valeria',
+    puntos: progresoAntiguo.puntos,
+    nivel: progresoAntiguo.nivel,
+    estrellas: progresoAntiguo.estrellas,
+    avatar: '🕵️‍♀️',
+    activo: true
+  };
+  const lista = [defaultDetective];
+  saveDetectives(lista);
+  return lista;
+}
+
+/**
+ * Guarda la lista de detectives en LocalStorage y sincroniza con el archivo físico en disco
+ */
+export function saveDetectives(list) {
+  try {
+    localStorage.setItem(DETECTIVES_KEY, JSON.stringify(list));
+    fetch('/api/detectives', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(list)
+    }).catch(() => {});
+  } catch (err) {
+    console.error('Error guardando detectives:', err);
+  }
+}
