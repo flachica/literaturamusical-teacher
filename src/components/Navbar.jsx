@@ -13,11 +13,9 @@ export default function Navbar({
   pestanaActiva,
   setPestanaActiva,
   detectiveActivo,
-  detectives = [],
-  onSeleccionarDetective
+  onAbrirSelector
 }) {
   const [menuAbierto, setMenuAbierto] = useState(false);
-  const [mostrarSelectorDetectives, setMostrarSelectorDetectives] = useState(false);
   const menuRef = useRef(null);
 
   const esAdmin = modoPrincipal === 'admin';
@@ -81,7 +79,7 @@ export default function Navbar({
             {/* Detective Activo (Encima y más grande) */}
             {detectiveActivo && (
               <div
-                onClick={() => setMostrarSelectorDetectives(true)}
+                onClick={onAbrirSelector}
                 style={{
                   display: 'flex',
                   alignItems: 'center',
@@ -364,109 +362,6 @@ export default function Navbar({
 
             </div>
           )}
-
-        {/* Modal Selector de Detectives Infantil */}
-        {mostrarSelectorDetectives && (
-          <div
-            className="modal-overlay-animate"
-            style={{
-              position: 'fixed',
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              background: 'rgba(15, 23, 42, 0.85)',
-              backdropFilter: 'blur(8px)',
-              display: 'flex',
-              alignItems: 'flex-start',
-              justifyContent: 'center',
-              zIndex: 9999,
-              padding: '40px 20px',
-              overflowY: 'auto'
-            }}
-          >
-            <div
-              className="modal-content-animate"
-              style={{
-                background: '#1e293b',
-                padding: '24px',
-                borderRadius: '24px',
-                border: '2px solid #8b5cf6',
-                maxWidth: '450px',
-                width: '100%',
-                margin: 'auto 0',
-                boxShadow: '0 0 30px rgba(139, 92, 246, 0.25)',
-                textAlign: 'center'
-              }}
-            >
-              <h3 style={{ fontSize: '1.25rem', fontWeight: 900, color: '#ffffff', marginBottom: '8px' }}>
-                🕵️‍♂️ ¿Quién va a investigar hoy?
-              </h3>
-              <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '20px' }}>
-                Selecciona tu perfil de detective para cargar tus puntos, nivel y estrellas.
-              </p>
-
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(110px, 1fr))', gap: '12px', marginBottom: '24px' }}>
-                {detectives.map(det => {
-                  const esActivo = det.id === detectiveActivo?.id;
-                  return (
-                    <button
-                      key={det.id}
-                      onClick={() => {
-                        onSeleccionarDetective(det.id);
-                        setMostrarSelectorDetectives(false);
-                      }}
-                      style={{
-                        background: esActivo ? 'rgba(139, 92, 246, 0.15)' : 'rgba(15, 23, 42, 0.4)',
-                        border: `2px solid ${esActivo ? '#8b5cf6' : 'rgba(255, 255, 255, 0.08)'}`,
-                        borderRadius: '18px',
-                        padding: '16px 8px',
-                        cursor: 'pointer',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        gap: '8px',
-                        transition: 'all 0.2s',
-                        boxShadow: esActivo ? '0 0 12px rgba(139, 92, 246, 0.2)' : 'none'
-                      }}
-                    >
-                      <span style={{ fontSize: '2.5rem', lineHeight: 1 }}>{det.avatar}</span>
-                      <span style={{ fontWeight: 800, fontSize: '0.88rem', color: esActivo ? '#c084fc' : '#ffffff', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap', width: '100%' }}>
-                        {det.nombre}
-                      </span>
-                      <span style={{ fontSize: '0.7rem', color: esActivo ? '#a78bfa' : 'var(--text-muted)', fontWeight: 700 }}>
-                        {det.puntos} PTS
-                      </span>
-                    </button>
-                  );
-                })}
-              </div>
-
-              <div style={{ display: 'flex', justifyContent: 'center' }}>
-                <button
-                  type="button"
-                  onClick={() => setMostrarSelectorDetectives(false)}
-                  style={{
-                    padding: '10px 24px',
-                    borderRadius: '12px',
-                    background: 'rgba(255, 255, 255, 0.06)',
-                    color: '#cbd5e1',
-                    border: '1px solid rgba(255, 255, 255, 0.1)',
-                    fontWeight: 700,
-                    fontSize: '0.85rem',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '6px',
-                    transition: 'all 0.2s'
-                  }}
-                >
-                  <X size={16} /> Cerrar
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
 
         </div>
 
