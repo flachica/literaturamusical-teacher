@@ -6,8 +6,8 @@ Documento de seguimiento del desarrollo interactivo de **LitMusical** estructura
 
 ## 📍 ESTADO ACTUAL DEL PROYECTO
 
-* **Sesión Actual**: 🟢 **SESIÓN 6** (Iteración 9 - Inicio)
-* **Subversión Alcanzada**: `v0.2.13` (Refactorización de Arquitectura y Componetización).
+* **Sesión Actual**: 🟢 **SESIÓN 6** (Iteración 10 - Completada)
+* **Subversión Alcanzada**: `v0.2.14` (Iteración de Usabilidad y Diccionario Editable).
 * **Métrica Clave del Reto (CPVM)**: 
   $$\text{CPVM} = [\text{Retos de figuras literarias resueltos con éxito}] + [\text{por la niña de forma autónoma}]$$
 * **Objetivo de la Iteración**: Planificación e inicio de la Gamificación Avanzada "Escuela de Detectives" (`v0.3.0`) y reordenamiento de la hoja de ruta.
@@ -28,14 +28,14 @@ Documento de seguimiento del desarrollo interactivo de **LitMusical** estructura
 
 ---
 
-### 🛠️ `v0.2.14` - Iteración de Usabilidad y Diccionario Editable (PLANIFICADA)
+### 🛠️ `v0.2.14` - Iteración de Usabilidad y Diccionario Editable (COMPLETADA - SESIÓN 6)
 * **Objetivo**: Pulir la interfaz de administración para reducir el ruido visual, permitir editar figuras literarias y trasladar información técnica a modales.
 * **Entregables**:
-  * Unificación estética de pestañas y tarjetas con un diseño de cristal (*glassmorphism*) más refinado y estructurado en la sección de administración.
-  * Formulario Wizard para añadir canciones más claro: pasos numerados con estados de carga activos.
-  * Ocultar la sección permanente de "Arquitectura Local-First" en la pestaña Ajustes y abrirla a demanda a través de un modal interactivo al pulsar el indicador "💾 Persistencia Activa".
-  * Eliminar el componente de sugerencias familiares (*FamilySuggestions*) por redundancia con el gestor de canciones.
-  * Rediseñar el Diccionario de Figuras (`FigureCatalog.jsx`) en Modo Admin para permitir la **edición en caliente** por parte de los padres (modificar nombre, definición infantil, ejemplo y puntos).
+  * Integración de las pestañas de administración en la Navbar superior al lado del botón "Volver al Juego", eliminando el selector interno del cuerpo de la pantalla.
+  * Limpieza del catálogo de canciones: eliminación del banner redundante y de la insignia permanente de IA. Unificación de botones en una barra de herramientas minimalista e inteligente (el botón de reparación solo aparece si hay audios perdidos).
+  * Rediseño del formulario Wizard para añadir canciones: cristal translúcido suave en lugar de bordes naranjas llamativos, y un selector rápido interactivo para las temáticas/emociones poéticas en lugar del desplegable plano.
+  * Refinamiento estético y de legibilidad de las tarjetas de canciones: tipografía un 20% más grande y elegante, mejores interlineados, efecto de elevación suave (hover) y papelera de borrado atenuada que solo brilla en rojo cuando el cursor pasa por encima.
+  * Implementación de la **edición en caliente** del Diccionario de Figuras Poéticas (`FigureCatalog.jsx`) en Modo Admin mediante un modal interactivo que permite modificar la definición, el icono emoji, el consejo y los puntos de detective asociados.
 
 > 💡 **Reflexión de Diseño (Pendiente)**:
 > * **Persistencia Activa e Indicador Multi-Detective:** Analizar el cambio de progreso local único a soporte multi-detective (múltiples perfiles infantiles seleccionables en el mismo dispositivo) y su impacto en el almacenamiento local y la interfaz del Modo Detective.
