@@ -89,9 +89,9 @@ export function sanitizeSongVerses(versos) {
 export function loadSongsCatalog() {
   try {
     const saved = localStorage.getItem(SONGS_KEY);
-    if (saved) {
+    if (saved !== null) {
       const parsed = JSON.parse(saved);
-      if (Array.isArray(parsed) && parsed.length > 0) {
+      if (Array.isArray(parsed)) {
         return parsed.map(s => {
           // Si el elemento tenía guardada una URL directa de YouTube no reproducible, limpiar la URL de vista previa
           let fixedAudioUrl = s.audioPreviewUrl || s.audioUrl;

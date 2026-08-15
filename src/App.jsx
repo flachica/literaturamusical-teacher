@@ -127,6 +127,39 @@ export default function App() {
                 Ir a Crear mi Detective 🚀
               </button>
             </div>
+          ) : canciones.length === 0 ? (
+            <div className="glass-panel modal-content-animate" style={{ padding: '40px', textAlign: 'center', marginTop: '30px', border: '2px solid #8b5cf6', boxShadow: '0 0 30px rgba(139, 92, 246, 0.2)', borderRadius: '24px', maxWidth: '600px', margin: '40px auto 0' }}>
+              <span style={{ fontSize: '4.5rem', display: 'block', marginBottom: '20px', lineHeight: 1 }}>🎵🔍</span>
+              <h2 style={{ fontSize: '1.65rem', fontWeight: 900, color: '#ffffff', marginBottom: '12px' }}>
+                ¡El catálogo está vacío!
+              </h2>
+              <p style={{ fontSize: '0.95rem', color: 'var(--text-muted)', maxWidth: '480px', margin: '0 auto 28px', lineHeight: 1.6 }}>
+                Todavía no hay canciones disponibles para investigar. Pídele a papá o mamá que vaya a la sección de administración para añadir la primera canción con música y figuras literarias.
+              </p>
+              <button
+                onClick={() => {
+                  setModoPrincipal('admin');
+                  setPestanaActiva('canciones');
+                }}
+                style={{
+                  padding: '12px 32px',
+                  borderRadius: '12px',
+                  background: 'linear-gradient(135deg, #10b981, #059669)',
+                  color: '#ffffff',
+                  border: 'none',
+                  fontSize: '0.95rem',
+                  fontWeight: 900,
+                  cursor: 'pointer',
+                  boxShadow: '0 0 20px rgba(16, 185, 129, 0.4)',
+                  transition: 'all 0.2s',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '8px'
+                }}
+              >
+                Ir a Añadir Canciones ➕
+              </button>
+            </div>
           ) : (
             <>
               {/* Song Switcher strip for Detective */}
