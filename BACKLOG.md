@@ -6,8 +6,9 @@ Documento de seguimiento del desarrollo interactivo de **LitMusical** estructura
 
 ## 📍 ESTADO ACTUAL DEL PROYECTO
 
-* **Sesión Actual**: 🔴 **SESIÓN 6 (CERRADA)** | **Próxima**: 🟢 **SESIÓN 7** (Iteración 13 - `v0.3.1`)
-* **Subversión Alcanzada**: `v0.3.0` (Persistencia Activa, Indicador Multi-Detective y Modales Accesibles con Teclado).
+* **Sesión Actual**: 🔴 **SESIÓN 6 (CERRADA)** | **Próxima**: 🟢 **SESIÓN 7** (Resolver fallo 403 en descargas / Usabilidad `v0.3.1`)
+* **Subversión Alcanzada**: `v0.3.0` (Persistencia Activa, Indicador Multi-Detective, Erradicación de `alert()` y Modales Accesibles con Teclado).
+* **Fallo Pendiente de Solucionar (Próxima Sesión)**: ⚠️ Error `HTTP Error 403: Forbidden` al intentar descargar/recuperar audio con `yt-dlp` debido a parámetros de lista de reproducción (`&list=...`). Solución propuesta y aprobada: Sanitizar los enlaces en el servidor (`vite.config.js`) para extraer únicamente el ID del vídeo antes de ejecutar `yt-dlp`.
 * **Métrica Clave del Reto (CPVM)**: 
   $$\text{CPVM} = [\text{Retos de figuras literarias resueltos con éxito}] + [\text{por la niña de forma autónoma}]$$
 * **Próxima Iteración**: Optimización de Usabilidad del Modo Detective Guiado (`v0.3.1`).

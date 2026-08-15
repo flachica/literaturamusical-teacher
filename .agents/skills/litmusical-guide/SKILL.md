@@ -101,7 +101,15 @@ Cuando el usuario o la IA soliciten cargar o sincronizar una nueva canción educ
 - **v0.2.13:** Refactorización de Arquitectura y Componetización (Desacoplar App.jsx mediante hooks personalizados como useAudioPlayer y useLocalCatalog). [COMPLETADO CON ÉXITO - SESIÓN 5]
 - **v0.2.14:** Iteración de Usabilidad y Diccionario Editable (Rediseño visual, diccionario editable, modal para Arquitectura y reflexión sobre el multi-detective). [COMPLETADO CON ÉXITO - SESIÓN 6]
 - **v0.3.0:** Persistencia Activa e Indicador Multi-Detective (Gestión y almacenamiento multi-perfil, avatar en navbar, refinamiento de teclado Esc/Enter en todos los modales y catálogo limpio sin canciones de prueba para producción). [COMPLETADO CON ÉXITO - SESIÓN 6]
-- **v0.3.1:** Iteración de Usabilidad: Optimización del Modo Detective Guiado (Visualizador de ondas, scroll y tipografías infantiles). [PLANIFICADO]
+- **v0.3.1:** Iteración de Usabilidad: Optimización del Modo Detective Guiado (Visualizador de ondas, scroll y tipografías infantiles) + Corrección de error 403 en descargas de listas de reproducción. [PLANIFICADO]
 - **v0.4.0:** Gamificación Avanzada "Escuela de Detectives" (Rangos, Logros persistidos en LocalStorage, Audio Feedback sintetizado con Web Audio API). [PLANIFICADO]
 - **v0.5.0:** Modo Detective Proactivo (Buzón Familiar, sugerencia de figuras de la niña). [PLANIFICADO]
 - **v0.6.0:** Asistente de Comprensión con IA Local (Conexión Ollama, prompt system didáctico, botón generar retos, fallback offline). [PLANIFICADO]
+
+---
+
+### ⚠️ Incidencias de la Sesión y Fallos por Resolver
+- **Fallo 403 de yt-dlp (YouTube)**:
+  * **Problema**: YouTube devuelve 403 al pasarle URLs con parámetros de listas de reproducción (`&list=...` o similar) porque `yt-dlp` intenta descargar la información de la playlist y esto gatilla las protecciones contra scraping de YouTube.
+  * **Solución acordada**: Sanitizar el enlace en el middleware backend en `vite.config.js` (`/api/download-audio`), extrayendo el ID de 11 caracteres y recomponiendo la URL como un enlace de vídeo directo `https://www.youtube.com/watch?v=VIDEO_ID` antes de ejecutar `yt-dlp`.
+
