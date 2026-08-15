@@ -117,12 +117,8 @@ export default function FigureCatalog({ figuras, onGuardarFiguras }) {
   return (
     <div className={onGuardarFiguras ? "" : "glass-panel"} style={{ padding: onGuardarFiguras ? '0px' : '24px', marginBottom: '24px' }}>
       
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px', flexWrap: 'wrap', gap: '12px' }}>
-        <div>
-          <h3 style={{ fontSize: '1.3rem', fontWeight: 800 }}>Tarjetas de Figuras Literarias</h3>
-        </div>
-        
-        {onGuardarFiguras && (
+      {onGuardarFiguras && (
+        <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '16px' }}>
           <button
             onClick={iniciarCreacion}
             style={{
@@ -144,8 +140,8 @@ export default function FigureCatalog({ figuras, onGuardarFiguras }) {
           >
             <Plus size={16} /> Añadir Figura
           </button>
-        )}
-      </div>
+        </div>
+      )}
 
       {/* Grid of Cards */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '16px' }}>
