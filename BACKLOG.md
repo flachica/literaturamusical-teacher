@@ -28,6 +28,25 @@ Documento de seguimiento del desarrollo interactivo de **LitMusical** estructura
 
 ---
 
+### 🛠️ `v0.2.14` - Iteración de Usabilidad: Rediseño del Panel de Administración de Padres (PLANIFICADA)
+* **Objetivo**: Pulir la interfaz de administración para hacer el flujo de carga, gestión y diagnóstico de canciones intuitivo y rápido para los padres.
+* **Entregables**:
+  * Unificación estética de pestañas y tarjetas con un diseño de cristal (*glassmorphism*) más refinado y estructurado.
+  * Formulario Wizard para añadir canciones más claro: pasos claramente numerados con estados de carga activos y validaciones directas.
+  * Gestión visual más amigable de la disponibilidad de audios (mejorar los botones de recuperación, reparación y sus estados en red/local).
+  * Rediseño del panel de sugerencias familiares (*FamilySuggestions*) usando un formato de tarjetas visuales limpias.
+
+---
+
+### 🔍 `v0.2.15` - Iteración de Usabilidad: Optimización del Modo Detective Guiado (PLANIFICADA)
+* **Objetivo**: Mejorar la experiencia interactiva del juego para la niña de 9 años, asegurando que el flujo didáctico sea fluido y sin distracciones.
+* **Entregables**:
+  * Ajustes en la interfaz del visualizador de ondas y scroll de letras para asegurar una perfecta coherencia visual y de respuesta en pantallas táctiles y escritorio.
+  * Simplificación del flujo de la trivia de comprensión de letras, guiando paso a paso de forma más amigable antes de pasar a la identificación de la figura.
+  * Ajuste de tipografías y espaciados generales para mejorar la lectura infantil de los versos de la canción.
+
+---
+
 ### 🏆 `v0.3.0` - Gamificación Avanzada "Escuela de Detectives" (PLANIFICADA)
 
 > 🧪 **Hipótesis Causal**:
