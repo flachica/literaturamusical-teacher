@@ -16,6 +16,7 @@ export default function SongManager({ canciones, audioStatus, onGuardarCanciones
   const [mensajeExito, setMensajeExito] = useState('');
   const [errorImport, setErrorImport] = useState('');
   const [mostrarPromptLetraIA, setMostrarPromptLetraIA] = useState(false);
+  const [modalAlerta, setModalAlerta] = useState(null);
 
   // Estados de modal de confirmación integrado
   const [cancionAEliminar, setCancionAEliminar] = useState(null);
@@ -69,7 +70,11 @@ export default function SongManager({ canciones, audioStatus, onGuardarCanciones
       queryUrl = `https://www.youtube.com/watch?v=${song.youtubeId}`;
     }
     if (!queryUrl) {
-      alert(`⚠️ No se puede recuperar el audio de «${song.titulo}» porque no tiene configurado un enlace o ID de YouTube.`);
+      setModalAlerta({
+        titulo: 'Falta Enlace de YouTube',
+        mensaje: `No se puede recuperar el audio de «${song.titulo}» porque no tiene configurado un enlace o ID de YouTube.`,
+        variante: 'advertencia'
+      });
       return;
     }
 
@@ -99,10 +104,18 @@ export default function SongManager({ canciones, audioStatus, onGuardarCanciones
         setMensajeExito(`¡Audio de «${song.titulo}» recuperado correctamente!`);
         setTimeout(() => setMensajeExito(''), 3000);
       } else {
-        alert(data.error || `No se pudo recuperar el audio para «${song.titulo}»`);
+        setModalAlerta({
+          titulo: 'Error al recuperar audio',
+          mensaje: data.error || `No se pudo recuperar el audio para «${song.titulo}»`,
+          variante: 'peligro'
+        });
       }
     } catch (err) {
-      alert(`Error al conectar con el servidor para recuperar «${song.titulo}»: ` + err.message);
+      setModalAlerta({
+        titulo: 'Error de conexión',
+        mensaje: `Error al conectar con el servidor para recuperar «${song.titulo}»: ` + err.message,
+        variante: 'peligro'
+      });
     } finally {
       setReparandoSongId(null);
     }
@@ -111,7 +124,11 @@ export default function SongManager({ canciones, audioStatus, onGuardarCanciones
   const handleRepararTodosLosAudiosPerdidos = async () => {
     const perdidas = canciones.filter(c => audioStatus[c.id] === 'perdido');
     if (perdidas.length === 0) {
-      alert('¡Todos los audios del catálogo están disponibles en este equipo!');
+      setModalAlerta({
+        titulo: 'Catálogo al día',
+        mensaje: '¡Todos los audios del catálogo están disponibles en este equipo!',
+        variante: 'advertencia'
+      });
       return;
     }
 
@@ -1137,6 +1154,16 @@ export default function SongManager({ canciones, audioStatus, onGuardarCanciones
         variante="peligro"
         onConfirm={ejecutarEliminacionCancion}
         onCancel={() => setCancionAEliminar(null)}
+      />
+
+      {/* Modal de alerta de errores/información */}
+      <ConfirmModal
+        isOpen={Boolean(modalAlerta)}
+        titulo={modalAlerta?.titulo || 'Aviso'}
+        mensaje={modalAlerta?.mensaje || ''}
+        textoConfirmar="Entendido"
+        variante={modalAlerta?.variante || 'peligro'}
+        onConfirm={() => setModalAlerta(null)}
       />
 
 

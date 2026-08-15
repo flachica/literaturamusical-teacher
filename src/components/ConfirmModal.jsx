@@ -16,10 +16,16 @@ export default function ConfirmModal({
     const handleKeyDown = (e) => {
       if (e.key === 'Escape') {
         e.preventDefault();
-        onCancel();
+        if (onCancel) {
+          onCancel();
+        } else if (onConfirm) {
+          onConfirm();
+        }
       } else if (e.key === 'Enter') {
         e.preventDefault();
-        onConfirm();
+        if (onConfirm) {
+          onConfirm();
+        }
       }
     };
     window.addEventListener('keydown', handleKeyDown);
@@ -86,24 +92,26 @@ export default function ConfirmModal({
         </p>
 
         <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
-          <button
-            onClick={onCancel}
-            style={{
-              padding: '9px 18px',
-              borderRadius: '10px',
-              background: 'rgba(255, 255, 255, 0.08)',
-              color: '#94a3b8',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
-              fontWeight: 700,
-              fontSize: '0.85rem',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px'
-            }}
-          >
-            <X size={16} /> {textoCancelar}
-          </button>
+          {onCancel && (
+            <button
+              onClick={onCancel}
+              style={{
+                padding: '9px 18px',
+                borderRadius: '10px',
+                background: 'rgba(255, 255, 255, 0.08)',
+                color: '#94a3b8',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                fontWeight: 700,
+                fontSize: '0.85rem',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px'
+              }}
+            >
+              <X size={16} /> {textoCancelar}
+            </button>
+          )}
 
           <button
             onClick={onConfirm}
