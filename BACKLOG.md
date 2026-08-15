@@ -46,6 +46,7 @@ Documento de seguimiento del desarrollo interactivo de **LitMusical** estructura
   * Integración en el panel de **Ajustes** de la administración de perfiles: visualización en cuadrícula de los detectives registrados con sus estadísticas individuales, adición de nuevos perfiles con selector de emoji y renombrado/eliminación en caliente.
   * Visualización dinámica del avatar emoji y el nombre del detective activo actual en la barra de estadísticas de la Navbar para feedback directo de la niña durante el juego.
   * Refinamiento de accesibilidad: captura global de la tecla `Esc` para cancelar/cerrar y `Enter` para confirmar la opción por defecto en todos los modales de la aplicación (ConfirmModal, Selector de Detectives, Editor de Figuras y Advertencia de Letra).
+  * Limpieza de catálogo para producción: eliminación de canciones de prueba por defecto en `initialData.js` y `songs_catalog.json` para entregar la base de datos limpia y vacía, arreglando el bucle de recreación de canciones vacías en `storage.js` e implementando una interfaz guiada para catálogo vacío en `App.jsx`.
 
 ---
 

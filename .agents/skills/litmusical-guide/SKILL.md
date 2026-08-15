@@ -100,7 +100,7 @@ Cuando el usuario o la IA soliciten cargar o sincronizar una nueva canción educ
 - **v0.2.12:** Fortalecimiento de Arquitectura Local-First con persistencia de metadatos de YouTube, comprobación de existencia física de audios en backend, estado de disponibilidad en tarjetas de Modo Admin, y herramientas de recuperación/reparación individual y global de audios desde YouTube. [COMPLETADO CON ÉXITO - SESIÓN 5]
 - **v0.2.13:** Refactorización de Arquitectura y Componetización (Desacoplar App.jsx mediante hooks personalizados como useAudioPlayer y useLocalCatalog). [COMPLETADO CON ÉXITO - SESIÓN 5]
 - **v0.2.14:** Iteración de Usabilidad y Diccionario Editable (Rediseño visual, diccionario editable, modal para Arquitectura y reflexión sobre el multi-detective). [COMPLETADO CON ÉXITO - SESIÓN 6]
-- **v0.3.0:** Persistencia Activa e Indicador Multi-Detective (Gestión y almacenamiento multi-perfil, avatar en navbar y refinamiento de teclado Esc/Enter en todos los modales). [COMPLETADO CON ÉXITO - SESIÓN 6]
+- **v0.3.0:** Persistencia Activa e Indicador Multi-Detective (Gestión y almacenamiento multi-perfil, avatar en navbar, refinamiento de teclado Esc/Enter en todos los modales y catálogo limpio sin canciones de prueba para producción). [COMPLETADO CON ÉXITO - SESIÓN 6]
 - **v0.3.1:** Iteración de Usabilidad: Optimización del Modo Detective Guiado (Visualizador de ondas, scroll y tipografías infantiles). [PLANIFICADO]
 - **v0.4.0:** Gamificación Avanzada "Escuela de Detectives" (Rangos, Logros persistidos en LocalStorage, Audio Feedback sintetizado con Web Audio API). [PLANIFICADO]
 - **v0.5.0:** Modo Detective Proactivo (Buzón Familiar, sugerencia de figuras de la niña). [PLANIFICADO]
