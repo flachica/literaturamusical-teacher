@@ -119,9 +119,7 @@ export default function FigureCatalog({ figuras, onGuardarFiguras }) {
       
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px', flexWrap: 'wrap', gap: '12px' }}>
         <div>
-          <h3 style={{ fontSize: '1.3rem', fontWeight: 800 }}>
-            {onGuardarFiguras ? 'Gestión del Diccionario de Figuras' : 'Tarjetas de Figuras Literarias'}
-          </h3>
+          <h3 style={{ fontSize: '1.3rem', fontWeight: 800 }}>Tarjetas de Figuras Literarias</h3>
         </div>
         
         {onGuardarFiguras && (
@@ -298,7 +296,7 @@ export default function FigureCatalog({ figuras, onGuardarFiguras }) {
               </button>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 120px', gap: '12px', marginBottom: '14px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 135px', gap: '12px', marginBottom: '14px' }}>
               <div>
                 <label style={{ fontSize: '0.8rem', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>Nombre de la Figura *</label>
                 <input
@@ -322,7 +320,7 @@ export default function FigureCatalog({ figuras, onGuardarFiguras }) {
                   <option value="#f59e0b">🧡 Ámbar</option>
                   <option value="#8b5cf6">💜 Morado</option>
                   <option value="#ec4899">🩷 Rosa</option>
-                  <option value="#10b981">💚 Esmeralda</option>
+                  <option value="#10b981">💚 Verde</option>
                   <option value="#3b82f6">💙 Azul</option>
                 </select>
               </div>

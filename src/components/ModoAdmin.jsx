@@ -118,7 +118,7 @@ export default function ModoAdmin({
                 ⚠️ Zona de Peligro: Reiniciar Datos de Juego
               </h4>
               <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: 1.5 }}>
-                Esta acción borrará de forma irreversible todo el progreso actual de la detective (puntuación, nivel, estrellas acumuladas y medallas obtenidas) restableciendo el perfil a cero. Se solicitará confirmación de seguridad con checkbox.
+                Esta acción borrará de forma irreversible todo el progreso actual de la detective (puntuación, nivel, estrellas acumuladas y medallas obtenidas) restableciendo el perfil a cero.
               </p>
             </div>
             
@@ -161,7 +161,6 @@ export default function ModoAdmin({
         textoConfirmar="Sí, reiniciar todo"
         textoCancelar="Cancelar"
         variante="peligro"
-        requiereCheck={true}
         onConfirm={ejecutarResetProgreso}
         onCancel={() => setMostrarConfirmReset(false)}
       />
