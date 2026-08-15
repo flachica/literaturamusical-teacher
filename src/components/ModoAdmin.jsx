@@ -276,7 +276,6 @@ export default function ModoAdmin({
 
                         {!estaEditando && (
                           <button
-                            disabled={detectives.length <= 1}
                             onClick={() => {
                               setDetectiveAEliminar(det);
                               setMostrarConfirmEliminar(true);
@@ -284,15 +283,17 @@ export default function ModoAdmin({
                             style={{
                               padding: '6px',
                               borderRadius: '8px',
-                              background: detectives.length <= 1 ? 'rgba(255, 255, 255, 0.02)' : 'rgba(239, 68, 68, 0.1)',
-                              color: detectives.length <= 1 ? '#475569' : '#fca5a5',
-                              border: `1px solid ${detectives.length <= 1 ? 'rgba(255, 255, 255, 0.05)' : 'rgba(239, 68, 68, 0.2)'}`,
-                              cursor: detectives.length <= 1 ? 'not-allowed' : 'pointer',
+                              background: '#ef4444',
+                              color: '#ffffff',
+                              border: 'none',
+                              cursor: 'pointer',
                               display: 'flex',
                               alignItems: 'center',
-                              opacity: detectives.length <= 1 ? 0.35 : 1
+                              boxShadow: '0 2px 6px rgba(239, 68, 68, 0.3)',
+                              transition: 'all 0.15s ease'
                             }}
-                            title={detectives.length <= 1 ? "No puedes eliminar el único detective registrado" : "Eliminar detective"}
+                            title="Eliminar detective"
+                            className="btn-trash-detective"
                           >
                             <Trash2 size={12} />
                           </button>
@@ -325,7 +326,7 @@ export default function ModoAdmin({
 
                 <div>
                   <label style={{ fontSize: '0.8rem', color: 'var(--text-muted)', display: 'block', marginBottom: '6px' }}>Selecciona tu Avatar Emoji</label>
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: '8px' }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px' }}>
                     {avataresDisponibles.map((av) => {
                       const esSeleccionado = nuevoAvatarDet === av;
                       return (

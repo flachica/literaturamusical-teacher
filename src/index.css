@@ -235,3 +235,9 @@ button:active {
   border-color: rgba(139, 92, 246, 0.4) !important;
   box-shadow: 0 0 10px rgba(139, 92, 246, 0.15);
 }
+
+.btn-trash-detective:hover {
+  background: #f87171 !important;
+  transform: scale(1.1);
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
+}

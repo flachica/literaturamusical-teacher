@@ -18,7 +18,7 @@ export default function useLocalCatalog(cancionActual, setCancionActual) {
   const [detectives, setDetectives] = useState(() => loadDetectives());
 
   // Detective activo actual
-  const detectiveActivo = detectives.find(d => d.activo) || detectives[0];
+  const detectiveActivo = detectives.find(d => d.activo) || detectives[0] || null;
   const { puntos, nivel, estrellas } = detectiveActivo || { puntos: 0, nivel: 1, estrellas: 0 };
 
   // Catalog states (Songs & Literary Figures)

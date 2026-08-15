@@ -74,77 +74,113 @@ export default function App() {
         onAbrirSelector={() => setMostrarSelectorDetectives(true)}
       />
 
-      {/* VIEW 1: MODO DETECTIVE GUIADO (LIMPIO Y PASO A PASO PARA 9 AÑOS) */}
-      {modoPrincipal === 'detective' && (
+      {/* VIEW 1: MODO DETECTIVE GUIADO (LIMPIO Y PASO A PASO PARA 9 AÑOS) */}      {modoPrincipal === 'detective' && (
         <div>
-          {/* Song Switcher strip for Detective */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px', overflowX: 'auto', paddingBottom: '6px' }}>
-            <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)', fontWeight: 700, whiteSpace: 'nowrap' }}>Elegir Canción:</span>
-            {canciones.map((c) => {
-              const isSelected = cancionActual && cancionActual.id === c.id;
-              return (
-                <button
-                  key={c.id}
-                  onClick={() => setCancionActual(c)}
-                  style={{
-                    padding: '8px 16px',
-                    borderRadius: '9999px',
-                    background: isSelected ? 'var(--primary)' : 'rgba(15, 23, 42, 0.6)',
-                    color: '#ffffff',
-                    fontWeight: 700,
-                    fontSize: '0.85rem',
-                    border: `1px solid ${isSelected ? 'var(--primary)' : 'rgba(255, 255, 255, 0.1)'}`,
-                    whiteSpace: 'nowrap',
-                    cursor: 'pointer'
-                  }}
-                >
-                  🎵 {c.titulo} ({c.artistaNombre})
-                </button>
-              );
-            })}
-          </div>
+          {detectives.length === 0 ? (
+            <div className="glass-panel modal-content-animate" style={{ padding: '40px', textAlign: 'center', marginTop: '30px', border: '2px solid #8b5cf6', boxShadow: '0 0 30px rgba(139, 92, 246, 0.2)', borderRadius: '24px', maxWidth: '600px', margin: '40px auto 0' }}>
+              <span style={{ fontSize: '4.5rem', display: 'block', marginBottom: '20px', lineHeight: 1 }}>🕵️‍♀️🔍</span>
+              <h2 style={{ fontSize: '1.65rem', fontWeight: 900, color: '#ffffff', marginBottom: '12px' }}>
+                ¡Bienvenido a la Escuela de Detectives!
+              </h2>
+              <p style={{ fontSize: '0.95rem', color: 'var(--text-muted)', maxWidth: '480px', margin: '0 auto 28px', lineHeight: 1.6 }}>
+                Para empezar a resolver divertidos misterios de la literatura musical, pídele a papá o mamá que registre tu perfil de detective en la sección de administración.
+              </p>
+              <button
+                onClick={() => {
+                  setModoPrincipal('admin');
+                  setPestanaActiva('ajustes');
+                }}
+                style={{
+                  padding: '12px 32px',
+                  borderRadius: '12px',
+                  background: 'linear-gradient(135deg, #10b981, #059669)',
+                  color: '#ffffff',
+                  border: 'none',
+                  fontSize: '0.95rem',
+                  fontWeight: 900,
+                  cursor: 'pointer',
+                  boxShadow: '0 0 20px rgba(16, 185, 129, 0.4)',
+                  transition: 'all 0.2s',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '8px'
+                }}
+              >
+                Ir a Crear mi Detective 🚀
+              </button>
+            </div>
+          ) : (
+            <>
+              {/* Song Switcher strip for Detective */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px', overflowX: 'auto', paddingBottom: '6px' }}>
+                <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)', fontWeight: 700, whiteSpace: 'nowrap' }}>Elegir Canción:</span>
+                {canciones.map((c) => {
+                  const isSelected = cancionActual && cancionActual.id === c.id;
+                  return (
+                    <button
+                      key={c.id}
+                      onClick={() => setCancionActual(c)}
+                      style={{
+                        padding: '8px 16px',
+                        borderRadius: '9999px',
+                        background: isSelected ? 'var(--primary)' : 'rgba(15, 23, 42, 0.6)',
+                        color: '#ffffff',
+                        fontWeight: 700,
+                        fontSize: '0.85rem',
+                        border: `1px solid ${isSelected ? 'var(--primary)' : 'rgba(255, 255, 255, 0.1)'}`,
+                        whiteSpace: 'nowrap',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      🎵 {c.titulo} ({c.artistaNombre})
+                    </button>
+                  );
+                })}
+              </div>
 
-          {/* Synchronized Main Audio Player Widget */}
-          {cancionActual && (
-            <PlayerWidget
-              cancion={cancionActual}
-              audioStatus={audioStatus}
-              isPlaying={isPlaying}
-              setIsPlaying={setIsPlaying}
-              posicion={posicion}
-              setPosicion={setPosicion}
-              currentTime={currentTime}
-              setCurrentTime={setCurrentTime}
-              duration={duration}
-              setDuration={setDuration}
-              localAudioSrc={localAudioSrc}
-              setLocalAudioSrc={setLocalAudioSrc}
-              audioRef={audioRef}
-              paso={paso}
-              setPaso={setPaso}
-              mostrarLetraCompleta={mostrarLetraCompleta}
-              setMostrarLetraCompleta={setMostrarLetraCompleta}
-            />
-          )}
+              {/* Synchronized Main Audio Player Widget */}
+              {cancionActual && (
+                <PlayerWidget
+                  cancion={cancionActual}
+                  audioStatus={audioStatus}
+                  isPlaying={isPlaying}
+                  setIsPlaying={setIsPlaying}
+                  posicion={posicion}
+                  setPosicion={setPosicion}
+                  currentTime={currentTime}
+                  setCurrentTime={setCurrentTime}
+                  duration={duration}
+                  setDuration={setDuration}
+                  localAudioSrc={localAudioSrc}
+                  setLocalAudioSrc={setLocalAudioSrc}
+                  audioRef={audioRef}
+                  paso={paso}
+                  setPaso={setPaso}
+                  mostrarLetraCompleta={mostrarLetraCompleta}
+                  setMostrarLetraCompleta={setMostrarLetraCompleta}
+                />
+              )}
 
-          {/* Guided Detective Experience (Meaning first, then Figure labeling + RAE) */}
-          {cancionActual && (
-            <ModoDetectiveGuiado
-              cancion={cancionActual}
-              audioStatus={audioStatus}
-              onGanarPuntos={handleSumarPuntos}
-              isPlaying={isPlaying}
-              setIsPlaying={setIsPlaying}
-              posicion={posicion}
-              setPosicion={setPosicion}
-              currentTime={currentTime}
-              onSeekTime={handleSeekTime}
-              duration={duration}
-              paso={paso}
-              setPaso={setPaso}
-              mostrarLetraCompleta={mostrarLetraCompleta}
-              setMostrarLetraCompleta={setMostrarLetraCompleta}
-            />
+              {/* Guided Detective Experience (Meaning first, then Figure labeling + RAE) */}
+              {cancionActual && (
+                <ModoDetectiveGuiado
+                  cancion={cancionActual}
+                  audioStatus={audioStatus}
+                  onGanarPuntos={handleSumarPuntos}
+                  isPlaying={isPlaying}
+                  setIsPlaying={setIsPlaying}
+                  posicion={posicion}
+                  setPosicion={setPosicion}
+                  currentTime={currentTime}
+                  onSeekTime={handleSeekTime}
+                  duration={duration}
+                  paso={paso}
+                  setPaso={setPaso}
+                  mostrarLetraCompleta={mostrarLetraCompleta}
+                  setMostrarLetraCompleta={setMostrarLetraCompleta}
+                />
+              )}
+            </>
           )}
         </div>
       )}
