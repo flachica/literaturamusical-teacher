@@ -99,7 +99,7 @@ Cuando el usuario o la IA soliciten cargar o sincronizar una nueva canción educ
 - **v0.2.11:** Conversor de YouTube a MP3 local en backend (`yt-dlp` con banderas anti-403), Formulario Wizard en 3 pasos con tecla `ENTER`, indicador visual de trabajo para padres, retorno rápido a Modo Detective y `ConfirmModal.jsx` integrado. [COMPLETADO CON ÉXITO - SESIÓN 4]
 - **v0.2.12:** Fortalecimiento de Arquitectura Local-First con persistencia de metadatos de YouTube, comprobación de existencia física de audios en backend, estado de disponibilidad en tarjetas de Modo Admin, y herramientas de recuperación/reparación individual y global de audios desde YouTube. [COMPLETADO CON ÉXITO - SESIÓN 5]
 - **v0.2.13:** Refactorización de Arquitectura y Componetización (Desacoplar App.jsx mediante hooks personalizados como useAudioPlayer y useLocalCatalog). [COMPLETADO CON ÉXITO - SESIÓN 5]
-- **v0.2.14:** Iteración de Usabilidad: Rediseño del Panel de Administración de Padres (Gestión visual, wizard más claro, FamilySuggestions). [PLANIFICADO]
+- **v0.2.14:** Iteración de Usabilidad y Diccionario Editable (Rediseño visual, diccionario editable, modal para Arquitectura y reflexión sobre multi-detective). [PLANIFICADO]
 - **v0.2.15:** Iteración de Usabilidad: Optimización del Modo Detective Guiado (Visualizador de ondas, scroll y tipografías infantiles). [PLANIFICADO]
 - **v0.3.0:** Gamificación Avanzada "Escuela de Detectives" (Rangos, Logros persistidos en LocalStorage, Audio Feedback sintetizado con Web Audio API). [PLANIFICADO]
 - **v0.4.0:** Modo Detective Proactivo (Buzón Familiar, sugerencia de figuras de la niña). [PLANIFICADO]

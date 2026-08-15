@@ -28,13 +28,17 @@ Documento de seguimiento del desarrollo interactivo de **LitMusical** estructura
 
 ---
 
-### 🛠️ `v0.2.14` - Iteración de Usabilidad: Rediseño del Panel de Administración de Padres (PLANIFICADA)
-* **Objetivo**: Pulir la interfaz de administración para hacer el flujo de carga, gestión y diagnóstico de canciones intuitivo y rápido para los padres.
+### 🛠️ `v0.2.14` - Iteración de Usabilidad y Diccionario Editable (PLANIFICADA)
+* **Objetivo**: Pulir la interfaz de administración para reducir el ruido visual, permitir editar figuras literarias y trasladar información técnica a modales.
 * **Entregables**:
-  * Unificación estética de pestañas y tarjetas con un diseño de cristal (*glassmorphism*) más refinado y estructurado.
-  * Formulario Wizard para añadir canciones más claro: pasos claramente numerados con estados de carga activos y validaciones directas.
-  * Gestión visual más amigable de la disponibilidad de audios (mejorar los botones de recuperación, reparación y sus estados en red/local).
-  * Rediseño del panel de sugerencias familiares (*FamilySuggestions*) usando un formato de tarjetas visuales limpias.
+  * Unificación estética de pestañas y tarjetas con un diseño de cristal (*glassmorphism*) más refinado y estructurado en la sección de administración.
+  * Formulario Wizard para añadir canciones más claro: pasos numerados con estados de carga activos.
+  * Ocultar la sección permanente de "Arquitectura Local-First" en la pestaña Ajustes y abrirla a demanda a través de un modal interactivo al pulsar el indicador "💾 Persistencia Activa".
+  * Eliminar el componente de sugerencias familiares (*FamilySuggestions*) por redundancia con el gestor de canciones.
+  * Rediseñar el Diccionario de Figuras (`FigureCatalog.jsx`) en Modo Admin para permitir la **edición en caliente** por parte de los padres (modificar nombre, definición infantil, ejemplo y puntos).
+
+> 💡 **Reflexión de Diseño (Pendiente)**:
+> * **Persistencia Activa e Indicador Multi-Detective:** Analizar el cambio de progreso local único a soporte multi-detective (múltiples perfiles infantiles seleccionables en el mismo dispositivo) y su impacto en el almacenamiento local y la interfaz del Modo Detective.
 
 ---
 
