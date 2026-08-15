@@ -56,6 +56,24 @@ export default function App() {
   const [paso, setPaso] = useState(1);
   const [mostrarLetraCompleta, setMostrarLetraCompleta] = useState(true);
 
+  React.useEffect(() => {
+    if (!mostrarSelectorDetectives) return;
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        setMostrarSelectorDetectives(false);
+      } else if (e.key === 'Enter') {
+        e.preventDefault();
+        if (detectiveActivo) {
+          handleSeleccionarDetective(detectiveActivo.id);
+        }
+        setMostrarSelectorDetectives(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [mostrarSelectorDetectives, detectiveActivo, handleSeleccionarDetective]);
+
   return (
     <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 16px 40px' }}>
       

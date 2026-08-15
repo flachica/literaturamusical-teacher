@@ -207,9 +207,9 @@ const DETECTIVES_KEY = 'litmusical_detectives_v1';
 export function loadDetectives() {
   try {
     const saved = localStorage.getItem(DETECTIVES_KEY);
-    if (saved) {
+    if (saved !== null) {
       const parsed = JSON.parse(saved);
-      if (Array.isArray(parsed) && parsed.length > 0) {
+      if (Array.isArray(parsed)) {
         return parsed;
       }
     }
@@ -217,7 +217,7 @@ export function loadDetectives() {
     console.error('Error cargando detectives de LocalStorage:', err);
   }
 
-  // Migración o creación del primer detective por defecto si no existen datos previos
+  // Si no existen datos previos en absoluto (primera carga de la app)
   const progresoAntiguo = loadUserProgress();
   const defaultDetective = {
     id: 'detective_valeria',

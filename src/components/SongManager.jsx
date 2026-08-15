@@ -20,6 +20,21 @@ export default function SongManager({ canciones, audioStatus, onGuardarCanciones
   // Estados de modal de confirmación integrado
   const [cancionAEliminar, setCancionAEliminar] = useState(null);
 
+  useEffect(() => {
+    if (!mostrarPromptLetraIA) return;
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        setMostrarPromptLetraIA(false);
+      } else if (e.key === 'Enter') {
+        e.preventDefault();
+        setMostrarPromptLetraIA(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [mostrarPromptLetraIA]);
+
   // Estado para el formulario de nueva canción
   const [nuevoTitulo, setNuevoTitulo] = useState('');
   const [nuevoArtista, setNuevoArtista] = useState('');

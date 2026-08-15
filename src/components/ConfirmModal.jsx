@@ -11,6 +11,21 @@ export default function ConfirmModal({
   onConfirm,
   onCancel
 }) {
+  React.useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        onCancel();
+      } else if (e.key === 'Enter') {
+        e.preventDefault();
+        onConfirm();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onCancel, onConfirm]);
+
   if (!isOpen) return null;
 
   const colorBorder = variante === 'peligro' ? '#ef4444' : '#f59e0b';

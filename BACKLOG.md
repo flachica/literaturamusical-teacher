@@ -45,6 +45,7 @@ Documento de seguimiento del desarrollo interactivo de **LitMusical** estructura
   * Implementación del almacén de datos multidetective en `storage.js` y `useLocalCatalog.js` con migración transparente del progreso previo de la niña "Valeria".
   * Integración en el panel de **Ajustes** de la administración de perfiles: visualización en cuadrícula de los detectives registrados con sus estadísticas individuales, adición de nuevos perfiles con selector de emoji y renombrado/eliminación en caliente.
   * Visualización dinámica del avatar emoji y el nombre del detective activo actual en la barra de estadísticas de la Navbar para feedback directo de la niña durante el juego.
+  * Refinamiento de accesibilidad: captura global de la tecla `Esc` para cancelar/cerrar y `Enter` para confirmar la opción por defecto en todos los modales de la aplicación (ConfirmModal, Selector de Detectives, Editor de Figuras y Advertencia de Letra).
 
 ---
 

@@ -19,6 +19,19 @@ export default function FigureCatalog({ figuras, onGuardarFiguras }) {
   const [editBadge, setEditBadge] = useState('');
   const [editPuntos, setEditPuntos] = useState(10);
 
+  React.useEffect(() => {
+    if (!figuraEditando) return;
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        setFiguraEditando(null);
+        setEsCreacion(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [figuraEditando]);
+
   const iniciarEdicion = (e, fig) => {
     e.stopPropagation(); // Avoid triggering selection on click
     setFiguraEditando(fig);
