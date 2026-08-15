@@ -378,10 +378,11 @@ export default function Navbar({
               background: 'rgba(15, 23, 42, 0.85)',
               backdropFilter: 'blur(8px)',
               display: 'flex',
-              alignItems: 'center',
+              alignItems: 'flex-start',
               justifyContent: 'center',
               zIndex: 9999,
-              padding: '20px'
+              padding: '40px 20px',
+              overflowY: 'auto'
             }}
           >
             <div
@@ -393,6 +394,7 @@ export default function Navbar({
                 border: '2px solid #8b5cf6',
                 maxWidth: '450px',
                 width: '100%',
+                margin: 'auto 0',
                 boxShadow: '0 0 30px rgba(139, 92, 246, 0.25)',
                 textAlign: 'center'
               }}
