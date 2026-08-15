@@ -100,5 +100,5 @@ Cuando el usuario o la IA soliciten cargar o sincronizar una nueva canción educ
 - **v0.2.12:** Fortalecimiento de Arquitectura Local-First con persistencia de metadatos de YouTube, comprobación de existencia física de audios en backend, estado de disponibilidad en tarjetas de Modo Admin, y herramientas de recuperación/reparación individual y global de audios desde YouTube. [COMPLETADO CON ÉXITO - SESIÓN 5]
 - **v0.2.13:** Refactorización de Arquitectura y Componetización (Desacoplar App.jsx mediante hooks personalizados como useAudioPlayer y useLocalCatalog). [COMPLETADO CON ÉXITO - SESIÓN 5]
 - **v0.3.0:** Gamificación Avanzada "Escuela de Detectives" (Rangos, Logros persistidos en LocalStorage, Audio Feedback sintetizado con Web Audio API). [PLANIFICADO]
-- **v0.4.0:** Asistente de Comprensión con IA Local (Conexión Ollama, prompt system didáctico, botón generar retos, fallback offline). [PLANIFICADO]
-- **v0.5.0:** Modo Detective Proactivo (Buzón Familiar, sugerencia de figuras de la niña). [PLANIFICADO]
+- **v0.4.0:** Modo Detective Proactivo (Buzón Familiar, sugerencia de figuras de la niña). [PLANIFICADO]
+- **v0.5.0:** Asistente de Comprensión con IA Local (Conexión Ollama, prompt system didáctico, botón generar retos, fallback offline). [PLANIFICADO]

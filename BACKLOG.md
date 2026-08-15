@@ -1,34 +1,25 @@
-# 📋 BACKLOG DE INICIATIVAS Y VERSIONES - LitMusical (Sesión 5)
+# 📋 BACKLOG DE INICIATIVAS Y VERSIONES - LitMusical (Sesión 6)
 
 Documento de seguimiento del desarrollo interactivo de **LitMusical** estructurado mediante la metodología **Impact-Driven Growth (IDG)** para garantizar que cada entrega genere cambios reales de comportamiento (*outcomes*) y valor en el aprendizaje pedagógico.
 
 ---
 
-## 📍 ESTADO ACTUAL DEL PRO OYECTO
+## 📍 ESTADO ACTUAL DEL PROYECTO
 
-* **Sesión Actual**: 🟢 **SESIÓN 5 EN CURSO** (Iteración 8)
-* **Subversión Alcanzada**: `v0.2.12` (Arquitectura Local-First Fortalecida).
+* **Sesión Actual**: 🟢 **SESIÓN 6** (Iteración 9 - Inicio)
+* **Subversión Alcanzada**: `v0.2.13` (Refactorización de Arquitectura y Componetización).
 * **Métrica Clave del Reto (CPVM)**: 
   $$\text{CPVM} = [\text{Retos de figuras literarias resueltos con éxito}] + [\text{por la niña de forma autónoma}]$$
-* **Objetivo de la Iteración**: Refactorizar y componetizar `App.jsx` (`v0.2.13`) para robustecer la arquitectura antes de añadir la gamificación.
+* **Objetivo de la Iteración**: Planificación e inicio de la Gamificación Avanzada "Escuela de Detectives" (`v0.3.0`) y reordenamiento de la hoja de ruta.
 
 ---
 
 ## 🗓️ HOJA DE RUTA DETALLADA POR SUBVERSIONES (ROADMAP IDG)
 
-### 🎨 `v0.1.0` - `v0.2.11` (COMPLETADAS)
+### 🎨 `v0.1.0` - `v0.2.12` (COMPLETADAS)
 * Prototipo visual interactivo, modo detective vs. modo admin, visualizador de ondas neón, catálogo local, wizard de 3 pasos para añadir canciones y extractor de MP3 desde YouTube con control anti-403 en servidor local.
 
-### 📦 `v0.2.12` - Fortalecimiento Local-First (COMPLETADA - SESIÓN 5)
-* **Objetivo**: Evitar la pérdida de audios al cambiar de equipo o clonar el repositorio sin binarios.
-* **Entregables**:
-  * Guardado persistente de `youtubeUrl` y `youtubeId` en el archivo JSON y LocalStorage.
-  * Endpoint `/api/check-audio` en backend Vite para comprobar la presencia física del audio en disco.
-  * Indicador de estado de audio (`🟢 disponible`, `🌐 en red`, `⚠️ perdido`) y herramientas de recuperación individual/masiva en Modo Admin.
-
----
-
-### 🏗️ `v0.2.13` - Refactorización de Arquitectura y Componetización (EN CURSO)
+### 🏗️ `v0.2.13` - Refactorización de Arquitectura y Componetización (COMPLETADA - SESIÓN 5)
 * **Objetivo**: Reducir el acoplamiento y el tamaño de `App.jsx` dividiéndolo en hooks personalizados independientes.
 * **Entregables**:
   * Hook `useAudioPlayer` para encapsular todo el estado de sincronización, temporizador, reproducción y seek del widget de música.
@@ -65,7 +56,23 @@ Documento de seguimiento del desarrollo interactivo de **LitMusical** estructura
 
 ---
 
-### 🤖 `v0.4.0` - Asistente de IA con Ollama Local y Fallback Offline
+### 🔍 `v0.4.0` - Modo Detective Proactivo (Sugerencia de Figuras) (PLANIFICADA)
+
+> 🧪 **Hipótesis Causal**:
+> **Si** permitimos que la niña marque libremente palabras o frases y sugiera nuevas figuras que ha descubierto,
+> **Provocará** que adopte un rol de lectura crítica activa en lugar de solo responder cuestionarios prefijados,
+> **Moviendo** la CPVM de retos literarios al crear un círculo de co-creación familiar en el catálogo.
+
+* [ ] **Herramienta "¡He descubierto una figura!"**:
+  * Permitir que la niña haga clic o seleccione cualquier línea/palabra y pulse un botón interactivo de descubrimiento.
+  * Formulario infantil simplificado donde elige qué figura cree que es (Metáfora, Símil, Personificación...) y por qué.
+* [ ] **Buzón Familiar en Modo Admin**:
+  * Panel donde los padres visualizan los descubrimientos de la niña.
+  * Botones para *"Aprobar e integrar en la canción"* (otorgando estrellas extra a la niña) o *"Conversar en la cena"*.
+
+---
+
+### 🤖 `v0.5.0` - Asistente de IA con Ollama Local y Fallback Offline (PLANIFICADA)
 
 > 🧪 **Hipótesis Causal**:
 > **Si** permitimos que un LLM local (Ollama) genere automáticamente las preguntas de comprensión infantil y la explicación de figuras para canciones incompletas,
@@ -80,22 +87,6 @@ Documento de seguimiento del desarrollo interactivo de **LitMusical** estructura
   * Generación y formateo automático de estrofas, preguntas de comprensión infantil con opciones A/B y explicaciones del verso.
 * [ ] **Fallback Offline Inteligente**:
   * Si la llamada a Ollama falla o no está activo, autogenerar un reto simplificado estático por defecto sin bloquear el guardado de la canción.
-
----
-
-### 🔍 `v0.5.0` - Modo Detective Proactivo (Sugerencia de Figuras)
-
-> 🧪 **Hipótesis Causal**:
-> **Si** permitimos que la niña marque libremente palabras o frases y sugiera nuevas figuras que ha descubierto,
-> **Provocará** que adopte un rol de lectura crítica activa en lugar de solo responder cuestionarios prefijados,
-> **Moviendo** la CPVM de retos literarios al crear un círculo de co-creación familiar en el catálogo.
-
-* [ ] **Herramienta "¡He descubierto una figura!"**:
-  * Permitir que la niña haga clic o seleccione cualquier línea/palabra y pulse un botón interactivo de descubrimiento.
-  * Formulario infantil simplificado donde elige qué figura cree que es (Metáfora, Símil, Personificación...) y por qué.
-* [ ] **Buzón Familiar en Modo Admin**:
-  * Panel donde los padres visualizan los descubrimientos de la niña.
-  * Botones para *"Aprobar e integrar en la canción"* (otorgando estrellas extra a la niña) o *"Conversar en la cena"*.
 
 ---
 

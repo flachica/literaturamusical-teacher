@@ -13,13 +13,15 @@ function jsonStoragePlugin() {
     name: 'json-storage-plugin',
     configureServer(server) {
       server.middlewares.use((req, res, next) => {
-        if (req.url.startsWith('/api/songs') || req.url.startsWith('/api/check-audio')) {
+        const pathname = req.url.split('?')[0]
+
+        if (pathname.startsWith('/api/songs') || pathname.startsWith('/api/check-audio')) {
           res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0');
           res.setHeader('Pragma', 'no-cache');
           res.setHeader('Expires', '0');
         }
 
-        if (req.url === '/api/download-audio' && req.method === 'POST') {
+        if (pathname === '/api/download-audio' && req.method === 'POST') {
           let body = ''
           req.on('data', chunk => { body += chunk })
           req.on('end', () => {
@@ -69,7 +71,7 @@ function jsonStoragePlugin() {
           return
         }
 
-        if (req.url === '/api/check-audio' && req.method === 'POST') {
+        if (pathname === '/api/check-audio' && req.method === 'POST') {
           let body = ''
           req.on('data', chunk => { body += chunk })
           req.on('end', () => {
@@ -94,7 +96,7 @@ function jsonStoragePlugin() {
           return
         }
 
-        if (req.url === '/api/figuras') {
+        if (pathname === '/api/figuras') {
           const figurasFilePath = path.join(dataDir, 'figuras_catalog.json')
 
           if (req.method === 'GET') {
@@ -125,7 +127,7 @@ function jsonStoragePlugin() {
           }
         }
 
-        if (req.url === '/api/songs') {
+        if (pathname === '/api/songs') {
           const songsFilePath = path.join(dataDir, 'songs_catalog.json')
 
           if (req.method === 'GET') {
@@ -156,7 +158,7 @@ function jsonStoragePlugin() {
           }
         }
 
-        if (req.url === '/api/progress') {
+        if (pathname === '/api/progress') {
           const progressFilePath = path.join(dataDir, 'user_progress.json')
 
           if (req.method === 'GET') {
