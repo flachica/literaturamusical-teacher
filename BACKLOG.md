@@ -1,4 +1,4 @@
-# 📋 BACKLOG DE INICIATIVAS Y VERSIONES - LitMusical (Sesión 6)
+# 📋 BACKLOG DE INICIATIVAS Y VERSIONES - LitMusical (Próxima: Sesión 7)
 
 Documento de seguimiento del desarrollo interactivo de **LitMusical** estructurado mediante la metodología **Impact-Driven Growth (IDG)** para garantizar que cada entrega genere cambios reales de comportamiento (*outcomes*) y valor en el aprendizaje pedagógico.
 
@@ -6,11 +6,11 @@ Documento de seguimiento del desarrollo interactivo de **LitMusical** estructura
 
 ## 📍 ESTADO ACTUAL DEL PROYECTO
 
-* **Sesión Actual**: 🟢 **SESIÓN 6** (Iteración 11 - Completada)
-* **Subversión Alcanzada**: `v0.3.0` (Persistencia Activa e Indicador Multi-Detective).
+* **Sesión Actual**: 🔴 **SESIÓN 6 (CERRADA)** | **Próxima**: 🟢 **SESIÓN 7** (Iteración 13 - `v0.3.1`)
+* **Subversión Alcanzada**: `v0.3.0` (Persistencia Activa, Indicador Multi-Detective y Modales Accesibles con Teclado).
 * **Métrica Clave del Reto (CPVM)**: 
   $$\text{CPVM} = [\text{Retos de figuras literarias resueltos con éxito}] + [\text{por la niña de forma autónoma}]$$
-* **Objetivo de la Iteración**: Planificación e implementación de la persistencia activa multi-detective en Ajustes y Navbar.
+* **Próxima Iteración**: Optimización de Usabilidad del Modo Detective Guiado (`v0.3.1`).
 
 ---
 
