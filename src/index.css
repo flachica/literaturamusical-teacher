@@ -196,15 +196,36 @@ button:active {
 }
 
 .admin-song-card .btn-trash {
-  color: #64748b;
-  transition: color 0.2s ease, transform 0.2s ease;
+  color: #ef4444;
+  opacity: 0.65;
+  transition: all 0.2s ease;
 }
 
 .admin-song-card:hover .btn-trash {
-  color: #94a3b8;
+  opacity: 0.85;
 }
 
 .admin-song-card .btn-trash:hover {
-  color: #ef4444;
-  transform: scale(1.1);
+  color: #f87171;
+  opacity: 1;
+  transform: scale(1.15);
+}
+
+/* Animaciones para Modales/Popups */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleUp {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.modal-overlay-animate {
+  animation: fadeIn 0.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.modal-content-animate {
+  animation: scaleUp 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }

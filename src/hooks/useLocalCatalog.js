@@ -122,12 +122,6 @@ export default function useLocalCatalog(cancionActual, setCancionActual) {
     setCanciones(nuevoCat);
   };
 
-  const handleRestaurarCanciones = () => {
-    const originalCat = resetSongsCatalog();
-    setCanciones(originalCat);
-    saveSongsCatalog(originalCat);
-  };
-
   return {
     canciones,
     setCanciones,
@@ -139,7 +133,6 @@ export default function useLocalCatalog(cancionActual, setCancionActual) {
     comprobarDisponibilidadAudios,
     handleSumarPuntos,
     handleResetProgreso,
-    handleGuardarCanciones,
-    handleRestaurarCanciones
+    handleGuardarCanciones
   };
 }

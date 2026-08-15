@@ -1,13 +1,18 @@
 import React, { useState } from 'react';
 import { FIGURAS_LITERARIAS } from '../data/initialData';
-import { BookOpen, Sparkles, Star, Edit3, X } from 'lucide-react';
+import { BookOpen, Sparkles, Star, Edit3, Trash2, Plus, X } from 'lucide-react';
+import ConfirmModal from './ConfirmModal';
 
 export default function FigureCatalog({ figuras, onGuardarFiguras }) {
   const listaFiguras = figuras || FIGURAS_LITERARIAS;
   const [figuraSeleccionada, setFiguraSeleccionada] = useState(listaFiguras[0]);
   const [figuraEditando, setFiguraEditando] = useState(null);
+  const [esCreacion, setEsCreacion] = useState(false);
+  const [figuraAEliminar, setFiguraAEliminar] = useState(null);
 
   // Form states for in-place editor
+  const [editNombre, setEditNombre] = useState('');
+  const [editColor, setEditColor] = useState('#f59e0b');
   const [editIcono, setEditIcono] = useState('');
   const [editDefinicion, setEditDefinicion] = useState('');
   const [editEjemplo, setEditEjemplo] = useState('');
@@ -17,6 +22,9 @@ export default function FigureCatalog({ figuras, onGuardarFiguras }) {
   const iniciarEdicion = (e, fig) => {
     e.stopPropagation(); // Avoid triggering selection on click
     setFiguraEditando(fig);
+    setEsCreacion(false);
+    setEditNombre(fig.nombre || '');
+    setEditColor(fig.color || '#f59e0b');
     setEditIcono(fig.icono || '📝');
     setEditDefinicion(fig.definicion_detective || fig.definicion_infantil || '');
     setEditEjemplo(fig.ejemplo_rapido || '');
@@ -24,56 +32,129 @@ export default function FigureCatalog({ figuras, onGuardarFiguras }) {
     setEditPuntos(fig.puntos_detective || 10);
   };
 
+  const iniciarCreacion = () => {
+    setEsCreacion(true);
+    const nuevaId = `figura_${Date.now()}`;
+    setFiguraEditando({
+      id: nuevaId,
+      nombre: '',
+      color: '#06b6d4',
+      icono: '📝',
+      definicion_detective: '',
+      ejemplo_rapido: '',
+      badge: '',
+      puntos_detective: 10
+    });
+    setEditNombre('');
+    setEditColor('#06b6d4');
+    setEditIcono('📝');
+    setEditDefinicion('');
+    setEditEjemplo('');
+    setEditBadge('');
+    setEditPuntos(10);
+  };
+
   const guardarEdicion = (e) => {
     e.preventDefault();
     if (!figuraEditando) return;
 
-    const nuevasFiguras = listaFiguras.map(f => {
-      if (f.id === figuraEditando.id) {
-        return {
-          ...f,
-          icono: editIcono,
-          definicion_detective: editDefinicion,
-          definicion_infantil: editDefinicion,
-          ejemplo_rapido: editEjemplo,
-          badge: editBadge,
-          puntos_detective: Number(editPuntos)
-        };
+    let nuevasFiguras;
+    if (esCreacion) {
+      const nuevaFig = {
+        id: figuraEditando.id,
+        nombre: editNombre,
+        color: editColor,
+        icono: editIcono,
+        definicion_detective: editDefinicion,
+        definicion_infantil: editDefinicion,
+        ejemplo_rapido: editEjemplo,
+        badge: editBadge,
+        puntos_detective: Number(editPuntos),
+        esNueva: true
+      };
+      nuevasFiguras = [...listaFiguras, nuevaFig];
+      setFiguraSeleccionada(nuevaFig);
+    } else {
+      nuevasFiguras = listaFiguras.map(f => {
+        if (f.id === figuraEditando.id) {
+          return {
+            ...f,
+            nombre: editNombre,
+            color: editColor,
+            icono: editIcono,
+            definicion_detective: editDefinicion,
+            definicion_infantil: editDefinicion,
+            ejemplo_rapido: editEjemplo,
+            badge: editBadge,
+            puntos_detective: Number(editPuntos)
+          };
+        }
+        return f;
+      });
+      
+      // Keep selected figure updated
+      const updatedSel = nuevasFiguras.find(f => f.id === figuraSeleccionada.id);
+      if (updatedSel) {
+        setFiguraSeleccionada(updatedSel);
       }
-      return f;
-    });
+    }
 
     onGuardarFiguras(nuevasFiguras);
     setFiguraEditando(null);
+    setEsCreacion(false);
+  };
 
-    // Keep active selected figure updated with modifications
-    const updatedSel = nuevasFiguras.find(f => f.id === figuraSeleccionada.id);
-    if (updatedSel) {
-      setFiguraSeleccionada(updatedSel);
+  const ejecutarEliminacionFigura = () => {
+    if (!figuraAEliminar) return;
+    const nuevasFiguras = listaFiguras.filter(f => f.id !== figuraAEliminar.id);
+    onGuardarFiguras(nuevasFiguras);
+    setFiguraAEliminar(null);
+    if (nuevasFiguras.length > 0) {
+      setFiguraSeleccionada(nuevasFiguras[0]);
     }
   };
 
   return (
-    <div className="glass-panel" style={{ padding: '24px', marginBottom: '24px' }}>
+    <div className={onGuardarFiguras ? "" : "glass-panel"} style={{ padding: onGuardarFiguras ? '0px' : '24px', marginBottom: '24px' }}>
       
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px', flexWrap: 'wrap', gap: '12px' }}>
         <div>
-          <span className="badge badge-cyan" style={{ marginBottom: '6px' }}>
-            <BookOpen size={14} /> Diccionario Didáctico
-          </span>
           <h3 style={{ fontSize: '1.3rem', fontWeight: 800 }}>
             {onGuardarFiguras ? 'Gestión del Diccionario de Figuras' : 'Tarjetas de Figuras Literarias'}
           </h3>
         </div>
-        <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-          {onGuardarFiguras ? 'Edita los trucos poéticos en caliente' : 'Aprende qué significa cada truco poético'}
-        </p>
+        
+        {onGuardarFiguras && (
+          <button
+            onClick={iniciarCreacion}
+            style={{
+              padding: '10px 18px',
+              borderRadius: '12px',
+              background: 'linear-gradient(135deg, #10b981, #059669)',
+              color: '#ffffff',
+              fontWeight: 800,
+              fontSize: '0.85rem',
+              border: 'none',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              boxShadow: '0 0 14px rgba(16, 185, 129, 0.35)',
+              transition: 'all 0.2s'
+            }}
+            title="Añadir nueva figura poética al diccionario"
+          >
+            <Plus size={16} /> Añadir Figura
+          </button>
+        )}
       </div>
 
       {/* Grid of Cards */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '16px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '16px' }}>
         {listaFiguras.map((figura) => {
           const isSelected = figuraSeleccionada.id === figura.id;
+          const esDeFabrica = ['metafora', 'simil', 'personificacion', 'hiperbole', 'aliteracion', 'anafora'].includes(figura.id);
+          
           return (
             <div
               key={figura.id}
@@ -94,24 +175,50 @@ export default function FigureCatalog({ figuras, onGuardarFiguras }) {
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <span style={{ fontSize: '2rem' }}>{figura.icono}</span>
                   {onGuardarFiguras && (
-                    <button
-                      onClick={(e) => iniciarEdicion(e, figura)}
-                      style={{
-                        background: 'rgba(255, 255, 255, 0.05)',
-                        border: '1px solid rgba(255, 255, 255, 0.1)',
-                        borderRadius: '6px',
-                        padding: '4px',
-                        color: '#94a3b8',
-                        cursor: 'pointer',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        transition: 'all 0.2s'
-                      }}
-                      title="Editar figura literaria"
-                    >
-                      <Edit3 size={12} />
-                    </button>
+                    <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
+                      <button
+                        onClick={(e) => iniciarEdicion(e, figura)}
+                        style={{
+                          background: 'rgba(255, 255, 255, 0.05)',
+                          border: '1px solid rgba(255, 255, 255, 0.1)',
+                          borderRadius: '6px',
+                          padding: '4px',
+                          color: '#94a3b8',
+                          cursor: 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          transition: 'all 0.2s'
+                        }}
+                        title="Editar figura"
+                      >
+                        <Edit3 size={12} />
+                      </button>
+
+                      {!esDeFabrica && (
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setFiguraAEliminar(figura);
+                          }}
+                          style={{
+                            background: 'rgba(239, 68, 68, 0.1)',
+                            border: '1px solid rgba(239, 68, 68, 0.25)',
+                            borderRadius: '6px',
+                            padding: '4px',
+                            color: '#fca5a5',
+                            cursor: 'pointer',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            transition: 'all 0.2s'
+                          }}
+                          title="Eliminar figura"
+                        >
+                          <Trash2 size={12} />
+                        </button>
+                      )}
+                    </div>
                   )}
                 </div>
                 <span className="badge" style={{ background: `${figura.color}22`, color: figura.color, border: `1px solid ${figura.color}44`, fontSize: '0.7rem' }}>
@@ -145,48 +252,85 @@ export default function FigureCatalog({ figuras, onGuardarFiguras }) {
 
       {/* In-place Figures Editor Modal */}
       {figuraEditando && (
-        <div style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          background: 'rgba(15, 23, 42, 0.8)',
-          backdropFilter: 'blur(8px)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          zIndex: 9999,
-          padding: '20px'
-        }}>
+        <div
+          className="modal-overlay-animate"
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'rgba(15, 23, 42, 0.8)',
+            backdropFilter: 'blur(8px)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 9999,
+            padding: '20px'
+          }}
+        >
           <form
             onSubmit={guardarEdicion}
+            className="modal-content-animate"
             style={{
               background: '#1e293b',
               padding: '24px',
               borderRadius: '20px',
-              border: `1.5px solid ${figuraEditando.color}`,
+              border: `1.5px solid ${editColor}`,
               maxWidth: '500px',
               width: '100%',
-              boxShadow: `0 0 30px ${figuraEditando.color}22`
+              boxShadow: `0 0 30px ${editColor}22`
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '18px' }}>
               <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#ffffff', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                ✏️ Editar Figura: <span style={{ color: figuraEditando.color }}>{figuraEditando.nombre}</span>
+                {esCreacion ? '➕ Nueva Figura Poética' : `✏️ Editar Figura: ${figuraEditando.nombre}`}
               </h3>
               <button
                 type="button"
-                onClick={() => setFiguraEditando(null)}
+                onClick={() => {
+                  setFiguraEditando(null);
+                  setEsCreacion(false);
+                }}
                 style={{ background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer', padding: '4px' }}
               >
                 <X size={20} />
               </button>
             </div>
 
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 120px', gap: '12px', marginBottom: '14px' }}>
+              <div>
+                <label style={{ fontSize: '0.8rem', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>Nombre de la Figura *</label>
+                <input
+                  type="text"
+                  required
+                  placeholder="Ej: Símil o Comparación"
+                  value={editNombre}
+                  onChange={e => setEditNombre(e.target.value)}
+                  style={{ width: '100%', padding: '10px', borderRadius: '10px', background: '#0f172a', color: '#fff', border: '1px solid #334155', fontSize: '0.88rem' }}
+                />
+              </div>
+
+              <div>
+                <label style={{ fontSize: '0.8rem', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>Color (CSS) *</label>
+                <select
+                  value={editColor}
+                  onChange={e => setEditColor(e.target.value)}
+                  style={{ width: '100%', padding: '10px', borderRadius: '10px', background: '#0f172a', color: '#fff', border: '1px solid #334155', fontSize: '0.88rem' }}
+                >
+                  <option value="#06b6d4">🩵 Cian</option>
+                  <option value="#f59e0b">🧡 Ámbar</option>
+                  <option value="#8b5cf6">💜 Morado</option>
+                  <option value="#ec4899">🩷 Rosa</option>
+                  <option value="#10b981">💚 Esmeralda</option>
+                  <option value="#3b82f6">💙 Azul</option>
+                </select>
+              </div>
+            </div>
+
             <div style={{ display: 'grid', gridTemplateColumns: '80px 1fr', gap: '12px', marginBottom: '14px' }}>
               <div>
-                <label style={{ fontSize: '0.8rem', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>Icono</label>
+                <label style={{ fontSize: '0.8rem', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>Emoji *</label>
                 <input
                   type="text"
                   required
@@ -198,7 +342,7 @@ export default function FigureCatalog({ figuras, onGuardarFiguras }) {
               </div>
 
               <div>
-                <label style={{ fontSize: '0.8rem', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>Puntos Detective</label>
+                <label style={{ fontSize: '0.8rem', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>Puntos Detective *</label>
                 <input
                   type="number"
                   required
@@ -212,7 +356,7 @@ export default function FigureCatalog({ figuras, onGuardarFiguras }) {
             </div>
 
             <div style={{ marginBottom: '14px' }}>
-              <label style={{ fontSize: '0.8rem', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>Definición Poética Didáctica</label>
+              <label style={{ fontSize: '0.8rem', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>Definición Poética Didáctica *</label>
               <textarea
                 required
                 rows={3}
@@ -224,7 +368,7 @@ export default function FigureCatalog({ figuras, onGuardarFiguras }) {
             </div>
 
             <div style={{ marginBottom: '14px' }}>
-              <label style={{ fontSize: '0.8rem', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>Ejemplo Práctico Rápido</label>
+              <label style={{ fontSize: '0.8rem', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>Ejemplo Práctico Rápido *</label>
               <input
                 type="text"
                 required
@@ -236,7 +380,7 @@ export default function FigureCatalog({ figuras, onGuardarFiguras }) {
             </div>
 
             <div style={{ marginBottom: '20px' }}>
-              <label style={{ fontSize: '0.8rem', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>Consejo Detective / Pista de búsqueda</label>
+              <label style={{ fontSize: '0.8rem', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>Consejo Detective / Pista de búsqueda *</label>
               <input
                 type="text"
                 required
@@ -250,7 +394,10 @@ export default function FigureCatalog({ figuras, onGuardarFiguras }) {
             <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
               <button
                 type="button"
-                onClick={() => setFiguraEditando(null)}
+                onClick={() => {
+                  setFiguraEditando(null);
+                  setEsCreacion(false);
+                }}
                 style={{ padding: '10px 18px', borderRadius: '10px', background: 'rgba(255, 255, 255, 0.05)', color: '#cbd5e1', border: '1px solid rgba(255, 255, 255, 0.1)', fontWeight: 700, fontSize: '0.88rem' }}
               >
                 Cancelar
@@ -273,6 +420,19 @@ export default function FigureCatalog({ figuras, onGuardarFiguras }) {
           </form>
         </div>
       )}
+
+      {/* Modal de confirmación para eliminar figura literaria personalizada */}
+      <ConfirmModal
+        isOpen={Boolean(figuraAEliminar)}
+        titulo="¿Eliminar figura literaria?"
+        mensaje={`¿Estás seguro de que deseas eliminar la figura «${figuraAEliminar?.nombre}»? Esta acción la borrará permanentemente de tu diccionario didáctico.`}
+        textoConfirmar="Eliminar Figura"
+        textoCancelar="Conservar"
+        variante="peligro"
+        requiereCheck={true}
+        onConfirm={ejecutarEliminacionFigura}
+        onCancel={() => setFiguraAEliminar(null)}
+      />
 
     </div>
   );

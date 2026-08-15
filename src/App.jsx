@@ -61,7 +61,6 @@ export default function App() {
         estrellas={estrellas}
         modoPrincipal={modoPrincipal}
         setModoPrincipal={setModoPrincipal}
-        onResetProgreso={handleResetProgreso}
         pestanaActiva={pestanaActiva}
         setPestanaActiva={setPestanaActiva}
       />
@@ -153,7 +152,6 @@ export default function App() {
           figuras={figuras}
           audioStatus={audioStatus}
           onGuardarCanciones={handleGuardarCanciones}
-          onRestaurarCanciones={handleRestaurarCanciones}
           onGuardarFiguras={setFiguras}
           puntos={puntos}
           nivel={nivel}

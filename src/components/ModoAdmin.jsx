@@ -9,7 +9,6 @@ export default function ModoAdmin({
   figuras,
   audioStatus,
   onGuardarCanciones,
-  onRestaurarCanciones,
   onGuardarFiguras,
   puntos,
   nivel,
@@ -36,7 +35,6 @@ export default function ModoAdmin({
           canciones={canciones}
           audioStatus={audioStatus}
           onGuardarCanciones={onGuardarCanciones}
-          onRestaurarDefault={onRestaurarCanciones}
         />
       )}
 

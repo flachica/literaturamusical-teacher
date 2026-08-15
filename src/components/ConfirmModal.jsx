@@ -27,22 +27,27 @@ export default function ConfirmModal({
   const colorBoton = variante === 'peligro' ? 'linear-gradient(135deg, #ef4444, #dc2626)' : 'linear-gradient(135deg, #f59e0b, #d97706)';
 
   return (
-    <div style={{
-      position: 'fixed',
-      inset: 0,
-      background: 'rgba(15, 23, 42, 0.85)',
-      backdropFilter: 'blur(8px)',
-      zIndex: 2500,
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      padding: '16px'
-    }}>
-      <div style={{
-        background: 'linear-gradient(135deg, #1e293b, #0f172a)',
-        border: `2px solid ${colorBorder}`,
-        borderRadius: '20px',
-        padding: '24px',
+    <div
+      className="modal-overlay-animate"
+      style={{
+        position: 'fixed',
+        inset: 0,
+        background: 'rgba(15, 23, 42, 0.85)',
+        backdropFilter: 'blur(8px)',
+        zIndex: 2500,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '16px'
+      }}
+    >
+      <div
+        className="modal-content-animate"
+        style={{
+          background: 'linear-gradient(135deg, #1e293b, #0f172a)',
+          border: `2px solid ${colorBorder}`,
+          borderRadius: '20px',
+          padding: '24px',
         maxWidth: '440px',
         width: '100%',
         boxShadow: `0 0 30px ${colorGlow}`

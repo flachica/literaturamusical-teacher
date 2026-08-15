@@ -10,12 +10,10 @@ export default function Navbar({
   estrellas,
   modoPrincipal,
   setModoPrincipal,
-  onResetProgreso,
   pestanaActiva,
   setPestanaActiva
 }) {
   const [menuAbierto, setMenuAbierto] = useState(false);
-  const [mostrarConfirmReset, setMostrarConfirmReset] = useState(false);
   const menuRef = useRef(null);
 
   const esAdmin = modoPrincipal === 'admin';
@@ -319,53 +317,12 @@ export default function Navbar({
                 </div>
               </div>
 
-              {onResetProgreso && (
-                <div style={{ borderTop: '1px solid rgba(255,255,255,0.08)', marginTop: '8px', paddingTop: '8px' }}>
-                  <button
-                    onClick={() => {
-                      setMostrarConfirmReset(true);
-                      setMenuAbierto(false);
-                    }}
-                    style={{
-                      width: '100%',
-                      padding: '6px 10px',
-                      background: 'transparent',
-                      color: '#f87171',
-                      border: 'none',
-                      fontSize: '0.78rem',
-                      fontWeight: 700,
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '6px',
-                      cursor: 'pointer'
-                    }}
-                  >
-                    <RotateCcw size={12} /> Reiniciar Puntos
-                  </button>
-                </div>
-              )}
             </div>
           )}
 
         </div>
 
       </div>
-
-      {/* Modal de confirmación integrado para reiniciar puntos */}
-      <ConfirmModal
-        isOpen={mostrarConfirmReset}
-        titulo="¿Reiniciar puntos de la detective?"
-        mensaje="Esta acción restablecerá las estrellas, el nivel y las puntuaciones acumuladas."
-        textoConfirmar="Sí, reiniciar"
-        textoCancelar="Cancelar"
-        variante="peligro"
-        requiereCheck={true}
-        onConfirm={() => {
-          onResetProgreso();
-          setMostrarConfirmReset(false);
-        }}
-        onCancel={() => setMostrarConfirmReset(false)}
-      />
 
     </header>
   );

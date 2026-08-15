@@ -11,7 +11,7 @@ const obtenerYoutubeId = (url) => {
   return (match && match[2].length === 11) ? match[2] : '';
 };
 
-export default function SongManager({ canciones, audioStatus, onGuardarCanciones, onRestaurarDefault }) {
+export default function SongManager({ canciones, audioStatus, onGuardarCanciones }) {
   const [mostrarForm, setMostrarForm] = useState(false);
   const [mensajeExito, setMensajeExito] = useState('');
   const [errorImport, setErrorImport] = useState('');
@@ -19,7 +19,6 @@ export default function SongManager({ canciones, audioStatus, onGuardarCanciones
 
   // Estados de modal de confirmación integrado
   const [cancionAEliminar, setCancionAEliminar] = useState(null);
-  const [mostrarConfirmRestaurar, setMostrarConfirmRestaurar] = useState(false);
 
   // Estado para el formulario de nueva canción
   const [nuevoTitulo, setNuevoTitulo] = useState('');
@@ -538,27 +537,6 @@ export default function SongManager({ canciones, audioStatus, onGuardarCanciones
             <Upload size={14} /> Importar JSON
             <input type="file" accept=".json" onChange={handleImportarJSON} style={{ display: 'none' }} />
           </label>
-
-          <button
-            onClick={() => setMostrarConfirmRestaurar(true)}
-            style={{
-              padding: '8px 14px',
-              borderRadius: '10px',
-              background: 'rgba(239, 68, 68, 0.08)',
-              color: '#fca5a5',
-              border: '1px solid rgba(239, 68, 68, 0.25)',
-              fontWeight: 700,
-              fontSize: '0.85rem',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px',
-              cursor: 'pointer',
-              transition: 'all 0.2s'
-            }}
-            title="Restaurar canciones iniciales por defecto"
-          >
-            <RotateCcw size={14} /> Restaurar Catálogo
-          </button>
         </div>
       </div>
 
@@ -1146,22 +1124,7 @@ export default function SongManager({ canciones, audioStatus, onGuardarCanciones
         onCancel={() => setCancionAEliminar(null)}
       />
 
-      {/* Modal de confirmación para restaurar catálogo predeterminado */}
-      <ConfirmModal
-        isOpen={mostrarConfirmRestaurar}
-        titulo="¿Restaurar catálogo original?"
-        mensaje="Esta acción restablecerá las canciones iniciales por defecto. Las canciones personalizadas se mantendrán si están en el servidor."
-        textoConfirmar="Restaurar Catálogo"
-        textoCancelar="Cancelar"
-        variante="advertencia"
-        onConfirm={() => {
-          onRestaurarDefault();
-          setMostrarConfirmRestaurar(false);
-          setMensajeExito('Catálogo predeterminado restaurado.');
-          setTimeout(() => setMensajeExito(''), 3000);
-        }}
-        onCancel={() => setMostrarConfirmRestaurar(false)}
-      />
+
 
     </div>
   );
