@@ -604,9 +604,9 @@ export default function SongManager({ canciones, audioStatus, onGuardarCanciones
 
       {/* Form for adding a new song */}
       {mostrarForm && (
-        <form onSubmit={handleValidarSubmit} style={{ background: 'rgba(15, 23, 42, 0.85)', padding: '20px', borderRadius: '14px', border: '1px solid rgba(245, 158, 11, 0.3)', marginBottom: '24px' }}>
-          <h4 style={{ fontSize: '1rem', fontWeight: 800, color: '#fbbf24', marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <Sparkles size={16} /> Alta de Canción Karaoke (Audio MP3 + Letras)
+        <form onSubmit={handleValidarSubmit} style={{ background: 'rgba(15, 23, 42, 0.6)', padding: '20px', borderRadius: '16px', border: '1px solid rgba(255, 255, 255, 0.08)', marginBottom: '24px' }}>
+          <h4 style={{ fontSize: '1rem', fontWeight: 800, color: '#ffffff', marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <Sparkles size={16} color="#fbbf24" /> Añadir Nueva Canción al Catálogo
           </h4>
 
           {/* Step Progress Pills Header */}
@@ -614,7 +614,7 @@ export default function SongManager({ canciones, audioStatus, onGuardarCanciones
             {[
               { step: 1, title: '1. Buscar Letra' },
               { step: 2, title: '2. Enlazar Audio' },
-              { step: 3, title: '3. Emoción & Guardar' }
+              { step: 3, title: '3. Temática' }
             ].map(s => (
               <div
                 key={s.step}
@@ -625,15 +625,16 @@ export default function SongManager({ canciones, audioStatus, onGuardarCanciones
                 }}
                 style={{
                   flex: 1,
-                  padding: '6px 10px',
-                  borderRadius: '8px',
-                  background: pasoWizard === s.step ? 'var(--primary)' : 'rgba(255, 255, 255, 0.06)',
-                  color: pasoWizard === s.step ? '#ffffff' : 'var(--text-muted)',
-                  fontSize: '0.78rem',
+                  padding: '8px 10px',
+                  borderRadius: '10px',
+                  background: pasoWizard === s.step ? 'rgba(245, 158, 11, 0.15)' : 'rgba(255, 255, 255, 0.02)',
+                  color: pasoWizard === s.step ? '#fbbf24' : 'var(--text-muted)',
+                  fontSize: '0.8rem',
                   fontWeight: 800,
                   textAlign: 'center',
                   cursor: 'pointer',
-                  border: pasoWizard === s.step ? '1px solid #c084fc' : '1px solid transparent'
+                  border: `1.5px solid ${pasoWizard === s.step ? 'rgba(245, 158, 11, 0.6)' : 'rgba(255, 255, 255, 0.08)'}`,
+                  transition: 'all 0.2s'
                 }}
               >
                 {s.title}
@@ -643,10 +644,10 @@ export default function SongManager({ canciones, audioStatus, onGuardarCanciones
 
           {/* PASO 1: Buscador Principal de Karaoke API */}
           {pasoWizard === 1 && (
-            <div style={{ background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(236, 72, 153, 0.2))', padding: '16px', borderRadius: '12px', border: '1.5px solid #c084fc' }}>
+            <div style={{ background: 'rgba(255, 255, 255, 0.02)', padding: '16px', borderRadius: '12px', border: '1px solid rgba(255, 255, 255, 0.08)' }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '10px', marginBottom: '12px' }}>
                 <div>
-                  <span style={{ fontSize: '0.95rem', fontWeight: 900, color: '#f472b6', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <span style={{ fontSize: '0.95rem', fontWeight: 900, color: '#fbbf24', display: 'flex', alignItems: 'center', gap: '6px' }}>
                     <Sparkles size={18} /> Paso 1: Buscar Letra (Karaoke API)
                   </span>
                   <span style={{ fontSize: '0.78rem', color: '#cbd5e1' }}>
@@ -660,19 +661,19 @@ export default function SongManager({ canciones, audioStatus, onGuardarCanciones
                   style={{
                     padding: '9px 18px',
                     borderRadius: '10px',
-                    background: cargandoAPI ? '#475569' : 'linear-gradient(135deg, #ec4899, #8b5cf6)',
+                    background: cargandoAPI ? '#475569' : 'linear-gradient(135deg, #f59e0b, #d97706)',
                     color: '#ffffff',
                     fontWeight: 900,
                     fontSize: '0.85rem',
                     border: 'none',
                     cursor: cargandoAPI ? 'wait' : 'pointer',
-                    boxShadow: '0 0 12px rgba(236, 72, 153, 0.4)',
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '6px'
+                    gap: '6px',
+                    transition: 'all 0.2s'
                   }}
                 >
-                  {cargandoAPI ? '⏳ Buscando...' : '🔍 Importar Letra de Karaoke API'}
+                  {cargandoAPI ? '⏳ Buscando...' : '🔍 Importar Letra'}
                 </button>
               </div>
 
@@ -732,7 +733,7 @@ export default function SongManager({ canciones, audioStatus, onGuardarCanciones
 
           {/* PASO 2: Vincular Música / Audio (YouTube o MP3) */}
           {pasoWizard === 2 && (
-            <div style={{ background: 'rgba(30, 41, 59, 0.7)', padding: '16px', borderRadius: '12px', border: '1.5px solid #38bdf8' }}>
+            <div style={{ background: 'rgba(255, 255, 255, 0.02)', padding: '16px', borderRadius: '12px', border: '1px solid rgba(255, 255, 255, 0.08)' }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
                 <span style={{ fontSize: '0.82rem', color: '#34d399', fontWeight: 700 }}>
                   ✓ Paso 1 OK: Letra de «{nuevoTitulo}» por {nuevoArtista} ({versosObtenidosAPI?.length || 1} versos)
@@ -742,7 +743,7 @@ export default function SongManager({ canciones, audioStatus, onGuardarCanciones
                 </button>
               </div>
 
-              <span style={{ fontSize: '0.95rem', color: '#38bdf8', fontWeight: 900, display: 'block', marginBottom: '12px' }}>
+              <span style={{ fontSize: '0.95rem', color: '#cbd5e1', fontWeight: 900, display: 'block', marginBottom: '12px' }}>
                 🎵 Paso 2: Vincular la Música o Vídeo
               </span>
 
@@ -754,18 +755,19 @@ export default function SongManager({ canciones, audioStatus, onGuardarCanciones
                   style={{
                     padding: '9px 16px',
                     borderRadius: '8px',
-                    background: 'linear-gradient(135deg, #ef4444, #dc2626)',
-                    color: '#ffffff',
+                    background: 'rgba(239, 68, 68, 0.1)',
+                    color: '#fca5a5',
+                    border: '1px solid rgba(239, 68, 68, 0.3)',
                     fontWeight: 800,
                     fontSize: '0.85rem',
                     display: 'inline-flex',
                     alignItems: 'center',
                     gap: '6px',
                     textDecoration: 'none',
-                    boxShadow: '0 0 10px rgba(239, 68, 68, 0.4)'
+                    transition: 'all 0.2s'
                   }}
                 >
-                  ▶️ Buscar audio en YouTube de «{(nuevoArtista + ' ' + nuevoTitulo).trim()}»
+                  ▶️ Buscar en YouTube
                 </a>
 
                 <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>o</span>
@@ -773,15 +775,16 @@ export default function SongManager({ canciones, audioStatus, onGuardarCanciones
                 <label style={{
                   padding: '8px 16px',
                   borderRadius: '8px',
-                  background: 'rgba(56, 189, 248, 0.15)',
-                  color: '#38bdf8',
-                  border: '1px solid rgba(56, 189, 248, 0.4)',
+                  background: 'rgba(255, 255, 255, 0.03)',
+                  color: '#cbd5e1',
+                  border: '1px solid rgba(255, 255, 255, 0.1)',
                   fontWeight: 800,
                   fontSize: '0.85rem',
                   display: 'inline-flex',
                   alignItems: 'center',
                   gap: '6px',
-                  cursor: 'pointer'
+                  cursor: 'pointer',
+                  transition: 'all 0.2s'
                 }}>
                   <Upload size={16} /> Subir MP3 local
                   <input type="file" accept="audio/*" onChange={handleMp3FileUpload} style={{ display: 'none' }} />
@@ -795,7 +798,7 @@ export default function SongManager({ canciones, audioStatus, onGuardarCanciones
               </div>
 
               <div style={{ marginBottom: '14px' }}>
-                <label style={{ fontSize: '0.78rem', color: '#38bdf8', fontWeight: 700, display: 'block', marginBottom: '4px' }}>
+                <label style={{ fontSize: '0.78rem', color: 'var(--text-muted)', fontWeight: 700, display: 'block', marginBottom: '4px' }}>
                   Pega el enlace de YouTube o URL y pulsa ENTER o el botón para extraer el audio a MP3:
                 </label>
                 <div style={{ display: 'flex', gap: '8px' }}>
@@ -819,16 +822,17 @@ export default function SongManager({ canciones, audioStatus, onGuardarCanciones
                     style={{
                       padding: '8px 16px',
                       borderRadius: '8px',
-                      background: cargandoAudioYouTube ? '#475569' : 'linear-gradient(135deg, #0284c7, #38bdf8)',
+                      background: cargandoAudioYouTube ? '#475569' : 'linear-gradient(135deg, #f59e0b, #d97706)',
                       color: '#ffffff',
                       fontWeight: 800,
                       fontSize: '0.82rem',
                       border: 'none',
                       cursor: (cargandoAudioYouTube || !nuevoAudioUrl.trim()) ? 'not-allowed' : 'pointer',
-                      whiteSpace: 'nowrap'
+                      whiteSpace: 'nowrap',
+                      transition: 'all 0.2s'
                     }}
                   >
-                    {cargandoAudioYouTube ? '⏳ Procesando...' : '⚡ Convertir a MP3 Local'}
+                    {cargandoAudioYouTube ? '⏳ Procesando...' : '⚡ Obtener MP3'}
                   </button>
                 </div>
               </div>
@@ -836,33 +840,42 @@ export default function SongManager({ canciones, audioStatus, onGuardarCanciones
               {/* Indicador visual de trabajo en progreso para el padre/madre */}
               {cargandoAudioYouTube && (
                 <div style={{
-                  background: 'rgba(2, 132, 199, 0.25)',
+                  background: 'rgba(245, 158, 11, 0.15)',
                   padding: '12px 16px',
                   borderRadius: '10px',
-                  border: '1px solid #38bdf8',
-                  color: '#38bdf8',
+                  border: '1px solid rgba(245, 158, 11, 0.3)',
+                  color: '#fbbf24',
                   fontSize: '0.85rem',
                   marginBottom: '14px',
                   fontWeight: 800,
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '10px',
-                  boxShadow: '0 0 16px rgba(56, 189, 248, 0.3)'
+                  gap: '10px'
                 }}>
-                  <div className="spinner" style={{ width: '20px', height: '20px', border: '3px solid rgba(56, 189, 248, 0.3)', borderTop: '3px solid #38bdf8', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
-                  <span>⏳ Descargando y convirtiendo el audio del vídeo de YouTube a MP3... Por favor, espera unos segundos.</span>
+                  <div className="spinner" style={{ width: '20px', height: '20px', border: '3px solid rgba(245, 158, 11, 0.3)', borderTop: '3px solid #f59e0b', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
+                  <span>⏳ Descargando y convirtiendo el audio de YouTube... Por favor, espera unos segundos.</span>
                 </div>
               )}
 
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <button type="button" onClick={() => setPasoWizard(1)} style={{ padding: '6px 12px', background: 'transparent', border: '1px solid #475569', borderRadius: '6px', color: '#94a3b8', fontSize: '0.8rem', cursor: 'pointer' }}>
+                <button type="button" onClick={() => setPasoWizard(1)} style={{ padding: '6px 12px', background: 'transparent', border: '1px solid rgba(255, 255, 255, 0.15)', borderRadius: '6px', color: '#cbd5e1', fontSize: '0.8rem', cursor: 'pointer' }}>
                   ⬅️ Atrás
                 </button>
                 <button
                   type="button"
                   onClick={() => setPasoWizard(3)}
                   disabled={!nuevoAudioUrl && !archivoMp3Nombre}
-                  style={{ padding: '8px 16px', borderRadius: '8px', background: (!nuevoAudioUrl && !archivoMp3Nombre) ? '#475569' : '#0284c7', color: '#fff', border: 'none', fontWeight: 800, cursor: 'pointer', fontSize: '0.82rem' }}
+                  style={{
+                    padding: '8px 16px',
+                    borderRadius: '8px',
+                    background: (!nuevoAudioUrl && !archivoMp3Nombre) ? '#475569' : 'linear-gradient(135deg, #10b981, #059669)',
+                    color: '#fff',
+                    border: 'none',
+                    fontWeight: 800,
+                    cursor: (!nuevoAudioUrl && !archivoMp3Nombre) ? 'not-allowed' : 'pointer',
+                    fontSize: '0.82rem',
+                    transition: 'all 0.2s'
+                  }}
                 >
                   Avanzar al Paso 3 ➔
                 </button>
@@ -872,24 +885,48 @@ export default function SongManager({ canciones, audioStatus, onGuardarCanciones
 
           {/* PASO 3: Emoción Didáctica & Guardado Final */}
           {pasoWizard === 3 && (
-            <div style={{ background: 'rgba(15, 23, 42, 0.9)', padding: '16px', borderRadius: '12px', border: '1.5px solid #10b981' }}>
-              <span style={{ fontSize: '0.95rem', color: '#34d399', fontWeight: 900, display: 'block', marginBottom: '12px' }}>
-                ✨ Paso 3: Emoción & Guardado Final
+            <div style={{ background: 'rgba(255, 255, 255, 0.02)', padding: '16px', borderRadius: '12px', border: '1px solid rgba(255, 255, 255, 0.08)' }}>
+              <span style={{ fontSize: '0.95rem', color: '#fbbf24', fontWeight: 900, display: 'block', marginBottom: '12px' }}>
+                ✨ Paso 3: Temática & Guardado Final
               </span>
 
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '12px', marginBottom: '16px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px', marginBottom: '16px' }}>
                 <div>
-                  <label style={{ fontSize: '0.8rem', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>Tema o Emoción Predominante</label>
-                  <select value={nuevoTemaId} onChange={e => setNuevoTemaId(e.target.value)} style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', background: '#0f172a', color: '#fff', border: '1px solid #334155' }}>
-                    {TEMAS_EMOCIONES.filter(t => t.id !== 'todos').map(t => (
-                      <option key={t.id} value={t.id}>{t.icono} {t.nombre}</option>
-                    ))}
-                  </select>
+                  <label style={{ fontSize: '0.8rem', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>Tema o Emoción Didáctica</label>
+                  <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginTop: '6px' }}>
+                    {TEMAS_EMOCIONES.filter(t => t.id !== 'todos').map(t => {
+                      const isSelected = nuevoTemaId === t.id;
+                      return (
+                        <button
+                          key={t.id}
+                          type="button"
+                          onClick={() => setNuevoTemaId(t.id)}
+                          style={{
+                            padding: '6px 12px',
+                            borderRadius: '8px',
+                            background: isSelected ? 'rgba(245, 158, 11, 0.2)' : 'rgba(255, 255, 255, 0.03)',
+                            color: isSelected ? '#fbbf24' : '#cbd5e1',
+                            border: `1.5px solid ${isSelected ? 'rgba(245, 158, 11, 0.6)' : 'rgba(255, 255, 255, 0.08)'}`,
+                            fontSize: '0.8rem',
+                            fontWeight: 700,
+                            cursor: 'pointer',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '4px',
+                            transition: 'all 0.2s'
+                          }}
+                        >
+                          <span>{t.icono}</span>
+                          <span>{t.nombre}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
 
                 <div>
-                  <label style={{ fontSize: '0.8rem', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>Resumen Didáctico (¿De qué trata?)</label>
-                  <input type="text" placeholder="Ej: Canción sobre las decisiones y el camino de la vida." value={nuevoResumen} onChange={e => setNuevoResumen(e.target.value)} style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', background: '#0f172a', color: '#fff', border: '1px solid #334155' }} />
+                  <label style={{ fontSize: '0.8rem', color: 'var(--text-muted)', display: 'block', marginBottom: '8px' }}>Resumen Didáctico (¿De qué trata?)</label>
+                  <input type="text" placeholder="Ej: Canción sobre las decisiones y el camino de la vida." value={nuevoResumen} onChange={e => setNuevoResumen(e.target.value)} style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', background: '#0f172a', color: '#fff', border: '1px solid #334155', fontSize: '0.85rem' }} />
                 </div>
               </div>
 
