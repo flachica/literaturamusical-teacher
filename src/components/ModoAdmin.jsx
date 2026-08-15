@@ -31,7 +31,7 @@ export default function ModoAdmin({
   const [detectiveEditandoId, setDetectiveEditandoId] = useState(null);
   const [nombreEditando, setNombreEditando] = useState('');
 
-  const avataresDisponibles = ['🕵️‍♀️', '🦊', '🦁', '🐼', '🦄', '🐨', '🦖', '🐯', '🐸', '🐨', '🦉', '🦄'];
+  const avataresDisponibles = ['🕵️‍♀️', '🦊', '🦁', '🐼', '🦄', '🐨', '🦖', '🐯', '🐸', '🦉', '🐙', '🐵'];
 
   const ejecutarResetProgreso = () => {
     onResetProgreso();

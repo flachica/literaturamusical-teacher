@@ -53,7 +53,7 @@ export default function Navbar({
               <h1 style={{ fontSize: '1.55rem', fontWeight: 900, background: 'linear-gradient(to right, #f8fafc, #c084fc)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', margin: 0, lineHeight: 1.1 }}>
                 LitMusical
               </h1>
-              <span className="badge badge-purple" style={{ fontSize: '0.68rem', padding: '2px 6px' }}>v0.2.4</span>
+              <span className="badge badge-purple" style={{ fontSize: '0.68rem', padding: '2px 6px' }}>v0.3.0</span>
             </div>
             <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)', fontWeight: 600, margin: 0, display: 'flex', alignItems: 'center', gap: '4px' }}>
               <Shield size={12} color="#f59e0b" /> Escuela de Detectives Literarios

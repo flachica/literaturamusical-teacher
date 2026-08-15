@@ -6,11 +6,11 @@ Documento de seguimiento del desarrollo interactivo de **LitMusical** estructura
 
 ## 📍 ESTADO ACTUAL DEL PROYECTO
 
-* **Sesión Actual**: 🟢 **SESIÓN 6** (Iteración 10 - Completada)
-* **Subversión Alcanzada**: `v0.2.14` (Iteración de Usabilidad y Diccionario Editable).
+* **Sesión Actual**: 🟢 **SESIÓN 6** (Iteración 11 - Completada)
+* **Subversión Alcanzada**: `v0.3.0` (Persistencia Activa e Indicador Multi-Detective).
 * **Métrica Clave del Reto (CPVM)**: 
   $$\text{CPVM} = [\text{Retos de figuras literarias resueltos con éxito}] + [\text{por la niña de forma autónoma}]$$
-* **Objetivo de la Iteración**: Planificación e inicio de la Gamificación Avanzada "Escuela de Detectives" (`v0.3.0`) y reordenamiento de la hoja de ruta.
+* **Objetivo de la Iteración**: Planificación e implementación de la persistencia activa multi-detective en Ajustes y Navbar.
 
 ---
 
@@ -37,12 +37,9 @@ Documento de seguimiento del desarrollo interactivo de **LitMusical** estructura
   * Refinamiento estético y de legibilidad de las tarjetas de canciones: tipografía un 20% más grande y elegante, mejores interlineados, efecto de elevación suave (hover) y papelera de borrado atenuada que solo brilla en rojo cuando el cursor pasa por encima.
   * Implementación de la **edición en caliente** del Diccionario de Figuras Poéticas (`FigureCatalog.jsx`) en Modo Admin mediante un modal interactivo que permite modificar la definición, el icono emoji, el consejo y los puntos de detective asociados.
 
-> 💡 **Reflexión de Diseño (Completada)**:
-> * **Persistencia Activa e Indicador Multi-Detective:** Resuelta mediante la creación del catálogo de perfiles de detectives interactivo en Ajustes.
-
 ---
 
-### 👥 `v0.2.15` - Persistencia Activa e Indicador Multi-Detective (COMPLETADA - SESIÓN 6)
+### 👥 `v0.3.0` - Persistencia Activa e Indicador Multi-Detective (COMPLETADA - SESIÓN 6)
 * **Objetivo**: Permitir que múltiples niños puedan jugar de forma independiente en el mismo dispositivo, gestionando sus propios puntos, estrellas y niveles con nombres y avatares personalizados.
 * **Entregables**:
   * Implementación del almacén de datos multidetective en `storage.js` y `useLocalCatalog.js` con migración transparente del progreso previo de la niña "Valeria".
@@ -51,7 +48,7 @@ Documento de seguimiento del desarrollo interactivo de **LitMusical** estructura
 
 ---
 
-### 🔍 `v0.2.16` - Iteración de Usabilidad: Optimización del Modo Detective Guiado (PLANIFICADA)
+### 🔍 `v0.3.1` - Iteración de Usabilidad: Optimización del Modo Detective Guiado (PLANIFICADA)
 * **Objetivo**: Mejorar la experiencia interactiva del juego para la niña de 9 años, asegurando que el flujo didáctico sea fluido y sin distracciones.
 * **Entregables**:
   * Ajustes en la interfaz del visualizador de ondas y scroll de letras para asegurar una perfecta coherencia visual y de respuesta en pantallas táctiles y escritorio.
@@ -60,7 +57,7 @@ Documento de seguimiento del desarrollo interactivo de **LitMusical** estructura
 
 ---
 
-### 🏆 `v0.3.0` - Gamificación Avanzada "Escuela de Detectives" (PLANIFICADA)
+### 🏆 `v0.4.0` - Gamificación Avanzada "Escuela de Detectives" (PLANIFICADA)
 
 > 🧪 **Hipótesis Causal**:
 > **Si** implementamos rangos de progreso de detective, placas visuales de logros y efectos de sonido interactivos autogenerados,
@@ -88,7 +85,7 @@ Documento de seguimiento del desarrollo interactivo de **LitMusical** estructura
 
 ---
 
-### 🔍 `v0.4.0` - Modo Detective Proactivo (Sugerencia de Figuras) (PLANIFICADA)
+### 🔍 `v0.5.0` - Modo Detective Proactivo (Sugerencia de Figuras) (PLANIFICADA)
 
 > 🧪 **Hipótesis Causal**:
 > **Si** permitimos que la niña marque libremente palabras o frases y sugiera nuevas figuras que ha descubierto,
@@ -104,7 +101,7 @@ Documento de seguimiento del desarrollo interactivo de **LitMusical** estructura
 
 ---
 
-### 🤖 `v0.5.0` - Asistente de IA con Ollama Local y Fallback Offline (PLANIFICADA)
+### 🤖 `v0.6.0` - Asistente de IA con Ollama Local y Fallback Offline (PLANIFICADA)
 
 > 🧪 **Hipótesis Causal**:
 > **Si** permitimos que un LLM local (Ollama) genere automáticamente las preguntas de comprensión infantil y la explicación de figuras para canciones incompletas,
@@ -124,6 +121,6 @@ Documento de seguimiento del desarrollo interactivo de **LitMusical** estructura
 
 ## 🏛️ MEMORIA DE DECISIONES DE ARQUITECTURA (IDG)
 
-1. **Persistencia Local-First**: LocalStorage es la base de datos de estado inmediato. Los ficheros JSON de disco (`songs_catalog.json` y `user_progress.json`) sincronizan el estado del servidor de desarrollo para asegurar la portabilidad del código y el despliegue sin dependencias.
-2. **Audio Autogenerado**: Para evitar subir archivos de sonido pesados a Git, todos los efectos sonoros de recompensa de la v0.3.0 se sintetizan dinámicamente usando la **Web Audio API** del navegador (osciladores y envolventes de volumen).
+1. **Persistencia Local-First**: LocalStorage es la base de datos de estado inmediato. Los ficheros JSON de disco (`songs_catalog.json`, `user_progress.json` y `detectives.json`) sincronizan el estado del servidor de desarrollo para asegurar la portabilidad del código y el despliegue sin dependencias.
+2. **Audio Autogenerado**: Para evitar subir archivos de sonido pesados a Git, todos los efectos sonoros de recompensa de la v0.4.0 se sintetizan dinámicamente usando la **Web Audio API** del navegador (osciladores y envolventes de volumen).
 3. **No Spotify**: Descartada para evitar barreras de autenticación OAuth e IDs de tracks de terceros, garantizando que el juego sea offline/local-first y duradero.

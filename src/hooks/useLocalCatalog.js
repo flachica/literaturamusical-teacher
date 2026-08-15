@@ -109,34 +109,36 @@ export default function useLocalCatalog(cancionActual, setCancionActual) {
 
   // Sumar puntos al detective activo y subir de nivel
   const handleSumarPuntos = (cantidad) => {
-    const nuevosPuntos = puntos + cantidad;
-    const nuevoNivel = Math.floor(nuevosPuntos / 300) + 1; // 300 pts por nivel
-    const nuevasEstrellas = estrellas + Math.floor(cantidad / 100);
-
-    const listaActualizada = detectives.map(d => {
-      if (d.id === detectiveActivo.id) {
-        return {
-          ...d,
-          puntos: nuevosPuntos,
-          nivel: nuevoNivel,
-          estrellas: nuevasEstrellas
-        };
-      }
-      return d;
+    setDetectives(prev => {
+      const listaActualizada = prev.map(d => {
+        if (d.activo) {
+          const nuevosPuntos = d.puntos + cantidad;
+          const nuevoNivel = Math.floor(nuevosPuntos / 300) + 1; // 300 pts por nivel
+          const nuevasEstrellas = d.estrellas + Math.floor(cantidad / 100);
+          return {
+            ...d,
+            puntos: nuevosPuntos,
+            nivel: nuevoNivel,
+            estrellas: nuevasEstrellas
+          };
+        }
+        return d;
+      });
+      saveDetectives(listaActualizada);
+      return listaActualizada;
     });
-
-    setDetectives(listaActualizada);
-    saveDetectives(listaActualizada);
   };
 
   // Cambiar el detective activo
   const handleSeleccionarDetective = (id) => {
-    const listaActualizada = detectives.map(d => ({
-      ...d,
-      activo: d.id === id
-    }));
-    setDetectives(listaActualizada);
-    saveDetectives(listaActualizada);
+    setDetectives(prev => {
+      const listaActualizada = prev.map(d => ({
+        ...d,
+        activo: d.id === id
+      }));
+      saveDetectives(listaActualizada);
+      return listaActualizada;
+    });
   };
 
   // Crear un nuevo detective
@@ -150,54 +152,62 @@ export default function useLocalCatalog(cancionActual, setCancionActual) {
       avatar,
       activo: false
     };
-    const listaActualizada = [...detectives, nuevoDet];
-    setDetectives(listaActualizada);
-    saveDetectives(listaActualizada);
+    setDetectives(prev => {
+      const listaActualizada = [...prev, nuevoDet];
+      saveDetectives(listaActualizada);
+      return listaActualizada;
+    });
     return nuevoDet;
   };
 
   // Renombrar un detective
   const handleRenombrarDetective = (id, nuevoNombre) => {
-    const listaActualizada = detectives.map(d => {
-      if (d.id === id) {
-        return { ...d, nombre: nuevoNombre.trim() || d.nombre };
-      }
-      return d;
+    setDetectives(prev => {
+      const listaActualizada = prev.map(d => {
+        if (d.id === id) {
+          return { ...d, nombre: nuevoNombre.trim() || d.nombre };
+        }
+        return d;
+      });
+      saveDetectives(listaActualizada);
+      return listaActualizada;
     });
-    setDetectives(listaActualizada);
-    saveDetectives(listaActualizada);
   };
 
   // Eliminar un detective
   const handleEliminarDetective = (id) => {
-    if (detectives.length <= 1) {
-      alert('⚠️ No puedes eliminar el único detective registrado.');
-      return;
-    }
-    const estabaActivo = detectives.find(d => d.id === id)?.activo;
-    const listaActualizada = detectives.filter(d => d.id !== id);
-    if (estabaActivo && listaActualizada.length > 0) {
-      listaActualizada[0].activo = true;
-    }
-    setDetectives(listaActualizada);
-    saveDetectives(listaActualizada);
+    setDetectives(prev => {
+      if (prev.length <= 1) {
+        alert('⚠️ No puedes eliminar el único detective registrado.');
+        return prev;
+      }
+      const estabaActivo = prev.find(d => d.id === id)?.activo;
+      const listaActualizada = prev.filter(d => d.id !== id);
+      if (estabaActivo && listaActualizada.length > 0) {
+        listaActualizada[0].activo = true;
+      }
+      saveDetectives(listaActualizada);
+      return listaActualizada;
+    });
   };
 
   // Resetear el progreso del detective activo
   const handleResetProgreso = () => {
-    const listaActualizada = detectives.map(d => {
-      if (d.id === detectiveActivo.id) {
-        return {
-          ...d,
-          puntos: 0,
-          nivel: 1,
-          estrellas: 0
-        };
-      }
-      return d;
+    setDetectives(prev => {
+      const listaActualizada = prev.map(d => {
+        if (d.id === detectiveActivo.id) {
+          return {
+            ...d,
+            puntos: 0,
+            nivel: 1,
+            estrellas: 0
+          };
+        }
+        return d;
+      });
+      saveDetectives(listaActualizada);
+      return listaActualizada;
     });
-    setDetectives(listaActualizada);
-    saveDetectives(listaActualizada);
   };
 
   const handleGuardarCanciones = (nuevoCat) => {
