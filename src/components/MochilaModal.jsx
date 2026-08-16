@@ -28,7 +28,7 @@ export default function MochilaModal({
     s => s.detectiveId === detectiveActivo.id && s.estado === 'pendiente'
   );
   const sugerenciasPendientesCount = pendientesDetective.length;
-  const puntosPendientesTotal = sugerenciasPendientesCount * 50;
+  const puntosPendientesTotal = sugerenciasPendientesCount * 100;
 
   const listaLogros = [
     {
