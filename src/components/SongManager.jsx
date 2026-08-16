@@ -262,25 +262,42 @@ export default function SongManager({ canciones, audioStatus, onGuardarCanciones
             const totalSecs = Number((parseFloat(m[1]) * 60 + parseFloat(m[2])).toFixed(2));
             const textClean = m[3] ? m[3].trim() : '';
             return { text: textClean, time: totalSecs };
-          }).filter(l => l && l.text.length > 0);
+          }).filter(Boolean);
 
-          const versos = rawLines.map((l, idx) => ({
-            linea: idx + 1,
-            estrofaNum: Math.floor(idx / 6) + 1,
-            texto: l.text,
-            tiempoInicio: l.time,
-            tiempoFin: rawLines[idx + 1] ? rawLines[idx + 1].time : l.time + 5,
-            palabrasDificiles: [],
-            preguntaComprension: `¿Qué transmite esta imagen poética de ${artistaFinal}?`,
-            opcionesComprension: [
-              { id: 'a', texto: 'Expresa emoción, libertad e imaginación con el lenguaje.', correcta: true },
-              { id: 'b', texto: 'Una descripción común sin valor poético.', correcta: false }
-            ],
-            figuraId: 'metafora',
-            figuraNombre: 'Metáfora',
-            explicacion: `Verso de ${artistaFinal} extraído de la Karaoke API.`,
-            pista: 'Reflexionar sobre el sentimiento de la letra.'
-          }));
+          const versos = [];
+          let lineIndex = 1;
+
+          for (let i = 0; i < rawLines.length; i++) {
+            const current = rawLines[i];
+            if (current.text.length === 0) {
+              // Es una línea de silencio instrumental en el LRC, no genera verso
+              continue;
+            }
+
+            // El fin de este verso es el inicio del siguiente elemento (sea vacío o texto)
+            let nextTime = current.time + 5;
+            if (i + 1 < rawLines.length) {
+              nextTime = rawLines[i + 1].time;
+            }
+
+            versos.push({
+              linea: lineIndex++,
+              estrofaNum: Math.floor((lineIndex - 2) / 6) + 1,
+              texto: current.text,
+              tiempoInicio: current.time,
+              tiempoFin: nextTime,
+              palabrasDificiles: [],
+              preguntaComprension: `¿Qué transmite esta imagen poética de ${artistaFinal}?`,
+              opcionesComprension: [
+                { id: 'a', texto: 'Expresa emoción, libertad e imaginación con el lenguaje.', correcta: true },
+                { id: 'b', texto: 'Una descripción común sin valor poético.', correcta: false }
+              ],
+              figuraId: 'metafora',
+              figuraNombre: 'Metáfora',
+              explicacion: `Verso de ${artistaFinal} extraído de la Karaoke API.`,
+              pista: 'Reflexionar sobre el sentimiento de la letra.'
+            });
+          }
 
           setVersosObtenidosAPI(versos);
           setPasoWizard(2); // Avanzar automáticamente al Paso 2 (Vincular Audio)
