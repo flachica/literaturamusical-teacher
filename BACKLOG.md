@@ -97,6 +97,16 @@ Documento de seguimiento del desarrollo interactivo de **LitMusical** estructura
 
 ---
 
+### 🔒 Exclusión de Progreso en Control de Versiones (COMPLETADO - SESIÓN 8)
+
+* **Objetivo**: Evitar que el historial de puntos y perfiles de detectives personales entren en el repositorio Git.
+* **Entregables**:
+  * [x] **Privacidad e Independencia Local**: Configurar `.gitignore` para omitir `public/data/detectives.json` y `public/data/user_progress.json`.
+  * [x] **Desvinculación del Índice**: Eliminar la caché de Git de ambos archivos para dejar de rastrear cambios sin borrar el progreso local existente.
+  * [x] **Alineación de Arquitectura**: Actualizar la Memoria de Decisiones para reflejar la persistencia local-first independiente del control de versiones.
+
+---
+
 ### 🧹 `v0.4.2` - Refactorización de Componentes Extensos (PLANIFICADA)
 
 * **Objetivo**: Reducir el tamaño y complejidad cognitiva de los ficheros de código más largos para optimizar el rendimiento y facilitar su lectura/mantenimiento por parte de desarrolladores e IAs.
@@ -147,7 +157,7 @@ Documento de seguimiento del desarrollo interactivo de **LitMusical** estructura
 ---
 
 ## 🏛️ MEMORIA DE DECISIONES DE ARQUITECTURA (IDG)
-
-1. **Persistencia Local-First**: LocalStorage es la base de datos de estado inmediato. Los ficheros JSON de disco (`songs_catalog.json`, `user_progress.json` y `detectives.json`) sincronizan el estado del servidor de desarrollo para asegurar la portabilidad del código y el despliegue sin dependencias.
+1. **Persistencia Local-First y Privacidad de Progreso**: LocalStorage es la base de datos de estado inmediato. Los ficheros JSON de disco (`songs_catalog.json` y `figuras_catalog.json`) se sincronizan en Git para persistir el catálogo de canciones y diccionario de figuras. Sin embargo, los datos dinámicos de uso (`user_progress.json` y `detectives.json`) se escriben localmente en el servidor de desarrollo pero están excluidos de Git para que cada entorno sea independiente y el progreso no se comparta de forma global ni ensucie el control de versiones.
 2. **Audio Autogenerado**: Para evitar subir archivos de sonido pesados a Git, todos los efectos sonoros de recompensa de la v0.4.0 se sintetizan dinámicamente usando la **Web Audio API** del navegador (osciladores y envolventes de volumen).
 3. **No Spotify**: Descartada para evitar barreras de autenticación OAuth e IDs de tracks de terceros, garantizando que el juego sea offline/local-first y duradero.
+

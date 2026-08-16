@@ -38,4 +38,6 @@ public/audio/*
 *.flac
 *.webm
 
-
+# Datos dinámicos de progreso y detectives (no subir a Git)
+public/data/detectives.json
+public/data/user_progress.json
