@@ -265,7 +265,7 @@ export default function ModoDetectiveGuiado({
 
       {/* COLUMN 2: ACTIVE VERSE DETECTIVE CHALLENGE (RIGHT PANEL) */}
       <div className="glass-panel" style={{
-        padding: '24px',
+        padding: '16px 20px',
         height: '560px',
         maxHeight: '560px',
         overflowY: 'auto',
@@ -356,13 +356,13 @@ export default function ModoDetectiveGuiado({
               <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                 <div style={{
                   background: 'rgba(15, 23, 42, 0.95)',
-                  padding: '20px 24px',
+                  padding: '14px 18px',
                   borderRadius: '18px',
                   border: '1.5px solid rgba(139, 92, 246, 0.3)',
                   textAlign: 'left',
                   boxShadow: '0 4px 20px rgba(0,0,0,0.35)'
                 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '10px', marginBottom: '14px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '10px', marginBottom: '10px' }}>
                     <span style={{ fontSize: '0.8rem', color: '#c084fc', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
                       📖 Bloque Poético
                     </span>
@@ -392,7 +392,7 @@ export default function ModoDetectiveGuiado({
                   <div style={{
                     display: 'flex',
                     flexDirection: 'column',
-                    gap: '8px',
+                    gap: '4px',
                     paddingLeft: '14px',
                     borderLeft: '3.5px solid #8b5cf6'
                   }}>
@@ -401,10 +401,10 @@ export default function ModoDetectiveGuiado({
                         <div
                           key={v.linea}
                           style={{
-                            fontSize: '1.25rem',
+                            fontSize: '1.15rem',
                             fontWeight: 600,
                             color: '#f8fafc',
-                            lineHeight: 1.7,
+                            lineHeight: 1.55,
                             padding: '2px 0'
                           }}
                         >
@@ -596,6 +596,33 @@ export default function ModoDetectiveGuiado({
                   </button>
                 </div>
               )}
+
+              {/* Botón de arrepentirse / volver atrás */}
+              <div style={{ display: 'flex', justifyContent: 'flex-start', marginTop: '6px' }}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setOpcionComprension(null);
+                    setPaso(1);
+                  }}
+                  style={{
+                    background: 'rgba(255, 255, 255, 0.05)',
+                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                    color: '#94a3b8',
+                    borderRadius: '10px',
+                    padding: '6px 14px',
+                    fontSize: '0.78rem',
+                    fontWeight: 700,
+                    cursor: 'pointer',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '5px',
+                    transition: 'all 0.2s'
+                  }}
+                >
+                  <span>⬅ Volver a Leer Estrofa</span>
+                </button>
+              </div>
             </div>
           )}
 
@@ -670,6 +697,33 @@ export default function ModoDetectiveGuiado({
                     </button>
                   );
                 })}
+              </div>
+
+              {/* Botón de arrepentirse / volver atrás */}
+              <div style={{ display: 'flex', justifyContent: 'flex-start', marginTop: '6px' }}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setOpcionFigura(null);
+                    setPaso(2);
+                  }}
+                  style={{
+                    background: 'rgba(255, 255, 255, 0.05)',
+                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                    color: '#94a3b8',
+                    borderRadius: '10px',
+                    padding: '6px 14px',
+                    fontSize: '0.78rem',
+                    fontWeight: 700,
+                    cursor: 'pointer',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '5px',
+                    transition: 'all 0.2s'
+                  }}
+                >
+                  <span>⬅ Volver al Reto de Comprensión</span>
+                </button>
               </div>
             </div>
           )}
