@@ -552,37 +552,74 @@ export default function SongManager({ canciones, audioStatus, onGuardarCanciones
             <Sparkles size={16} color="#fbbf24" /> Añadir Nueva Canción al Catálogo
           </h4>
 
-          {/* Step Progress Pills Header */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
-            {[
-              { step: 1, title: '1. Buscar Letra' },
-              { step: 2, title: '2. Enlazar Audio' },
-              { step: 3, title: '3. Temática' }
-            ].map(s => (
-              <div
-                key={s.step}
-                onClick={() => {
-                  if (s.step === 1 || (s.step === 2 && versosObtenidosAPI) || (s.step === 3 && (nuevoAudioUrl || archivoMp3Nombre))) {
-                    setPasoWizard(s.step);
-                  }
-                }}
-                style={{
-                  flex: 1,
-                  padding: '8px 10px',
-                  borderRadius: '10px',
-                  background: pasoWizard === s.step ? 'rgba(245, 158, 11, 0.15)' : 'rgba(255, 255, 255, 0.02)',
-                  color: pasoWizard === s.step ? '#fbbf24' : 'var(--text-muted)',
-                  fontSize: '0.8rem',
-                  fontWeight: 800,
-                  textAlign: 'center',
-                  cursor: 'pointer',
-                  border: `1.5px solid ${pasoWizard === s.step ? 'rgba(245, 158, 11, 0.6)' : 'rgba(255, 255, 255, 0.08)'}`,
-                  transition: 'all 0.2s'
-                }}
-              >
-                {s.title}
+          {/* Step Progress Stepper Header con Animación y Conectores */}
+          <div style={{ marginBottom: '20px', background: 'rgba(15, 23, 42, 0.6)', padding: '14px', borderRadius: '14px', border: '1px solid rgba(245, 158, 11, 0.25)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'relative' }}>
+              
+              {/* Barra de progreso de fondo */}
+              <div style={{ position: 'absolute', top: '18px', left: '15%', right: '15%', height: '3px', background: 'rgba(255, 255, 255, 0.1)', zIndex: 1 }}>
+                <div style={{
+                  height: '100%',
+                  width: pasoWizard === 1 ? '0%' : pasoWizard === 2 ? '50%' : '100%',
+                  background: 'linear-gradient(90deg, #f59e0b, #ec4899)',
+                  transition: 'width 0.4s ease'
+                }} />
               </div>
-            ))}
+
+              {[
+                { step: 1, title: '1. Buscar Letra', icon: '📜' },
+                { step: 2, title: '2. Enlazar Audio', icon: '🎵' },
+                { step: 3, title: '3. Temática Didáctica', icon: '✨' }
+              ].map(s => {
+                const isActive = pasoWizard === s.step;
+                const isPassed = pasoWizard > s.step;
+
+                return (
+                  <div
+                    key={s.step}
+                    onClick={() => {
+                      if (s.step === 1 || (s.step === 2 && versosObtenidosAPI) || (s.step === 3 && (nuevoAudioUrl || archivoMp3Nombre))) {
+                        setPasoWizard(s.step);
+                      }
+                    }}
+                    style={{
+                      zIndex: 2,
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      gap: '6px',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    <div style={{
+                      width: '36px',
+                      height: '36px',
+                      borderRadius: '50%',
+                      background: isPassed ? '#10b981' : isActive ? 'linear-gradient(135deg, #f59e0b, #ec4899)' : 'rgba(30, 41, 59, 0.9)',
+                      border: `2px solid ${isActive ? '#fbbf24' : isPassed ? '#10b981' : 'rgba(255, 255, 255, 0.15)'}`,
+                      color: '#ffffff',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: '1rem',
+                      fontWeight: 800,
+                      boxShadow: isActive ? '0 0 16px rgba(245, 158, 11, 0.5)' : 'none',
+                      transition: 'all 0.3s ease'
+                    }}>
+                      {isPassed ? '✓' : s.icon}
+                    </div>
+                    <span style={{
+                      fontSize: '0.78rem',
+                      fontWeight: isActive ? 900 : 700,
+                      color: isActive ? '#fbbf24' : isPassed ? '#34d399' : '#94a3b8',
+                      transition: 'all 0.2s'
+                    }}>
+                      {s.title}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
           </div>
 
           {/* PASO 1: Buscador Principal de Karaoke API */}

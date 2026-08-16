@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Play, Pause, Disc, Upload, ListMusic, ChevronDown } from 'lucide-react';
 
 export default function PlayerWidget({
@@ -23,6 +23,8 @@ export default function PlayerWidget({
   setMostrarLetraCompleta,
   audioStatus
 }) {
+  const [hoveringWaveform, setHoveringWaveform] = useState(false);
+
   // Determine if physical audio file is available and not a mockup fallback
   const estadoAudio = audioStatus?.[cancion?.id] || 'vacio';
   const tieneAudio = cancion?.audioPreviewUrl && estadoAudio !== 'perdido' && estadoAudio !== 'vacio';
@@ -110,6 +112,9 @@ export default function PlayerWidget({
     return `${mins}:${segs < 10 ? '0' : ''}${segs}`;
   };
 
+  const totalCancionesCount = canciones.length || 1;
+  const indiceActual = canciones.findIndex(c => c.id === cancion?.id) + 1 || 1;
+
   return (
     <div className="glass-panel" style={{ padding: '16px 20px', marginBottom: '20px', position: 'relative' }}>
       
@@ -128,38 +133,43 @@ export default function PlayerWidget({
         />
       )}
 
-      {/* Row 1: Unified Header (Song Title + Button to open Song Box Modal + Timer + Steps + Lyrics Toggle) */}
+      {/* Row 1: Header (Song Title + Eye-Catching Neon Song Selector Button + Timer + Steps + Lyrics Toggle) */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px', flexWrap: 'wrap', gap: '12px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <Disc size={22} color="#ec4899" className={isPlaying ? 'spin-animation' : ''} />
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
-            <h3 style={{ fontSize: '1.2rem', fontWeight: 900, color: '#f8fafc', margin: 0, lineHeight: 1.2 }}>
-              {cancion.titulo} <span style={{ fontWeight: 400, color: 'var(--text-muted)', fontSize: '0.9rem' }}>— {cancion.artistaNombre}</span>
+        
+        {/* Left Side: Song Title + Prominent Neon Selector Badge */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <Disc size={24} color="#ec4899" className={isPlaying ? 'spin-animation' : ''} />
+            <h3 style={{ fontSize: '1.25rem', fontWeight: 900, color: '#f8fafc', margin: 0, lineHeight: 1.2 }}>
+              {cancion.titulo} <span style={{ fontWeight: 500, color: 'var(--text-muted)', fontSize: '0.9rem' }}>— {cancion.artistaNombre}</span>
             </h3>
-
-            {canciones.length > 1 && onAbrirCajaDiscos && (
-              <button
-                onClick={onAbrirCajaDiscos}
-                style={{
-                  background: 'rgba(139, 92, 246, 0.18)',
-                  color: '#c084fc',
-                  border: '1px solid rgba(139, 92, 246, 0.35)',
-                  borderRadius: '12px',
-                  padding: '4px 10px',
-                  fontSize: '0.78rem',
-                  fontWeight: 800,
-                  cursor: 'pointer',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '4px',
-                  transition: 'all 0.2s'
-                }}
-                title="Abrir Caja de Discos Poéticos"
-              >
-                <span>Cambiar Canción</span> <ChevronDown size={13} />
-              </button>
-            )}
           </div>
+
+          {/* Prominent Neon "Caja de Discos Poéticos" Button */}
+          {onAbrirCajaDiscos && (
+            <button
+              onClick={onAbrirCajaDiscos}
+              style={{
+                background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.35), rgba(236, 72, 153, 0.35))',
+                color: '#ffffff',
+                border: '1.5px solid #ec4899',
+                borderRadius: '9999px',
+                padding: '6px 14px',
+                fontSize: '0.82rem',
+                fontWeight: 900,
+                cursor: 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+                boxShadow: '0 0 16px rgba(236, 72, 153, 0.35)',
+                transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)'
+              }}
+              title="Abrir Caja de Discos Poéticos"
+            >
+              <span>📦 Explorar Canciones ({indiceActual}/{totalCancionesCount})</span>
+              <ChevronDown size={14} color="#ec4899" />
+            </button>
+          )}
         </div>
 
         {/* Top Center Prominent Timer Counter */}
@@ -270,15 +280,31 @@ export default function PlayerWidget({
           {isPlaying && tieneAudio ? <Pause size={22} /> : <Play size={22} style={{ marginLeft: '3px' }} />}
         </button>
 
-        {/* Integrated Waveform Visualizer & Interactive Slider */}
-        <div style={{ flex: 1, position: 'relative', height: '44px', background: 'rgba(15, 23, 42, 0.8)', borderRadius: '10px', padding: '6px 10px', display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: '2px', overflow: 'hidden', border: '1px solid rgba(255, 255, 255, 0.08)' }}>
+        {/* Integrated Waveform Visualizer & Interactive Scrubber Slider */}
+        <div
+          onMouseEnter={() => setHoveringWaveform(true)}
+          onMouseLeave={() => setHoveringWaveform(false)}
+          style={{
+            flex: 1,
+            position: 'relative',
+            height: '48px',
+            background: 'rgba(15, 23, 42, 0.8)',
+            borderRadius: '12px',
+            padding: '6px 12px',
+            display: 'flex',
+            alignItems: 'flex-end',
+            justifyContent: 'space-between',
+            gap: '2px',
+            border: '1.5px solid rgba(139, 92, 246, 0.25)'
+          }}
+        >
           {bars.map((bar, i) => {
             const barPos = (i / bars.length) * 100;
             const isPassed = tieneAudio && (barPos <= posicion);
 
             let barColor = 'rgba(255, 255, 255, 0.12)';
             if (tieneAudio && isPassed) {
-              barColor = bar.isFigureMarker ? '#f59e0b' : '#c084fc';
+              barColor = bar.isFigureMarker ? '#f59e0b' : '#ec4899';
             }
 
             return (
@@ -288,8 +314,9 @@ export default function PlayerWidget({
                   flex: 1,
                   height: `${bar.heightPercent}%`,
                   background: barColor,
-                  borderRadius: '2px',
-                  position: 'relative'
+                  borderRadius: '3px',
+                  position: 'relative',
+                  transition: 'background 0.15s ease'
                 }}
               >
                 {tieneAudio && bar.isFigureMarker && (
@@ -322,7 +349,7 @@ export default function PlayerWidget({
             </div>
           )}
 
-          {/* Draggable Vertical Cursor Line */}
+          {/* Draggable Neon Laser Cursor Line with Floating Live Timestamp Tooltip */}
           {tieneAudio && (
             <div
               style={{
@@ -331,23 +358,49 @@ export default function PlayerWidget({
                 bottom: 0,
                 left: `${posicion}%`,
                 width: '3px',
-                background: '#ec4899',
-                boxShadow: '0 0 10px #ec4899',
+                background: 'linear-gradient(to bottom, #f59e0b, #ec4899, #8b5cf6)',
+                boxShadow: '0 0 12px #ec4899, 0 0 4px #fbbf24',
                 pointerEvents: 'none',
-                zIndex: 10
+                zIndex: 10,
+                transition: isDraggingRef.current ? 'none' : 'left 0.1s linear'
               }}
             >
+              {/* Floating Tooltip displaying current playback time */}
+              {(hoveringWaveform || isPlaying || isDraggingRef.current) && (
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: '-26px',
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    background: '#ec4899',
+                    color: '#ffffff',
+                    fontSize: '0.72rem',
+                    fontWeight: 900,
+                    padding: '2px 7px',
+                    borderRadius: '6px',
+                    boxShadow: '0 2px 10px rgba(236, 72, 153, 0.6)',
+                    whiteSpace: 'nowrap',
+                    letterSpacing: '0.02em'
+                  }}
+                >
+                  {formatearTiempo(currentTime)}
+                </div>
+              )}
+
+              {/* Laser Pin Head */}
               <div
                 style={{
                   position: 'absolute',
                   top: '50%',
                   left: '50%',
                   transform: 'translate(-50%, -50%)',
-                  width: '12px',
-                  height: '12px',
+                  width: '14px',
+                  height: '14px',
                   borderRadius: '50%',
                   background: '#ffffff',
-                  border: '2px solid #ec4899'
+                  border: '3px solid #ec4899',
+                  boxShadow: '0 0 10px #ec4899'
                 }}
               />
             </div>
