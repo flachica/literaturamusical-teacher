@@ -70,17 +70,24 @@ export function resetUserProgress() {
 export function sanitizeSongVerses(versos) {
   if (!Array.isArray(versos) || versos.length === 0) return versos;
 
-  const primerEstrofa = versos[0]?.estrofaNum;
-  const todasTienenMismoNum = versos.every(v => v.estrofaNum === primerEstrofa);
+  // Filtrar versos con texto vacío o solo espacios
+  const versosValidos = versos.filter(v => v.texto && v.texto.trim().length > 0);
+
+  const primerEstrofa = versosValidos[0]?.estrofaNum;
+  const todasTienenMismoNum = versosValidos.every(v => v.estrofaNum === primerEstrofa);
 
   if (!primerEstrofa || todasTienenMismoNum) {
-    return versos.map((v, idx) => ({
+    return versosValidos.map((v, idx) => ({
       ...v,
-      estrofaNum: Math.floor(idx / 4) + 1
+      linea: idx + 1,
+      estrofaNum: Math.floor(idx / 6) + 1
     }));
   }
 
-  return versos;
+  return versosValidos.map((v, idx) => ({
+    ...v,
+    linea: idx + 1
+  }));
 }
 
 /**
