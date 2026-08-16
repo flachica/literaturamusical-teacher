@@ -1,8 +1,11 @@
-import React, { useEffect } from 'react';
-import { Play, Pause, Disc, Upload, ListMusic } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { Play, Pause, Disc, Upload, ListMusic, ChevronDown } from 'lucide-react';
+import SongSelectorModal from './detective/SongSelectorModal';
 
 export default function PlayerWidget({
   cancion,
+  canciones = [],
+  onSeleccionarCancion,
   isPlaying,
   setIsPlaying,
   posicion,
@@ -21,6 +24,8 @@ export default function PlayerWidget({
   setMostrarLetraCompleta,
   audioStatus
 }) {
+  const [selectorAbierto, setSelectorAbierto] = useState(false);
+
   // Determine if physical audio file is available and not a mockup fallback
   const estadoAudio = audioStatus?.[cancion?.id] || 'vacio';
   const tieneAudio = cancion?.audioPreviewUrl && estadoAudio !== 'perdido' && estadoAudio !== 'vacio';
@@ -81,7 +86,6 @@ export default function PlayerWidget({
     const newPos = Number(e.target.value);
     setPosicion(newPos);
     
-    // Si se está arrastrando, solo actualizamos visualmente el tiempo
     const targetDuration = duration || 180;
     const targetSeconds = (newPos / 100) * targetDuration;
     setCurrentTime(targetSeconds);
@@ -99,16 +103,6 @@ export default function PlayerWidget({
     if (isDraggingRef.current) {
       isDraggingRef.current = false;
       executeSeek(posicion);
-    }
-  };
-
-  // Handle file upload
-  const handleFileUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const url = URL.createObjectURL(file);
-      setLocalAudioSrc(url);
-      setIsPlaying(true);
     }
   };
 
@@ -137,18 +131,41 @@ export default function PlayerWidget({
         />
       )}
 
-      {/* Row 1: Unified Header (Song Title + Top Center Prominent Timer + Step Dots + Full Lyrics Toggle) */}
+      {/* Row 1: Unified Header (Song Title + Button to open Song Box Modal + Timer + Steps + Lyrics Toggle) */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px', flexWrap: 'wrap', gap: '12px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <Disc size={20} color="#ec4899" className={isPlaying ? 'spin-animation' : ''} />
-          <div>
+          <Disc size={22} color="#ec4899" className={isPlaying ? 'spin-animation' : ''} />
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
             <h3 style={{ fontSize: '1.2rem', fontWeight: 900, color: '#f8fafc', margin: 0, lineHeight: 1.2 }}>
               {cancion.titulo} <span style={{ fontWeight: 400, color: 'var(--text-muted)', fontSize: '0.9rem' }}>— {cancion.artistaNombre}</span>
             </h3>
+
+            {canciones.length > 1 && (
+              <button
+                onClick={() => setSelectorAbierto(true)}
+                style={{
+                  background: 'rgba(139, 92, 246, 0.18)',
+                  color: '#c084fc',
+                  border: '1px solid rgba(139, 92, 246, 0.35)',
+                  borderRadius: '12px',
+                  padding: '4px 10px',
+                  fontSize: '0.78rem',
+                  fontWeight: 800,
+                  cursor: 'pointer',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                  transition: 'all 0.2s'
+                }}
+                title="Abrir Caja de Discos Poéticos"
+              >
+                <span>Cambiar Canción</span> <ChevronDown size={13} />
+              </button>
+            )}
           </div>
         </div>
 
-        {/* Top Center Prominent Timer Counter / Modo Lectura */}
+        {/* Top Center Prominent Timer Counter */}
         <div style={{
           display: 'flex',
           alignItems: 'center',
@@ -364,6 +381,16 @@ export default function PlayerWidget({
         </div>
 
       </div>
+
+      {/* Modal Caja de Discos Poéticos */}
+      <SongSelectorModal
+        isOpen={selectorAbierto}
+        onClose={() => setSelectorAbierto(false)}
+        canciones={canciones}
+        cancionActual={cancion}
+        onSeleccionarCancion={onSeleccionarCancion}
+        audioStatus={audioStatus}
+      />
 
     </div>
   );

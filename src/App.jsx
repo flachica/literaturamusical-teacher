@@ -171,37 +171,12 @@ export default function App() {
             </div>
           ) : (
             <>
-              {/* Song Switcher strip for Detective */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px', overflowX: 'auto', paddingBottom: '6px' }}>
-                <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)', fontWeight: 700, whiteSpace: 'nowrap' }}>Elegir Canción:</span>
-                {canciones.map((c) => {
-                  const isSelected = cancionActual && cancionActual.id === c.id;
-                  return (
-                    <button
-                      key={c.id}
-                      onClick={() => setCancionActual(c)}
-                      style={{
-                        padding: '8px 16px',
-                        borderRadius: '9999px',
-                        background: isSelected ? 'var(--primary)' : 'rgba(15, 23, 42, 0.6)',
-                        color: '#ffffff',
-                        fontWeight: 700,
-                        fontSize: '0.85rem',
-                        border: `1px solid ${isSelected ? 'var(--primary)' : 'rgba(255, 255, 255, 0.1)'}`,
-                        whiteSpace: 'nowrap',
-                        cursor: 'pointer'
-                      }}
-                    >
-                      🎵 {c.titulo} ({c.artistaNombre})
-                    </button>
-                  );
-                })}
-              </div>
-
               {/* Synchronized Main Audio Player Widget */}
               {cancionActual && (
                 <PlayerWidget
                   cancion={cancionActual}
+                  canciones={canciones}
+                  onSeleccionarCancion={setCancionActual}
                   audioStatus={audioStatus}
                   isPlaying={isPlaying}
                   setIsPlaying={setIsPlaying}
