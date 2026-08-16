@@ -46,7 +46,6 @@ export default function SugerirFiguraModal({
 
   const toggleSeleccionLinea = (lineaNum) => {
     if (lineasSeleccionadas.includes(lineaNum)) {
-      // Evitar desmarcar absolutamente todos los versos
       if (lineasSeleccionadas.length > 1) {
         setLineasSeleccionadas(lineasSeleccionadas.filter(l => l !== lineaNum));
       }
@@ -77,7 +76,7 @@ export default function SugerirFiguraModal({
       figuraColor: figObj.color,
       comentario: comentario.trim() || '¡He descubierto este truco poético entre estos versos!',
       fecha: new Date().toLocaleDateString('es-ES', { hour: '2-digit', minute: '2-digit' }),
-      estado: 'pendiente' // 'pendiente' | 'aprobada' | 'cena'
+      estado: 'pendiente'
     };
 
     onEnviarSugerencia(nuevaSugerencia);
@@ -104,19 +103,19 @@ export default function SugerirFiguraModal({
         alignItems: 'center',
         justifyContent: 'center',
         zIndex: 99999,
-        padding: '20px'
+        padding: '16px'
       }}
     >
       <div
         className="modal-content-animate"
         style={{
           background: 'linear-gradient(135deg, #1e293b, #0f172a)',
-          padding: '24px',
-          borderRadius: '24px',
+          padding: '18px 22px',
+          borderRadius: '20px',
           border: '2px solid #ec4899',
-          maxWidth: '640px',
+          maxWidth: '600px',
           width: '100%',
-          maxHeight: 'calc(100vh - 40px)',
+          maxHeight: 'calc(100vh - 30px)',
           display: 'flex',
           flexDirection: 'column',
           boxShadow: '0 0 45px rgba(236, 72, 153, 0.35)',
@@ -124,12 +123,12 @@ export default function SugerirFiguraModal({
         }}
       >
         {/* Header */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px', borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '12px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px', borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '8px' }}>
           <div>
-            <h3 style={{ fontSize: '1.25rem', fontWeight: 900, color: '#ffffff', margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <h3 style={{ fontSize: '1.18rem', fontWeight: 900, color: '#ffffff', margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
               🔍 Marca los versos del descubrimiento
             </h3>
-            <p style={{ fontSize: '0.82rem', color: '#ec4899', margin: '4px 0 0 0', fontWeight: 700 }}>
+            <p style={{ fontSize: '0.8rem', color: '#ec4899', margin: '2px 0 0 0', fontWeight: 700 }}>
               Propuesta de {detectiveActivo?.avatar} {detectiveActivo?.nombre || 'Detective'} — «{cancion.titulo}»
             </p>
           </div>
@@ -140,8 +139,8 @@ export default function SugerirFiguraModal({
               border: '1px solid rgba(255, 255, 255, 0.1)',
               color: '#cbd5e1',
               borderRadius: '50%',
-              width: '32px',
-              height: '32px',
+              width: '30px',
+              height: '30px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -153,34 +152,34 @@ export default function SugerirFiguraModal({
         </div>
 
         {enviadoExito ? (
-          <div style={{ padding: '30px', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px' }}>
-            <span style={{ fontSize: '3.5rem' }}>🎉 📬</span>
-            <h4 style={{ fontSize: '1.3rem', fontWeight: 900, color: '#34d399', margin: 0 }}>
+          <div style={{ padding: '24px', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
+            <span style={{ fontSize: '3rem' }}>🎉 📬</span>
+            <h4 style={{ fontSize: '1.2rem', fontWeight: 900, color: '#34d399', margin: 0 }}>
               ¡Sugerencia Enviada al Buzón Familiar!
             </h4>
-            <p style={{ fontSize: '0.9rem', color: '#cbd5e1', maxWidth: '420px' }}>
+            <p style={{ fontSize: '0.88rem', color: '#cbd5e1', maxWidth: '400px', margin: 0 }}>
               +50 Puntos de Detective por tu investigación entre versos. Papá y Mamá la revisarán en la administración.
             </p>
           </div>
         ) : (
-          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '14px', overflowY: 'auto', paddingRight: '4px' }}>
+          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '10px', overflowY: 'auto', paddingRight: '4px' }}>
             
-            {/* Selector de Versos Multi-Estrofa */}
+            {/* Selector de Versos Multi-Estrofa (Limpio y Compacto) */}
             <div>
-              <label style={{ fontSize: '0.85rem', color: '#f8fafc', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '6px' }}>
-                <Layers size={15} color="#c084fc" /> Marca el verso o versos que forman la figura literaria ({lineasSeleccionadas.length} marcados):
+              <label style={{ fontSize: '0.82rem', color: '#f8fafc', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '6px' }}>
+                <Layers size={14} color="#c084fc" /> Selecciona uno o varios versos de la canción ({lineasSeleccionadas.length} marcados):
               </label>
               
               <div style={{
                 background: 'rgba(15, 23, 42, 0.8)',
-                borderRadius: '14px',
+                borderRadius: '12px',
                 border: '1.5px solid rgba(139, 92, 246, 0.3)',
-                maxHeight: '160px',
+                maxHeight: '140px',
                 overflowY: 'auto',
-                padding: '8px 12px',
+                padding: '6px 8px',
                 display: 'flex',
                 flexDirection: 'column',
-                gap: '6px'
+                gap: '4px'
               }}>
                 {(cancion?.versos || []).map((v) => {
                   const isSelected = lineasSeleccionadas.includes(v.linea);
@@ -189,24 +188,21 @@ export default function SugerirFiguraModal({
                       key={v.linea}
                       onClick={() => toggleSeleccionLinea(v.linea)}
                       style={{
-                        padding: '8px 12px',
-                        borderRadius: '10px',
+                        padding: '6px 10px',
+                        borderRadius: '8px',
                         background: isSelected ? 'rgba(139, 92, 246, 0.25)' : 'rgba(255, 255, 255, 0.02)',
                         border: `1.5px solid ${isSelected ? '#c084fc' : 'rgba(255, 255, 255, 0.06)'}`,
                         cursor: 'pointer',
                         display: 'flex',
                         alignItems: 'center',
-                        gap: '10px',
+                        gap: '8px',
                         transition: 'all 0.15s'
                       }}
                     >
-                      <span style={{ color: isSelected ? '#c084fc' : '#64748b' }}>
-                        {isSelected ? <CheckSquare size={16} color="#c084fc" /> : <Square size={16} />}
+                      <span style={{ color: isSelected ? '#c084fc' : '#64748b', display: 'flex', alignItems: 'center' }}>
+                        {isSelected ? <CheckSquare size={15} color="#c084fc" /> : <Square size={15} />}
                       </span>
-                      <span style={{ fontSize: '0.78rem', color: '#94a3b8', fontWeight: 800, flexShrink: 0 }}>
-                        V{v.linea} (Estrofa {v.estrofaNum || 1}):
-                      </span>
-                      <span style={{ fontSize: '0.9rem', color: isSelected ? '#ffffff' : '#cbd5e1', fontWeight: isSelected ? 700 : 400, fontStyle: 'italic' }}>
+                      <span style={{ fontSize: '0.88rem', color: isSelected ? '#ffffff' : '#cbd5e1', fontWeight: isSelected ? 700 : 400, fontStyle: 'italic' }}>
                         «{v.texto}»
                       </span>
                     </div>
@@ -215,26 +211,12 @@ export default function SugerirFiguraModal({
               </div>
             </div>
 
-            {/* Vista Previa del Fragmento Poético Seleccionado */}
-            {versosObjetosSeleccionados.length > 0 && (
-              <div style={{ background: 'rgba(236, 72, 153, 0.12)', padding: '10px 14px', borderRadius: '12px', borderLeft: '4px solid #ec4899' }}>
-                <span style={{ fontSize: '0.72rem', color: '#f472b6', fontWeight: 900, textTransform: 'uppercase', display: 'block', marginBottom: '4px' }}>
-                  Fragmento Poético Seleccionado:
-                </span>
-                {versosObjetosSeleccionados.map((v, i) => (
-                  <p key={i} style={{ fontSize: '0.92rem', fontWeight: 700, color: '#ffffff', margin: '2px 0', fontStyle: 'italic' }}>
-                    «{v.texto}»
-                  </p>
-                ))}
-              </div>
-            )}
-
             {/* Selector de Figura Poética */}
             <div>
-              <label style={{ fontSize: '0.85rem', color: '#f8fafc', fontWeight: 800, display: 'block', marginBottom: '8px' }}>
-                ¿Qué figura o truco literario hay entre estos versos? *
+              <label style={{ fontSize: '0.82rem', color: '#f8fafc', fontWeight: 800, display: 'block', marginBottom: '6px' }}>
+                ¿Qué figura o truco literario hay en esta selección? *
               </label>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '8px', maxHeight: '160px', overflowY: 'auto' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '6px', maxHeight: '130px', overflowY: 'auto' }}>
                 {FIGURAS_LITERARIAS.map((fig) => {
                   const isSelected = figuraSeleccionada === fig.id;
                   return (
@@ -243,22 +225,22 @@ export default function SugerirFiguraModal({
                       type="button"
                       onClick={() => setFiguraSeleccionada(fig.id)}
                       style={{
-                        padding: '8px 10px',
-                        borderRadius: '10px',
+                        padding: '6px 8px',
+                        borderRadius: '8px',
                         background: isSelected ? `${fig.color}25` : 'rgba(30, 41, 59, 0.4)',
                         border: `1.5px solid ${isSelected ? fig.color : 'rgba(255, 255, 255, 0.08)'}`,
                         color: '#ffffff',
-                        fontSize: '0.82rem',
+                        fontSize: '0.8rem',
                         fontWeight: 700,
                         cursor: 'pointer',
                         display: 'flex',
                         alignItems: 'center',
                         gap: '6px',
                         textAlign: 'left',
-                        transition: 'all 0.2s'
+                        transition: 'all 0.15s'
                       }}
                     >
-                      <span style={{ fontSize: '1.2rem' }}>{fig.icono}</span>
+                      <span style={{ fontSize: '1.1rem' }}>{fig.icono}</span>
                       <span style={{ color: isSelected ? fig.color : '#cbd5e1' }}>{fig.nombre}</span>
                     </button>
                   );
@@ -268,7 +250,7 @@ export default function SugerirFiguraModal({
 
             {/* Explicación / Comentario Opcional */}
             <div>
-              <label style={{ fontSize: '0.82rem', color: '#94a3b8', fontWeight: 700, display: 'block', marginBottom: '4px' }}>
+              <label style={{ fontSize: '0.78rem', color: '#94a3b8', fontWeight: 700, display: 'block', marginBottom: '3px' }}>
                 ¿Por qué crees que es esta figura? (Opcional):
               </label>
               <textarea
@@ -278,31 +260,31 @@ export default function SugerirFiguraModal({
                 rows={2}
                 style={{
                   width: '100%',
-                  padding: '8px 12px',
-                  borderRadius: '10px',
+                  padding: '7px 10px',
+                  borderRadius: '8px',
                   background: '#0f172a',
                   color: '#fff',
                   border: '1px solid #334155',
-                  fontSize: '0.85rem',
+                  fontSize: '0.82rem',
                   resize: 'none'
                 }}
               />
             </div>
 
             {/* Action Buttons */}
-            <div style={{ display: 'flex', gap: '10px', marginTop: '4px' }}>
+            <div style={{ display: 'flex', gap: '10px', marginTop: '2px' }}>
               <button
                 type="button"
                 onClick={onClose}
                 style={{
                   flex: 1,
-                  padding: '10px',
-                  borderRadius: '12px',
+                  padding: '9px',
+                  borderRadius: '10px',
                   background: 'rgba(255, 255, 255, 0.06)',
                   color: '#cbd5e1',
                   border: '1px solid rgba(255, 255, 255, 0.1)',
                   fontWeight: 700,
-                  fontSize: '0.85rem',
+                  fontSize: '0.82rem',
                   cursor: 'pointer'
                 }}
               >
@@ -312,12 +294,12 @@ export default function SugerirFiguraModal({
                 type="submit"
                 style={{
                   flex: 2,
-                  padding: '10px',
-                  borderRadius: '12px',
+                  padding: '9px',
+                  borderRadius: '10px',
                   background: 'linear-gradient(135deg, #ec4899, #8b5cf6)',
                   color: '#ffffff',
                   fontWeight: 900,
-                  fontSize: '0.88rem',
+                  fontSize: '0.85rem',
                   border: 'none',
                   cursor: 'pointer',
                   boxShadow: '0 0 16px rgba(236, 72, 153, 0.4)',
@@ -327,7 +309,7 @@ export default function SugerirFiguraModal({
                   gap: '6px'
                 }}
               >
-                <Send size={15} /> 🚀 Enviar al Buzón Familiar (+50 PTS)
+                <Send size={14} /> 🚀 Enviar al Buzón Familiar (+50 PTS)
               </button>
             </div>
           </form>
