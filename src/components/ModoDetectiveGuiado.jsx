@@ -479,20 +479,6 @@ export default function ModoDetectiveGuiado({
           {/* PASO 2: RETO DE COMPRENSIÓN DE LA HISTORIA */}
           {paso === 2 && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', textAlign: 'left' }}>
-              
-              {/* Recordatorio de Estrofa Compacto */}
-              <div style={{
-                background: 'rgba(15, 23, 42, 0.4)',
-                padding: '10px 14px',
-                borderRadius: '12px',
-                borderLeft: '4.5px solid #06b6d4',
-                fontSize: '0.88rem',
-                color: '#94a3b8',
-                fontStyle: 'italic',
-                lineHeight: 1.4
-              }}>
-                "{versoActual.texto}"
-              </div>
 
               <h4 style={{ fontSize: '1.15rem', fontWeight: 900, color: '#38bdf8', marginBottom: '6px', lineHeight: 1.4 }}>
                 {(() => {
@@ -629,20 +615,6 @@ export default function ModoDetectiveGuiado({
           {/* PASO 3: RETO DE ETIQUETADO DE FIGURA LITERARIA */}
           {paso === 3 && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', textAlign: 'left' }}>
-              
-              {/* Recordatorio de Estrofa Compacto */}
-              <div style={{
-                background: 'rgba(15, 23, 42, 0.4)',
-                padding: '10px 14px',
-                borderRadius: '12px',
-                borderLeft: '4.5px solid #ec4899',
-                fontSize: '0.88rem',
-                color: '#94a3b8',
-                fontStyle: 'italic',
-                lineHeight: 1.4
-              }}>
-                "{versoActual.texto}"
-              </div>
 
               <h4 style={{ fontSize: '1.05rem', fontWeight: 800, color: '#f472b6', marginBottom: '4px' }}>
                 🔮 ¿Qué truco de magia poética utiliza el autor en esta estrofa?
