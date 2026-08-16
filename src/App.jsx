@@ -389,6 +389,7 @@ export default function App() {
         estrellas={estrellas}
         logros={logros}
         placasDesbloqueadas={placasDesbloqueadas}
+        sugerencias={sugerencias}
       />
 
       {/* Modal Caja de Discos Poéticos (Global a nivel de raíz) */}
