@@ -451,7 +451,16 @@ export default function ModoDetectiveGuiado({
         {paso === 2 && (
           <div style={{ paddingTop: '10px', borderTop: '1px solid rgba(255, 255, 255, 0.08)' }}>
             <h4 style={{ fontSize: '1.05rem', fontWeight: 800, color: '#38bdf8', marginBottom: '12px' }}>
-              {versoActual.preguntaComprension}
+              {(() => {
+                const pg = versoActual.preguntaComprension;
+                if (!pg || 
+                    pg.includes('esta imagen') || 
+                    pg.includes('esta canción') || 
+                    pg.includes('este verso de')) {
+                  return `¿Qué transmite esta estrofa de ${cancion.artistaNombre}?`;
+                }
+                return pg;
+              })()}
             </h4>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>

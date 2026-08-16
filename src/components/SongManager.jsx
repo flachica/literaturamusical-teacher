@@ -287,7 +287,7 @@ export default function SongManager({ canciones, audioStatus, onGuardarCanciones
               tiempoInicio: current.time,
               tiempoFin: nextTime,
               palabrasDificiles: [],
-              preguntaComprension: `¿Qué transmite esta imagen poética de ${artistaFinal}?`,
+              preguntaComprension: `¿Qué transmite esta estrofa de ${artistaFinal}?`,
               opcionesComprension: [
                 { id: 'a', texto: 'Expresa emoción, libertad e imaginación con el lenguaje.', correcta: true },
                 { id: 'b', texto: 'Una descripción común sin valor poético.', correcta: false }
@@ -311,7 +311,7 @@ export default function SongManager({ canciones, audioStatus, onGuardarCanciones
             tiempoInicio: idx * 6,
             tiempoFin: (idx + 1) * 6,
             palabrasDificiles: [],
-            preguntaComprension: `¿Qué nos transmite esta parte de ${artistaFinal}?`,
+            preguntaComprension: `¿Qué nos transmite esta estrofa de ${artistaFinal}?`,
             opcionesComprension: [
               { id: 'a', texto: 'Una historia contada con sentimiento.', correcta: true },
               { id: 'b', texto: 'Sin significado especial.', correcta: false }
@@ -383,7 +383,7 @@ export default function SongManager({ canciones, audioStatus, onGuardarCanciones
           linea: 1,
           texto: `[Letra pendiente de renderizar por IA para ${nuevoTitulo}]`,
           palabrasDificiles: [],
-          preguntaComprension: `¿Qué transmite esta canción de ${nuevoArtista}?`,
+          preguntaComprension: `¿Qué transmite esta estrofa de ${nuevoArtista}?`,
           opcionesComprension: [
             { id: 'a', texto: 'Una historia poética llena de imaginación y emoción.', correcta: true },
             { id: 'b', texto: 'Una descripción común sin imágenes literarias.', correcta: false }
@@ -400,7 +400,7 @@ export default function SongManager({ canciones, audioStatus, onGuardarCanciones
           linea: 1,
           texto: versoTexto.trim(),
           palabrasDificiles: [],
-          preguntaComprension: versoPregunta.trim() || `¿Qué nos transmite este verso de ${nuevoArtista}?`,
+          preguntaComprension: versoPregunta.trim() || `¿Qué nos transmite esta estrofa de ${nuevoArtista}?`,
           opcionesComprension: [
             { id: 'a', texto: versoOpcionA.trim() || 'Transmitir una emoción profunda con palabras poéticas.', correcta: true },
             { id: 'b', texto: versoOpcionB.trim() || 'Un significado literal y sin ninguna imagen poética.', correcta: false }
