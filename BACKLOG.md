@@ -95,6 +95,21 @@ Documento de seguimiento del desarrollo interactivo de **LitMusical** estructura
 
 ---
 
+### 🧹 `v0.4.2` - Refactorización de Componentes Extensos (PLANIFICADA)
+
+* **Objetivo**: Reducir el tamaño y complejidad cognitiva de los ficheros de código más largos para optimizar el rendimiento y facilitar su lectura/mantenimiento por parte de desarrolladores e IAs.
+* **Entregables**:
+  * **Dividir `ModoDetectiveGuiado.jsx`**:
+    * Extraer `StanzaReader.jsx` (Paso 1: Bloque poético, audio local de estrofas y diccionarios).
+    * Extraer `ComprehensionChallenge.jsx` (Paso 2: Trivia de comprensión con opciones).
+    * Extraer `FigureChallenge.jsx` (Paso 3: Cuestionario de identificación de figuras).
+    * Extraer `ChallengeCelebration.jsx` (Paso 4: Mensaje de éxito, explicaciones didácticas de Valeria y mini álbum).
+  * **Auditar otros ficheros extensos**:
+    * Refactorizar [`SongManager.jsx`](file:///home/flachica/proyectos/pocs/literaturamusical-teacher/src/components/SongManager.jsx) para modularizar los formularios y la importación de letras LRC.
+    * Modularizar [`ModoAdmin.jsx`](file:///home/flachica/proyectos/pocs/literaturamusical-teacher/src/components/ModoAdmin.jsx).
+
+---
+
 ### 🔍 `v0.5.0` - Modo Detective Proactivo (Sugerencia de Figuras) (PLANIFICADA)
 
 > 🧪 **Hipótesis Causal**:
