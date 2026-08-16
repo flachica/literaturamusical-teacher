@@ -1,4 +1,4 @@
-# 📋 BACKLOG DE INICIATIVAS Y VERSIONES - LitMusical (Sesión 9)
+# 📋 BACKLOG DE INICIATIVAS Y VERSIONES - LitMusical (Próxima: Sesión 10)
 
 Documento de seguimiento del desarrollo interactivo de **LitMusical** estructurado mediante la metodología **Impact-Driven Growth (IDG)** para garantizar que cada entrega genere cambios reales de comportamiento (*outcomes*) y valor en el aprendizaje pedagógico.
 
@@ -6,12 +6,12 @@ Documento de seguimiento del desarrollo interactivo de **LitMusical** estructura
 
 ## 📍 ESTADO ACTUAL DEL PROYECTO
 
-* **Sesión Actual**: 🟢 **SESIÓN 9 (EN DESARROLLO)** | **Próxima**: 🔴 **SESIÓN 10** (IA Local Ollama `v0.6.0`)
-* **Subversión Alcanzada**: `v0.5.0` (Modo Detective Proactivo - Sugerencias y Buzón Familiar).
+* **Sesión Actual**: 🔴 **SESIÓN 9 (CERRADA)** | **Próxima**: 🟢 **SESIÓN 10** (IA Local Ollama `v0.6.0`)
+* **Subversión Alcanzada**: `v0.5.0` (Modo Detective Proactivo - Selector multi-verso y Buzón Familiar completados).
 * **Fallo Pendiente de Solucionar (Próxima Sesión)**: Ninguno crítico registrado.
 * **Métrica Clave del Reto (CPVM)**: 
   $$\text{CPVM} = [\text{Retos de figuras literarias resueltos con éxito}] + [\text{por la niña de forma autónoma}]$$
-* **Próxima Iteración**: Modo Detective Proactivo (`v0.5.0`).
+* **Próxima Iteración**: IA Local Ollama (`v0.6.0`).
 
 ---
 
@@ -122,19 +122,21 @@ Documento de seguimiento del desarrollo interactivo de **LitMusical** estructura
 
 ---
 
-### 🔍 `v0.5.0` - Modo Detective Proactivo (Sugerencia de Figuras) (EN DESARROLLO - SESIÓN 9)
+### 🔍 `v0.5.0` - Modo Detective Proactivo (Sugerencia de Figuras) (COMPLETADA CON ÉXITO - SESIÓN 9)
 
 > 🧪 **Hipótesis Causal**:
 > **Si** permitimos que la niña marque libremente palabras o frases y sugiera nuevas figuras que ha descubierto,
 > **Provocará** que adopte un rol de lectura crítica activa en lugar de solo responder cuestionarios prefijados,
 > **Moviendo** la CPVM de retos literarios al crear un círculo de co-creación familiar en el catálogo.
 
-* [ ] **Herramienta "¡He descubierto una figura!"**:
-  * Permitir que la niña haga clic o seleccione cualquier línea/palabra y pulse un botón interactivo de descubrimiento.
-  * Formulario infantil simplificado donde elige qué figura cree que es (Metáfora, Símil, Personificación...) y por qué.
-* [ ] **Buzón Familiar en Modo Admin**:
-  * Panel donde los padres visualizan los descubrimientos de la niña.
-  * Botones para *"Aprobar e integrar en la canción"* (otorgando estrellas extra a la niña) o *"Conversar en la cena"*.
+* [x] **Herramienta "¡He descubierto una figura!"**:
+  * Permitir que la niña seleccione uno o varios versos (incluso de distintas estrofas) y proponga un descubrimiento con `SugerirFiguraModal.jsx`.
+  * Formulario infantil simplificado donde elige qué figura cree que es y envía la propuesta recibiendo +50 PTS.
+* [x] **Buzón Familiar en Modo Admin**:
+  * Panel `FamilySuggestions.jsx` donde los padres visualizan los descubrimientos de la niña.
+  * Opciones para *"Aprobar e integrar en la canción"* (otorgando +100 PTS y +1 Estrella extra) o *"Guardar para la cena"*.
+* [x] **Mochila de Detective**:
+  * Visualización en vivo de la tarjeta *"EN REVISIÓN (+100 PTS)"* con los descubrimientos pendientes de aprobación.
 
 ---
 
