@@ -194,37 +194,8 @@ export default function PlayerWidget({
           )}
         </div>
 
-        {/* Unified Step Indicator Dots (1 2 3 4) + Lyrics Toggle */}
+        {/* Lyrics Toggle Button */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          {paso && (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '4px', background: 'rgba(15, 23, 42, 0.7)', padding: '4px 8px', borderRadius: '9999px', border: '1px solid rgba(255, 255, 255, 0.08)' }}>
-              {[1, 2, 3, 4].map((stepNum) => {
-                const isCompleted = paso > stepNum;
-                const isCurrent = paso === stepNum;
-                return (
-                  <div
-                    key={stepNum}
-                    style={{
-                      width: '24px',
-                      height: '24px',
-                      borderRadius: '50%',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      fontWeight: 800,
-                      fontSize: '0.75rem',
-                      background: isCompleted ? '#10b981' : isCurrent ? 'var(--primary)' : 'rgba(255,255,255,0.1)',
-                      color: '#ffffff'
-                    }}
-                    title={`Paso ${stepNum}`}
-                  >
-                    {isCompleted ? '✓' : stepNum}
-                  </div>
-                );
-              })}
-            </div>
-          )}
-
           {setMostrarLetraCompleta && (
             <button
               onClick={() => setMostrarLetraCompleta(!mostrarLetraCompleta)}
