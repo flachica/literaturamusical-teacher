@@ -13,7 +13,8 @@ export default function Navbar({
   pestanaActiva,
   setPestanaActiva,
   detectiveActivo,
-  onAbrirSelector
+  onAbrirSelector,
+  onAbrirMochila
 }) {
   const [menuAbierto, setMenuAbierto] = useState(false);
   const menuRef = useRef(null);
@@ -132,6 +133,29 @@ export default function Navbar({
                 <Sparkles size={14} color="#38bdf8" />
                 <span style={{ fontWeight: 800, color: '#38bdf8' }}>{puntos} PTS</span>
               </div>
+              <div style={{ width: '1px', height: '10px', background: 'rgba(255, 255, 255, 0.15)' }} />
+              <button
+                onClick={onAbrirMochila}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                  background: 'rgba(192, 132, 252, 0.15)',
+                  border: '1.5px solid rgba(192, 132, 252, 0.4)',
+                  borderRadius: '10px',
+                  padding: '2px 10px',
+                  cursor: 'pointer',
+                  color: '#c084fc',
+                  fontWeight: 900,
+                  fontSize: '0.78rem',
+                  transition: 'all 0.2s',
+                  boxShadow: '0 2px 8px rgba(192, 132, 252, 0.1)'
+                }}
+                className="btn-mochila"
+                title="Ver tu mochila de logros y placas"
+              >
+                <span>🎒 Mochila</span>
+              </button>
             </div>
 
           </div>

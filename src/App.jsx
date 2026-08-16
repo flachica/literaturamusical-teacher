@@ -4,6 +4,7 @@ import ModoDetectiveGuiado from './components/ModoDetectiveGuiado';
 import ModoAdmin from './components/ModoAdmin';
 import FigureCatalog from './components/FigureCatalog';
 import PlayerWidget from './components/PlayerWidget';
+import MochilaModal from './components/MochilaModal';
 import { X } from 'lucide-react';
 
 import useAudioPlayer from './hooks/useAudioPlayer';
@@ -15,6 +16,7 @@ export default function App() {
   const [cancionActual, setCancionActual] = useState(null);
   const [pestanaActiva, setPestanaActiva] = useState('canciones'); // 'canciones' | 'figuras' | 'ajustes'
   const [mostrarSelectorDetectives, setMostrarSelectorDetectives] = useState(false);
+  const [mochilaAbierta, setMochilaAbierta] = useState(false);
 
   // Custom hook for catalogs, physical audio checks, user progress and multi-detectives
   const {
@@ -96,6 +98,7 @@ export default function App() {
         setPestanaActiva={setPestanaActiva}
         detectiveActivo={detectiveActivo}
         onAbrirSelector={() => setMostrarSelectorDetectives(true)}
+        onAbrirMochila={() => setMochilaAbierta(true)}
       />
 
       {/* VIEW 1: MODO DETECTIVE GUIADO (LIMPIO Y PASO A PASO PARA 9 AÑOS) */}      {modoPrincipal === 'detective' && (
@@ -387,6 +390,18 @@ export default function App() {
           </div>
         </div>
       )}
+
+      {/* Mochila de Detective (Logros y Placas) Popup Modal */}
+      <MochilaModal
+        isOpen={mochilaAbierta}
+        onClose={() => setMochilaAbierta(false)}
+        detectiveActivo={detectiveActivo}
+        puntos={puntos}
+        nivel={nivel}
+        estrellas={estrellas}
+        logros={logros}
+        placasDesbloqueadas={placasDesbloqueadas}
+      />
 
     </div>
   );

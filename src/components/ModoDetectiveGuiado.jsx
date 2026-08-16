@@ -175,16 +175,14 @@ export default function ModoDetectiveGuiado({
       
       {/* COLUMN 1: 100% FULL SONG LYRICS GROUPED BY STANZAS (LEFT PANEL) */}
       {mostrarLetraCompleta && (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          <div ref={lyricsContainerRef} className="glass-panel" style={{
-            padding: '18px 20px',
-            height: 'fit-content',
-            maxHeight: '420px',
-            overflowY: 'auto',
-            background: 'rgba(15, 23, 42, 0.85)',
-            border: '1px solid rgba(56, 189, 248, 0.3)',
-            marginBottom: 0
-          }}>
+        <div ref={lyricsContainerRef} className="glass-panel" style={{
+          padding: '18px 20px',
+          height: 'fit-content',
+          maxHeight: '560px',
+          overflowY: 'auto',
+          background: 'rgba(15, 23, 42, 0.85)',
+          border: '1px solid rgba(56, 189, 248, 0.3)'
+        }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
             <h4 style={{ fontSize: '0.92rem', fontWeight: 800, color: '#38bdf8', margin: 0, display: 'flex', alignItems: 'center', gap: '6px' }}>
               📜 Lectura Completa — «{cancion.titulo}»
@@ -263,154 +261,32 @@ export default function ModoDetectiveGuiado({
             })}
           </div>
         </div>
+      )}
 
-        {/* ÁLBUM DE PLACAS Y LOGROS */}
-        <div className="glass-panel" style={{
-          padding: '16px',
-          background: 'rgba(15, 23, 42, 0.75)',
-          border: '1px solid rgba(139, 92, 246, 0.2)'
-        }}>
-          <h4 style={{
-            fontSize: '0.88rem',
-            fontWeight: 800,
-            color: '#c084fc',
-            margin: '0 0 12px 0',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '6px'
-          }}>
-            <Award size={16} /> Álbum de Placas y Logros
-          </h4>
-          
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(2, 1fr)',
-            gap: '12px'
-          }}>
-            
-            {/* Placa 1: Lector RAE */}
-            {(() => {
-              const tienePlaca = placasDesbloqueadas.includes('lector');
-              const prog = logros?.abiertasRAE || 0;
-              return (
-                <div style={{
-                  padding: '10px',
-                  borderRadius: '12px',
-                  background: tienePlaca ? 'rgba(139, 92, 246, 0.12)' : 'rgba(30, 41, 59, 0.25)',
-                  border: `1.5px ${tienePlaca ? 'solid rgba(139, 92, 246, 0.4)' : 'dashed rgba(255, 255, 255, 0.08)'}`,
-                  opacity: tienePlaca ? 1 : 0.5,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  textAlign: 'center',
-                  transition: 'all 0.3s ease'
-                }}>
-                  <span style={{ fontSize: '1.6rem', marginBottom: '4px', filter: tienePlaca ? 'none' : 'grayscale(100%)' }}>📖</span>
-                  <div style={{ fontSize: '0.78rem', fontWeight: 800, color: tienePlaca ? '#c084fc' : '#94a3b8' }}>Placa del Lector</div>
-                  <div style={{ fontSize: '0.68rem', color: 'var(--text-muted)', marginTop: '2px' }}>
-                    {tienePlaca ? '¡Curioso como un búho!' : `Diccionario: ${prog}/5`}
-                  </div>
-                </div>
-              );
-            })()}
-
-            {/* Placa 2: Oído de Lince */}
-            {(() => {
-              const tienePlaca = placasDesbloqueadas.includes('oido_lince');
-              const prog = logros?.estrofasEscuchadas || 0;
-              return (
-                <div style={{
-                  padding: '10px',
-                  borderRadius: '12px',
-                  background: tienePlaca ? 'rgba(236, 72, 153, 0.12)' : 'rgba(30, 41, 59, 0.25)',
-                  border: `1.5px ${tienePlaca ? 'solid rgba(236, 72, 153, 0.4)' : 'dashed rgba(255, 255, 255, 0.08)'}`,
-                  opacity: tienePlaca ? 1 : 0.5,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  textAlign: 'center',
-                  transition: 'all 0.3s ease'
-                }}>
-                  <span style={{ fontSize: '1.6rem', marginBottom: '4px', filter: tienePlaca ? 'none' : 'grayscale(100%)' }}>🦊</span>
-                  <div style={{ fontSize: '0.78rem', fontWeight: 800, color: tienePlaca ? '#f472b6' : '#94a3b8' }}>Oído de Lince</div>
-                  <div style={{ fontSize: '0.68rem', color: 'var(--text-muted)', marginTop: '2px' }}>
-                    {tienePlaca ? '¡Oído musical agudo!' : `Escuchar: ${prog}/10`}
-                  </div>
-                </div>
-              );
-            })()}
-
-            {/* Placa 3: Racha Poética */}
-            {(() => {
-              const tienePlaca = placasDesbloqueadas.includes('racha_poetica');
-              const prog = logros?.rachaComprension || 0;
-              return (
-                <div style={{
-                  padding: '10px',
-                  borderRadius: '12px',
-                  background: tienePlaca ? 'rgba(56, 189, 248, 0.12)' : 'rgba(30, 41, 59, 0.25)',
-                  border: `1.5px ${tienePlaca ? 'solid rgba(56, 189, 248, 0.4)' : 'dashed rgba(255, 255, 255, 0.08)'}`,
-                  opacity: tienePlaca ? 1 : 0.5,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  textAlign: 'center',
-                  transition: 'all 0.3s ease'
-                }}>
-                  <span style={{ fontSize: '1.6rem', marginBottom: '4px', filter: tienePlaca ? 'none' : 'grayscale(100%)' }}>✨</span>
-                  <div style={{ fontSize: '0.78rem', fontWeight: 800, color: tienePlaca ? '#38bdf8' : '#94a3b8' }}>Racha Poética</div>
-                  <div style={{ fontSize: '0.68rem', color: 'var(--text-muted)', marginTop: '2px' }}>
-                    {tienePlaca ? '¡Comprensión de acero!' : `Racha: ${prog}/3`}
-                  </div>
-                </div>
-              );
-            })()}
-
-            {/* Placa 4: Melómano Literario */}
-            {(() => {
-              const tienePlaca = placasDesbloqueadas.includes('melomano');
-              const prog = logros?.cancionesCompletadas?.length || 0;
-              return (
-                <div style={{
-                  padding: '10px',
-                  borderRadius: '12px',
-                  background: tienePlaca ? 'rgba(245, 158, 11, 0.12)' : 'rgba(30, 41, 59, 0.25)',
-                  border: `1.5px ${tienePlaca ? 'solid rgba(245, 158, 11, 0.4)' : 'dashed rgba(255, 255, 255, 0.08)'}`,
-                  opacity: tienePlaca ? 1 : 0.5,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  textAlign: 'center',
-                  transition: 'all 0.3s ease'
-                }}>
-                  <span style={{ fontSize: '1.6rem', marginBottom: '4px', filter: tienePlaca ? 'none' : 'grayscale(100%)' }}>🎵</span>
-                  <div style={{ fontSize: '0.78rem', fontWeight: 800, color: tienePlaca ? '#fbbf24' : '#94a3b8' }}>Melómano</div>
-                  <div style={{ fontSize: '0.68rem', color: 'var(--text-muted)', marginTop: '2px' }}>
-                    {tienePlaca ? '¡Gran explorador!' : `Canciones: ${prog}/3`}
-                  </div>
-                </div>
-              );
-            })()}
-
-          </div>
-        </div>
-
-      </div>
-    )}
-
-      {/* COLUMN 2: ACTIVE VERSE DETECTIVE CHALLENGE (RIGHT PANEL / FULL WIDTH WHEN TOGGLED OFF) */}
-      <div className="glass-panel" style={{ padding: '24px', height: 'fit-content', border: paso === 4 ? '2px solid #10b981' : '1px solid rgba(139, 92, 246, 0.3)' }}>
+      {/* COLUMN 2: ACTIVE VERSE DETECTIVE CHALLENGE (RIGHT PANEL) */}
+      <div className="glass-panel" style={{
+        padding: '24px',
+        height: '560px',
+        maxHeight: '560px',
+        overflowY: 'auto',
+        border: paso === 4 ? '2.5px solid #10b981' : '1px solid rgba(139, 92, 246, 0.35)',
+        background: 'rgba(15, 23, 42, 0.85)',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        transition: 'all 0.3s ease'
+      }}>
         
         {/* Step Badge Header */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid rgba(255, 255, 255, 0.08)', paddingBottom: '12px', marginBottom: '16px', flexShrink: 0 }}>
           <div>
-            {paso === 1 && <span className="badge badge-purple">Paso 1: Leer y Comprender la Estrofa</span>}
-            {paso === 2 && <span className="badge badge-cyan">Paso 2: Reto de Comprensión de la Letra</span>}
-            {paso === 3 && <span className="badge badge-pink">Paso 3: Identificar la Figura Literaria</span>}
-            {paso === 4 && <span className="badge" style={{ background: '#10b981', color: '#fff' }}>¡Reto Completado con Éxito! 🎉</span>}
+            {paso === 1 && <span className="badge badge-purple" style={{ padding: '4px 10px', fontSize: '0.72rem' }}>Paso 1: Leer y Escuchar</span>}
+            {paso === 2 && <span className="badge badge-cyan" style={{ padding: '4px 10px', fontSize: '0.72rem' }}>Paso 2: Comprensión</span>}
+            {paso === 3 && <span className="badge badge-pink" style={{ padding: '4px 10px', fontSize: '0.72rem' }}>Paso 3: Figura Poética</span>}
+            {paso === 4 && <span className="badge" style={{ background: '#10b981', color: '#fff', padding: '4px 10px', fontSize: '0.72rem' }}>¡Reto Superado! 🎉</span>}
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span style={{ fontSize: '0.82rem', color: '#38bdf8', fontWeight: 800 }}>
+            <span style={{ fontSize: '0.8rem', color: '#c084fc', fontWeight: 800 }}>
               Estrofa {versoActual.estrofaNum || 1} de {totalEstrofas}
             </span>
             <div style={{ display: 'flex', gap: '4px' }}>
@@ -450,346 +326,470 @@ export default function ModoDetectiveGuiado({
           </div>
         </div>
 
-        {/* Full Stanza Context Box (Single Continuous Poetic Block) */}
-        {(() => {
-          const estrofaVersos = versoActual.estrofaNum
-            ? cancion.versos.filter(v => v.estrofaNum === versoActual.estrofaNum)
-            : [versoActual];
+        {/* CONTENT DYNAMIC CONTAINER */}
+        <div style={{ flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
 
-          const tienePalabrasDificiles = estrofaVersos.some(v => v.palabrasDificiles && v.palabrasDificiles.length > 0);
+          {/* RAE Word modal popup if clicked (Visible in Step 1) */}
+          {paso === 1 && palabraRaeActiva && (
+            <div style={{ background: 'linear-gradient(135deg, rgba(245, 158, 11, 0.25), rgba(15, 23, 42, 0.95))', padding: '16px', borderRadius: '14px', border: '1px solid #f59e0b', marginBottom: '16px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+                <h4 style={{ color: '#fbbf24', fontWeight: 800, fontSize: '0.92rem', margin: 0, display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  📖 Diccionario RAE: {palabraRaeActiva.palabra}
+                </h4>
+                <button onClick={() => setPalabraRaeActiva(null)} style={{ background: 'none', border: 'none', color: '#fbbf24', fontWeight: 800, cursor: 'pointer', fontSize: '0.85rem' }}>✕ Cerrar</button>
+              </div>
+              <p style={{ fontSize: '0.85rem', color: '#f8fafc', lineHeight: 1.4, margin: 0 }}>
+                {palabraRaeActiva.definicion}
+              </p>
+            </div>
+          )}
 
-          return (
-            <div style={{
-              background: 'rgba(15, 23, 42, 0.95)',
-              padding: '22px 26px',
-              borderRadius: '18px',
-              border: '1px solid rgba(139, 92, 246, 0.35)',
-              marginBottom: '20px',
-              textAlign: 'left',
-              boxShadow: '0 4px 24px rgba(0,0,0,0.45)'
-            }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '10px', marginBottom: '16px' }}>
-                <span style={{ fontSize: '0.82rem', color: '#38bdf8', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.06em' }}>
-                  📜 Estrofa #{versoActual.estrofaNum || 1}
-                </span>
+          {/* PASO 1: MOMENTO DE LECTURA */}
+          {paso === 1 && (() => {
+            const estrofaVersos = versoActual.estrofaNum
+              ? cancion.versos.filter(v => v.estrofaNum === versoActual.estrofaNum)
+              : [versoActual];
+
+            const tienePalabrasDificiles = estrofaVersos.some(v => v.palabrasDificiles && v.palabrasDificiles.length > 0);
+
+            return (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                <div style={{
+                  background: 'rgba(15, 23, 42, 0.95)',
+                  padding: '20px 24px',
+                  borderRadius: '18px',
+                  border: '1.5px solid rgba(139, 92, 246, 0.3)',
+                  textAlign: 'left',
+                  boxShadow: '0 4px 20px rgba(0,0,0,0.35)'
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '10px', marginBottom: '14px' }}>
+                    <span style={{ fontSize: '0.8rem', color: '#c084fc', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                      📖 Bloque Poético
+                    </span>
+                    <button
+                      onClick={() => handlePlayEstrofa(estrofaVersos[0]?.tiempoInicio)}
+                      style={{
+                        background: 'linear-gradient(135deg, #10b981, #059669)',
+                        color: '#ffffff',
+                        border: 'none',
+                        borderRadius: '20px',
+                        padding: '4px 12px',
+                        fontSize: '0.76rem',
+                        fontWeight: 800,
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '5px',
+                        cursor: 'pointer',
+                        boxShadow: '0 0 10px rgba(16, 185, 129, 0.3)'
+                      }}
+                      title="Escuchar esta estrofa completa desde su inicio"
+                    >
+                      <Play size={12} fill="#ffffff" /> Escuchar Estrofa
+                    </button>
+                  </div>
+
+                  {/* Poetic lines block */}
+                  <div style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '8px',
+                    paddingLeft: '14px',
+                    borderLeft: '3.5px solid #8b5cf6'
+                  }}>
+                    {estrofaVersos.map((v) => {
+                      return (
+                        <div
+                          key={v.linea}
+                          style={{
+                            fontSize: '1.25rem',
+                            fontWeight: 600,
+                            color: '#f8fafc',
+                            lineHeight: 1.7,
+                            padding: '2px 0'
+                          }}
+                        >
+                          {v.texto.split(' ').map((palabra, i) => {
+                            const limpia = palabra.toLowerCase().replace(/[.,/#!$%^&*;:{}=\-_`~()]/g, "");
+                            const esDificil = v.palabrasDificiles && v.palabrasDificiles.includes(limpia);
+                            if (esDificil) {
+                              return (
+                                <span
+                                  key={i}
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setPalabraRaeActiva(DICCIONARIO_RAE[limpia] || { palabra: limpia, definicion: 'Palabra destacada de la canción.' });
+                                    if (onRegistrarLecturaDiccionario) onRegistrarLecturaDiccionario();
+                                  }}
+                                  style={{
+                                    color: '#fbbf24',
+                                    textDecoration: 'underline dotted #fbbf24',
+                                    cursor: 'pointer',
+                                    background: 'rgba(245, 158, 11, 0.25)',
+                                    padding: '2px 6px',
+                                    borderRadius: '6px',
+                                    margin: '0 2px',
+                                    display: 'inline-block'
+                                  }}
+                                  title="Haz clic para ver el secreto de la palabra en el Diccionario RAE"
+                                >
+                                  {palabra}
+                                </span>
+                              );
+                            }
+                            return palabra + ' ';
+                          })}
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  {tienePalabrasDificiles && (
+                    <div style={{ marginTop: '14px', paddingTop: '10px', borderTop: '1px solid rgba(255,255,255,0.06)', fontSize: '0.78rem', color: '#fbbf24', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                      <Book size={12} /> Haz clic en las palabras amarillas para abrir el Diccionario RAE 🔍
+                    </div>
+                  )}
+                </div>
+
                 <button
-                  onClick={() => handlePlayEstrofa(estrofaVersos[0]?.tiempoInicio)}
+                  onClick={() => setPaso(2)}
                   style={{
-                    background: 'linear-gradient(135deg, #10b981, #059669)',
+                    width: '100%',
+                    padding: '14px',
+                    borderRadius: '12px',
+                    background: 'linear-gradient(135deg, #8b5cf6, #ec4899)',
                     color: '#ffffff',
-                    border: 'none',
-                    borderRadius: '20px',
-                    padding: '4px 12px',
-                    fontSize: '0.76rem',
                     fontWeight: 800,
+                    fontSize: '1rem',
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '5px',
+                    justifyContent: 'center',
+                    gap: '8px',
+                    border: 'none',
                     cursor: 'pointer',
-                    boxShadow: '0 0 10px rgba(16, 185, 129, 0.3)'
+                    boxShadow: '0 4px 14px rgba(139, 92, 246, 0.4)',
+                    flexShrink: 0
                   }}
-                  title="Escuchar esta estrofa completa desde su inicio"
                 >
-                  <Play size={12} fill="#ffffff" /> Escuchar Estrofa
+                  <span>He leído la estrofa → Resolver Reto de Comprensión</span> <ArrowRight size={18} />
                 </button>
               </div>
+            );
+          })()}
 
-              {/* Single Continuous Poetic Block */}
+          {/* PASO 2: RETO DE COMPRENSIÓN DE LA HISTORIA */}
+          {paso === 2 && (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', textAlign: 'left' }}>
+              
+              {/* Recordatorio de Estrofa Compacto */}
               <div style={{
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '8px',
-                paddingLeft: '14px',
-                borderLeft: '3px solid #8b5cf6'
+                background: 'rgba(15, 23, 42, 0.4)',
+                padding: '10px 14px',
+                borderRadius: '12px',
+                borderLeft: '4.5px solid #06b6d4',
+                fontSize: '0.88rem',
+                color: '#94a3b8',
+                fontStyle: 'italic',
+                lineHeight: 1.4
               }}>
-                {estrofaVersos.map((v) => {
+                "{versoActual.texto}"
+              </div>
+
+              <h4 style={{ fontSize: '1.15rem', fontWeight: 900, color: '#38bdf8', marginBottom: '6px', lineHeight: 1.4 }}>
+                {(() => {
+                  const pg = versoActual.preguntaComprension;
+                  if (!pg || pg.includes('esta imagen') || pg.includes('esta canción') || pg.includes('este verso de')) {
+                    return `¿Qué transmite esta estrofa de ${cancion.artistaNombre}?`;
+                  }
+                  return pg;
+                })()}
+              </h4>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                {versoActual.opcionesComprension.map((opcion) => {
+                  const isSelected = opcionComprension?.id === opcion.id;
+                  const isCorrectAnswerSelected = opcionComprension?.correcta === true;
+                  let bg = 'rgba(15, 23, 42, 0.6)';
+                  let border = '1px solid rgba(255, 255, 255, 0.1)';
+
+                  if (isSelected) {
+                    bg = opcion.correcta ? 'rgba(16, 185, 129, 0.25)' : 'rgba(239, 68, 68, 0.25)';
+                    border = opcion.correcta ? '1px solid #10b981' : '1px solid #ef4444';
+                  }
+
+                  const isDisabled = isCorrectAnswerSelected && !isSelected;
+
                   return (
-                    <div
-                      key={v.linea}
+                    <button
+                      key={opcion.id}
+                      disabled={isDisabled}
+                      onClick={() => handleResponderComprension(opcion)}
                       style={{
-                        fontSize: '1.25rem',
-                        fontWeight: 600,
-                        color: '#f8fafc',
-                        lineHeight: 1.7,
-                        padding: '2px 0'
+                        padding: '12px 16px',
+                        borderRadius: '12px',
+                        textAlign: 'left',
+                        background: bg,
+                        border: border,
+                        color: '#ffffff',
+                        fontWeight: 700,
+                        fontSize: '0.92rem',
+                        cursor: isDisabled ? 'default' : 'pointer',
+                        opacity: isDisabled ? 0.45 : 1,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        transition: 'all 0.2s ease'
                       }}
                     >
-                      {v.texto.split(' ').map((palabra, i) => {
-                        const limpia = palabra.toLowerCase().replace(/[.,/#!$%^&*;:{}=\-_`~()]/g, "");
-                        const esDificil = v.palabrasDificiles && v.palabrasDificiles.includes(limpia);
-                        if (esDificil) {
-                          return (
-                            <span
-                              key={i}
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setPalabraRaeActiva(DICCIONARIO_RAE[limpia] || { palabra: limpia, definicion: 'Palabra destacada de la canción.' });
-                                if (onRegistrarLecturaDiccionario) onRegistrarLecturaDiccionario();
-                              }}
-                              style={{
-                                color: '#fbbf24',
-                                textDecoration: 'underline dotted #fbbf24',
-                                cursor: 'pointer',
-                                background: 'rgba(245, 158, 11, 0.25)',
-                                padding: '2px 6px',
-                                borderRadius: '6px',
-                                margin: '0 2px',
-                                display: 'inline-block'
-                              }}
-                              title="Haz clic para ver el secreto de la palabra en el Diccionario RAE"
-                            >
-                              {palabra}
-                            </span>
-                          );
-                        }
-                        return palabra + ' ';
-                      })}
-                    </div>
+                      <span>{opcion.texto}</span>
+                      {isSelected && (
+                        <span style={{ color: opcion.correcta ? '#10b981' : '#ef4444', fontWeight: 800, fontSize: '1.1rem' }}>
+                          {opcion.correcta ? '✓' : '✕'}
+                        </span>
+                      )}
+                    </button>
                   );
                 })}
               </div>
 
-              {tienePalabrasDificiles && (
-                <div style={{ marginTop: '16px', paddingTop: '10px', borderTop: '1px solid rgba(255,255,255,0.06)', fontSize: '0.8rem', color: '#fbbf24', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <Book size={14} /> Haz clic en la palabra destacada para desvelar su secreto RAE 🔍
+              {opcionComprension && !opcionComprension.correcta && (
+                <div style={{ background: 'rgba(239,68,68,0.15)', border: '1px solid #ef4444', padding: '10px 14px', borderRadius: '10px', fontSize: '0.8rem', color: '#fca5a5', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  ❌ Vuelve a escuchar y leer la estrofa con atención. ¡Puedes conseguirlo!
+                </div>
+              )}
+
+              {opcionComprension?.correcta && (
+                <div
+                  className="modal-content-animate"
+                  style={{
+                    marginTop: '10px',
+                    padding: '14px',
+                    borderRadius: '12px',
+                    background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(56, 189, 248, 0.1))',
+                    border: '1.5px solid rgba(16, 185, 129, 0.45)',
+                    textAlign: 'center',
+                    boxShadow: '0 4px 16px rgba(16, 185, 129, 0.1)'
+                  }}
+                >
+                  <p style={{ fontSize: '0.88rem', color: '#f8fafc', fontWeight: 700, margin: '0 0 10px 0', lineHeight: 1.4 }}>
+                    🌟 ¡Excelente! Has comprendido muy bien el mensaje de la estrofa.
+                  </p>
+                  <button
+                    onClick={() => setPaso(3)}
+                    style={{
+                      width: '100%',
+                      padding: '10px',
+                      borderRadius: '10px',
+                      background: 'linear-gradient(135deg, #10b981, #059669)',
+                      color: '#ffffff',
+                      fontWeight: 800,
+                      fontSize: '0.9rem',
+                      border: 'none',
+                      cursor: 'pointer',
+                      boxShadow: '0 4px 12px rgba(16, 185, 129, 0.3)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '6px'
+                    }}
+                  >
+                    <span>Paso 3: Identificar la Figura Poética</span> <ArrowRight size={14} />
+                  </button>
                 </div>
               )}
             </div>
-          );
-        })()}
+          )}
 
-        {/* RAE Word modal popup if clicked */}
-        {palabraRaeActiva && (
-          <div style={{ background: 'linear-gradient(135deg, rgba(245, 158, 11, 0.25), rgba(15, 23, 42, 0.95))', padding: '16px', borderRadius: '14px', border: '1px solid #f59e0b', marginBottom: '20px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-              <h4 style={{ color: '#fbbf24', fontWeight: 800, fontSize: '1rem', margin: 0, display: 'flex', alignItems: 'center', gap: '6px' }}>
-                📖 Diccionario RAE: {palabraRaeActiva.palabra}
+          {/* PASO 3: RETO DE ETIQUETADO DE FIGURA LITERARIA */}
+          {paso === 3 && (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', textAlign: 'left' }}>
+              
+              {/* Recordatorio de Estrofa Compacto */}
+              <div style={{
+                background: 'rgba(15, 23, 42, 0.4)',
+                padding: '10px 14px',
+                borderRadius: '12px',
+                borderLeft: '4.5px solid #ec4899',
+                fontSize: '0.88rem',
+                color: '#94a3b8',
+                fontStyle: 'italic',
+                lineHeight: 1.4
+              }}>
+                "{versoActual.texto}"
+              </div>
+
+              <h4 style={{ fontSize: '1.05rem', fontWeight: 800, color: '#f472b6', marginBottom: '4px' }}>
+                🔮 ¿Qué truco de magia poética utiliza el autor en esta estrofa?
               </h4>
-              <button onClick={() => setPalabraRaeActiva(null)} style={{ background: 'none', border: 'none', color: '#fbbf24', fontWeight: 800, cursor: 'pointer', fontSize: '0.9rem' }}>✕ Cerrar</button>
+              <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)', margin: '0 0 10px 0' }}>
+                Pulsa sobre la figura literaria correcta para resolver el misterio:
+              </p>
+
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '10px' }}>
+                {FIGURAS_LITERARIAS.map((fig) => {
+                  const isSelected = opcionFigura === fig.id;
+                  const esCorrecto = fig.id === versoActual.figuraId;
+                  
+                  let bg = 'rgba(15, 23, 42, 0.6)';
+                  let border = '1.5px solid rgba(255, 255, 255, 0.08)';
+
+                  if (opcionFigura) {
+                    if (isSelected) {
+                      bg = esCorrecto ? 'rgba(16, 185, 129, 0.25)' : 'rgba(239, 68, 68, 0.25)';
+                      border = esCorrecto ? '2px solid #10b981' : '2px solid #ef4444';
+                    } else if (esCorrecto) {
+                      // Resaltar la correcta sutilmente si ya respondió mal
+                      border = '1.5px dashed rgba(16, 185, 129, 0.5)';
+                    }
+                  }
+
+                  return (
+                    <button
+                      key={fig.id}
+                      onClick={() => handleResponderFigura(fig.id)}
+                      style={{
+                        padding: '10px 14px',
+                        borderRadius: '12px',
+                        background: bg,
+                        border: border,
+                        color: '#ffffff',
+                        fontWeight: 700,
+                        fontSize: '0.88rem',
+                        textAlign: 'left',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '10px',
+                        transition: 'all 0.2s'
+                      }}
+                    >
+                      <span style={{ fontSize: '1.3rem' }}>{fig.icono}</span>
+                      <div>
+                        <div style={{ color: fig.color, fontSize: '0.88rem' }}>{fig.nombre}</div>
+                        <div style={{ fontSize: '0.68rem', color: 'var(--text-muted)', fontWeight: 400 }}>+{fig.puntos_detective} pts</div>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
             </div>
-            <p style={{ fontSize: '0.9rem', color: '#f8fafc', lineHeight: 1.5, margin: 0 }}>
-              {palabraRaeActiva.definicion}
-            </p>
-          </div>
-        )}
+          )}
 
-        {/* DYNAMIC CHALLENGE SECTION WITHIN THE SAME UNIFIED CARD */}
-        
-        {/* PASO 1: CONFIRMAR LECTURA */}
-        {paso === 1 && (
-          <button
-            onClick={() => setPaso(2)}
-            style={{
-              width: '100%',
-              padding: '14px',
-              borderRadius: '12px',
-              background: 'linear-gradient(135deg, #8b5cf6, #ec4899)',
-              color: '#ffffff',
-              fontWeight: 800,
-              fontSize: '1rem',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '8px',
-              border: 'none',
-              cursor: 'pointer',
-              boxShadow: '0 0 15px rgba(139, 92, 246, 0.4)'
-            }}
-          >
-            <span>He leído la estrofa → Resolver Reto de Comprensión</span> <ArrowRight size={18} />
-          </button>
-        )}
-
-        {/* PASO 2: RETO DE COMPRENSIÓN DE LA HISTORIA */}
-        {paso === 2 && (
-          <div style={{ paddingTop: '10px', borderTop: '1px solid rgba(255, 255, 255, 0.08)' }}>
-            <h4 style={{ fontSize: '1.05rem', fontWeight: 800, color: '#38bdf8', marginBottom: '12px' }}>
-              {(() => {
-                const pg = versoActual.preguntaComprension;
-                if (!pg || 
-                    pg.includes('esta imagen') || 
-                    pg.includes('esta canción') || 
-                    pg.includes('este verso de')) {
-                  return `¿Qué transmite esta estrofa de ${cancion.artistaNombre}?`;
-                }
-                return pg;
-              })()}
-            </h4>
-
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              {versoActual.opcionesComprension.map((opcion) => {
-                const isSelected = opcionComprension?.id === opcion.id;
-                const isCorrectAnswerSelected = opcionComprension?.correcta === true;
-                let bg = 'rgba(15, 23, 42, 0.6)';
-                let border = '1px solid rgba(255, 255, 255, 0.1)';
-
-                if (isSelected) {
-                  bg = opcion.correcta ? 'rgba(16, 185, 129, 0.25)' : 'rgba(239, 68, 68, 0.25)';
-                  border = opcion.correcta ? '1px solid #10b981' : '1px solid #ef4444';
-                }
-
-                // Deshabilitar otros botones una vez seleccionada la correcta
-                const isDisabled = isCorrectAnswerSelected && !isSelected;
-
-                return (
-                  <button
-                    key={opcion.id}
-                    disabled={isDisabled}
-                    onClick={() => handleResponderComprension(opcion)}
-                    style={{
-                      padding: '12px 16px',
-                      borderRadius: '12px',
-                      textAlign: 'left',
-                      background: bg,
-                      border: border,
-                      color: '#ffffff',
-                      fontWeight: 700,
-                      fontSize: '0.92rem',
-                      cursor: isDisabled ? 'default' : 'pointer',
-                      opacity: isDisabled ? 0.45 : 1,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      transition: 'all 0.2s ease'
-                    }}
-                  >
-                    <span>{opcion.texto}</span>
-                    {isSelected && opcion.correcta && <span style={{ color: '#34d399', fontWeight: 800 }}>¡Correcto! ✨</span>}
-                    {isSelected && !opcion.correcta && <span style={{ color: '#f87171', fontWeight: 800 }}>¡Inténtalo otra vez! 🤔</span>}
-                  </button>
-                );
-              })}
-            </div>
-
-            {opcionComprension?.correcta && (
-              <div
-                className="modal-content-animate"
-                style={{
-                  marginTop: '18px',
-                  padding: '16px',
-                  borderRadius: '16px',
-                  background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(56, 189, 248, 0.1))',
-                  border: '1.5px solid rgba(16, 185, 129, 0.4)',
-                  textAlign: 'center',
-                  boxShadow: '0 4px 16px rgba(16, 185, 129, 0.15)'
-                }}
-              >
-                <p style={{ fontSize: '0.95rem', color: '#f8fafc', fontWeight: 700, margin: '0 0 12px 0', lineHeight: 1.5 }}>
-                  🌟 ¡Excelente trabajo de detective! Has comprendido muy bien la historia de estos versos.
+          {/* PASO 4: CELEBRACIÓN Y CONCLUSIÓN */}
+          {paso === 4 && (
+            <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: '14px', height: '100%' }}>
+              
+              <div style={{
+                textAlign: 'center',
+                background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.12), rgba(139, 92, 246, 0.12))',
+                padding: '16px',
+                borderRadius: '16px',
+                border: '1.5px solid rgba(16, 185, 129, 0.35)',
+                flexShrink: 0
+              }}>
+                <div style={{ fontSize: '1.8rem', marginBottom: '4px' }}>🎉 🔮</div>
+                <h3 style={{ fontSize: '1.2rem', fontWeight: 950, color: '#ffffff', marginBottom: '4px' }}>
+                  ¡Gran Trabajo, Detective!
+                </h3>
+                <p style={{ fontSize: '0.9rem', color: '#e2e8f0', maxWidth: '440px', margin: '0 auto 10px', lineHeight: 1.45 }}>
+                  {versoActual.explicacion}
                 </p>
+
+                <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: '#10b981', color: '#ffffff', padding: '6px 14px', borderRadius: '9999px', fontWeight: 800, fontSize: '0.82rem' }}>
+                  <Trophy size={14} /> +150 Puntos de Detective Añadidos
+                </div>
+              </div>
+
+              {/* MINI ÁLBUM DE PLACAS DE LOGRO EN CELEBRACIÓN */}
+              <div style={{
+                padding: '12px',
+                background: 'rgba(15, 23, 42, 0.45)',
+                borderRadius: '12px',
+                border: '1px solid rgba(255, 255, 255, 0.05)',
+                textAlign: 'left'
+              }}>
+                <div style={{ fontSize: '0.78rem', fontWeight: 800, color: '#c084fc', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  <Award size={14} /> Tu Progreso de Detective:
+                </div>
+                <div style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(4, 1fr)',
+                  gap: '8px'
+                }}>
+                  {[
+                    { id: 'lector', titulo: 'Lector', icono: '📖', color: '#c084fc' },
+                    { id: 'oido_lince', titulo: 'Oído', icono: '🦊', color: '#f472b6' },
+                    { id: 'racha_poetica', titulo: 'Racha', icono: '✨', color: '#38bdf8' },
+                    { id: 'melomano', titulo: 'Canciones', icono: '🎵', color: '#fbbf24' }
+                  ].map(p => {
+                    const conseguido = placasDesbloqueadas?.includes(p.id);
+                    return (
+                      <div key={p.id} style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        padding: '6px',
+                        borderRadius: '8px',
+                        background: conseguido ? `${p.color}15` : 'rgba(30, 41, 59, 0.2)',
+                        border: `1px ${conseguido ? 'solid' : 'dashed'} ${conseguido ? `${p.color}50` : 'rgba(255, 255, 255, 0.08)'}`,
+                        opacity: conseguido ? 1 : 0.45
+                      }} title={p.titulo}>
+                        <span style={{ fontSize: '1.25rem', marginBottom: '2px', filter: conseguido ? 'none' : 'grayscale(100%)' }}>{p.icono}</span>
+                        <span style={{ fontSize: '0.62rem', fontWeight: 800, color: conseguido ? p.color : '#94a3b8' }}>{p.titulo}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <div style={{ display: 'flex', gap: '10px', flexShrink: 0 }}>
                 <button
-                  onClick={() => setPaso(3)}
+                  onClick={handleReiniciar}
                   style={{
-                    width: '100%',
-                    padding: '12px',
-                    borderRadius: '12px',
-                    background: 'linear-gradient(135deg, #10b981, #059669)',
+                    flexGrow: 1,
+                    padding: '8px 14px',
+                    borderRadius: '10px',
+                    background: 'rgba(255, 255, 255, 0.08)',
                     color: '#ffffff',
-                    fontWeight: 800,
-                    fontSize: '0.95rem',
-                    border: 'none',
-                    cursor: 'pointer',
-                    boxShadow: '0 4px 14px rgba(16, 185, 129, 0.4)',
-                    display: 'flex',
+                    border: '1px solid rgba(255, 255, 255, 0.18)',
+                    fontWeight: 700,
+                    fontSize: '0.82rem',
+                    display: 'inline-flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    gap: '8px'
+                    gap: '4px',
+                    cursor: 'pointer'
                   }}
                 >
-                  <span>Paso 3: Identificar la Figura Poética</span> <ArrowRight size={16} />
+                  <RotateCcw size={12} /> Analizar de nuevo
                 </button>
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* PASO 3: IDENTIFICAR LA FIGURA LITERARIA */}
-        {paso === 3 && (
-          <div style={{ paddingTop: '10px', borderTop: '1px solid rgba(255, 255, 255, 0.08)' }}>
-            <p style={{ fontSize: '0.85rem', color: '#c084fc', marginBottom: '12px', fontWeight: 700 }}>
-              Pista del detective: <em>"{versoActual.pista}"</em>
-            </p>
-
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '10px' }}>
-              {FIGURAS_LITERARIAS.map((fig) => {
-                const isSelected = opcionFigura === fig.id;
-                const isCorrect = fig.id === versoActual.figuraId;
-
-                let bg = 'rgba(15, 23, 42, 0.6)';
-                let border = `1px solid ${fig.color}`;
-
-                if (isSelected) {
-                  bg = isCorrect ? 'rgba(16, 185, 129, 0.3)' : 'rgba(239, 68, 68, 0.3)';
-                }
-
-                return (
+                {versoActual.estrofaNum < totalEstrofas && (
                   <button
-                    key={fig.id}
-                    onClick={() => handleResponderFigura(fig.id)}
+                    onClick={() => handleCambiarEstrofa((versoActual.estrofaNum || 1) + 1)}
                     style={{
-                      padding: '12px 16px',
-                      borderRadius: '12px',
-                      background: bg,
-                      border: border,
+                      flexGrow: 1.5,
+                      padding: '8px 14px',
+                      borderRadius: '10px',
+                      background: 'linear-gradient(135deg, #8b5cf6, #ec4899)',
                       color: '#ffffff',
-                      fontWeight: 700,
-                      fontSize: '0.9rem',
-                      textAlign: 'left',
-                      cursor: 'pointer',
-                      display: 'flex',
+                      border: 'none',
+                      fontWeight: 800,
+                      fontSize: '0.82rem',
+                      display: 'inline-flex',
                       alignItems: 'center',
-                      gap: '10px'
+                      justifyContent: 'center',
+                      gap: '4px',
+                      cursor: 'pointer',
+                      boxShadow: '0 2px 10px rgba(139, 92, 246, 0.3)'
                     }}
                   >
-                    <span style={{ fontSize: '1.3rem' }}>{fig.icono}</span>
-                    <div>
-                      <div style={{ color: fig.color }}>{fig.nombre}</div>
-                      <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontWeight: 400 }}>+{fig.puntos_detective} pts</div>
-                    </div>
+                    <span>Siguiente Estrofa</span> <ArrowRight size={12} />
                   </button>
-                );
-              })}
+                )}
+              </div>
             </div>
-          </div>
-        )}
+          )}
 
-        {/* PASO 4: CELEBRACIÓN Y CONCLUSIÓN */}
-        {paso === 4 && (
-          <div style={{ paddingTop: '10px', textAlign: 'center', background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(139, 92, 246, 0.15))', padding: '20px', borderRadius: '16px' }}>
-            <div style={{ fontSize: '2.2rem', marginBottom: '6px' }}>🎉 🔮</div>
-            <h3 style={{ fontSize: '1.4rem', fontWeight: 900, color: '#ffffff', marginBottom: '8px' }}>
-              ¡Gran Trabajo, Detective Literaria!
-            </h3>
-            <p style={{ fontSize: '1.05rem', color: '#f8fafc', maxWidth: '600px', margin: '0 auto 16px', lineHeight: 1.6 }}>
-              {versoActual.explicacion}
-            </p>
-
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: '#10b981', color: '#ffffff', padding: '8px 16px', borderRadius: '9999px', fontWeight: 800, marginBottom: '14px' }}>
-              <Trophy size={16} /> +150 Puntos de Detective Añadidos
-            </div>
-
-            <div>
-              <button
-                onClick={handleReiniciar}
-                style={{
-                  padding: '8px 18px',
-                  borderRadius: '10px',
-                  background: 'rgba(255, 255, 255, 0.15)',
-                  color: '#ffffff',
-                  border: '1px solid rgba(255, 255, 255, 0.3)',
-                  fontWeight: 700,
-                  fontSize: '0.85rem',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                  cursor: 'pointer'
-                }}
-              >
-                <RotateCcw size={14} /> Volver a Analizar este Verso
-              </button>
-            </div>
-          </div>
-        )}
+        </div>
 
       </div>
 
