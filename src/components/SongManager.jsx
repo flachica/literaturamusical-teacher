@@ -257,11 +257,12 @@ export default function SongManager({ canciones, audioStatus, onGuardarCanciones
 
         if (match.syncedLyrics) {
           const rawLines = match.syncedLyrics.split('\n').filter(Boolean).map(l => {
-            const m = l.match(/\[(\d+):(\d+\.\d+)\]\s*(.*)/);
+            const m = l.match(/\[(\d+):(\d+(?:\.\d+)?)\]\s*(.*)/);
             if (!m) return null;
             const totalSecs = Number((parseFloat(m[1]) * 60 + parseFloat(m[2])).toFixed(2));
-            return { text: m[3], time: totalSecs };
-          }).filter(Boolean);
+            const textClean = m[3] ? m[3].trim() : '';
+            return { text: textClean, time: totalSecs };
+          }).filter(l => l && l.text.length > 0);
 
           const versos = rawLines.map((l, idx) => ({
             linea: idx + 1,

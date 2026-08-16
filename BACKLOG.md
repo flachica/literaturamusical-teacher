@@ -54,10 +54,11 @@ Documento de seguimiento del desarrollo interactivo de **LitMusical** estructura
 ### 🔍 `v0.3.1` - Iteración de Usabilidad: Optimización del Modo Detective Guiado (COMPLETADA - SESIÓN 7)
 * **Objetivo**: Mejorar la experiencia interactiva del juego para la niña de 9 años, asegurando que el flujo didáctico sea fluido y sin distracciones.
 * **Entregables**:
-  * Ajustes en la interfaz del visualizador de ondas y scroll de letras: se optimizó el seek del scrubber de música en `PlayerWidget.jsx` para evitar ruidos de buffer y desfases al arrastrar en caliente. Además, se añadió un resaltado dinámico de verso activo dentro de la estrofa del reto actual en `ModoDetectiveGuiado.jsx`.
+  * Ajustes en la interfaz del visualizador de ondas y scroll de letras: se optimizó el seek del scrubber de música en `PlayerWidget.jsx` para evitar ruidos de buffer y desfases al arrastrar en caliente. El panel de lectura completa/karaoke mantiene la coherencia visual con scroll suave.
   * Simplificación del flujo de la trivia de comprensión de letras: se sustituyó el avance temporal automático tras responder por un panel de éxito que felicita a la detective y un botón explícito de avance al Paso 3 para guiar a la niña a su propio ritmo.
-  * Ajuste de tipografías y espaciados generales: se incrementó el tamaño de los versos activos de 1.15rem a 1.3rem, con mayor interlineado y espaciado de margen, y se amplió la definición/explicación final de acierto para mejorar la lectura infantil.
-  * Resolución del error 403 de YouTube: sanitizado de enlaces con parámetros de lista de reproducción en el backend local (`vite.config.js`) para extraer únicamente el ID del vídeo.
+  * Ajuste de tipografías y espaciados generales: se incrementó el tamaño de la letra de los versos que avanzan con la música en la columna izquierda de karaoke (activo a `1.25rem`, inactivos a `1.05rem` con mayor padding). La estrofa del reto (columna derecha) se mantiene como un bloque poético uniforme de `1.25rem` sin señalamiento del verso actual, delegando esa interacción a la columna del karaoke.
+  * Corrección en el Importador de Letras de la API: se modificó el parser de letras de LRCLIB en `SongManager.jsx` para tolerar marcas de tiempo sin decimales y filtrar líneas vacías o instrumentales, evitando la inyección de versos en blanco en la trivia.
+  * Resolución definitiva del error 403 de YouTube: se incorporó el extractor remoto de JS `--remote-components ejs:github` y la combinación de clientes `--extractor-args "youtube:player_client=web_embedded,android"` en `vite.config.js` para evitar el bloqueo del tráfico de descarga de audio.
 
 ---
 
