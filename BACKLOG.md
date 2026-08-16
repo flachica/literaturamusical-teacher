@@ -62,31 +62,22 @@ Documento de seguimiento del desarrollo interactivo de **LitMusical** estructura
 
 ---
 
-### 🏆 `v0.4.0` - Gamificación Avanzada "Escuela de Detectives" (PLANIFICADA)
+### 🏆 `v0.4.0` - Gamificación Avanzada "Escuela de Detectives" (COMPLETADA - SESIÓN 8)
 
 > 🧪 **Hipótesis Causal**:
 > **Si** implementamos rangos de progreso de detective, placas visuales de logros y efectos de sonido interactivos autogenerados,
 > **Provocará** que la niña acceda a la app con más frecuencia semanal de forma voluntaria y use más el diccionario didáctico,
 > **Moviendo** la CPVM de retos resueltos autónomamente y consolidando su comprensión literaria.
 
-* [ ] **Rangos de Detective**:
-  * Implementar progresión por niveles de experiencia basados en puntos:
-    * *Nivel 1 (0-150 pts)*: Detective Novato 🔍
-    * *Nivel 2 (151-350 pts)*: Ayudante de Inspector 🧥
-    * *Nivel 3 (351-600 pts)*: Inspector Literario 🕵️‍♀️
-    * *Nivel 4 (601+ pts)*: Superdetective de Oro 🏆
-  * Mostrar de forma destacada el rango de la niña detective en la Navbar y el Modo Detective.
-* [ ] **Álbum de Placas y Logros (Insignias)**:
-  * Crear un panel visual en Modo Detective para ver los logros desbloqueados:
-    * 📖 *Placa del Lector* (Por abrir el diccionario 5 veces).
-    * 🦊 *Oído de Lince* (Por escuchar estrofas individuales 10 veces).
-    * ✨ *Racha Poética* (Por responder 3 preguntas de comprensión seguidas sin fallar).
-    * 🎵 *Melómano Literario* (Por completar 3 canciones diferentes).
-* [ ] **Audio Feedback (Web Audio API)**:
-  * Generar efectos de sonido dinámicos en la UI sintetizados en tiempo real (evita descargar archivos de audio):
-    * Sonido de éxito/puntos (arpegio ascendente).
-    * Sonido de fallo/pista (tono suave descendente).
-    * Sonido de desbloqueo de placa (fanfarria pequeña).
+* **Entregables**:
+  * **Rangos de Detective**: Se implementó una escala de progresión basada en la puntuación acumulada del detective activo. El rango actual (Novato 🔍, Ayudante 🧥, Inspector 🕵️‍♀️, Súper de Oro 🏆) se muestra en una insignia dinámica en la Navbar junto a su avatar y nombre.
+  * **Álbum de Placas y Logros**: Se diseñó una mochila visual de detective en la columna izquierda que sigue el progreso en tiempo real de 4 logros didácticos:
+    * 📖 *Placa del Lector*: 5 consultas al diccionario RAE.
+    * 🦊 *Oído de Lince*: Escuchar estrofas individuales 10 veces en el karaoke.
+    * ✨ *Racha Poética*: Responder 3 trivias de comprensión de textos seguidas sin fallar.
+    * 🎵 *Melómano*: Resolver versos en al menos 3 canciones diferentes del catálogo.
+  * **Audio Feedback (Web Audio API)**: Se desarrolló un sintetizador de audio en caliente (`audioEffects.js`) que genera arpegios y fanfarrias dulces con osciladores nativos del navegador, proporcionando feedback sonoro al ganar puntos (éxito), fallar respuestas (tono descendente) o desbloquear placas de logros.
+  * **Puntuación por Comprensión**: Se añadieron 50 puntos extra al acertar la trivia de comprensión de textos de la estrofa, repartiendo el incentivo del juego entre la comprensión y la identificación formal de la figura literaria.
 
 ---
 
