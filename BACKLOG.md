@@ -140,21 +140,25 @@ Documento de seguimiento del desarrollo interactivo de **LitMusical** estructura
 
 ---
 
-### 🤖 `v0.6.0` - Asistente de IA con Ollama Local y Fallback Offline (PLANIFICADA)
+### 🤖 `v0.6.0` - Asistente Pedagógico con IA Nube Ligera (PLANIFICADA / PENDIENTE)
 
 > 🧪 **Hipótesis Causal**:
-> **Si** permitimos que un LLM local (Ollama) genere automáticamente las preguntas de comprensión infantil y la explicación de figuras para canciones incompletas,
-> **Provocará** que los padres dediquen un 90% menos de tiempo a escribir retos a mano en Modo Admin,
-> **Moviendo** la CPVM al acelerar la incorporación de nuevas canciones en el catálogo.
+> **Si** integramos un servicio de IA ultraligero en la nube (ej. API Cloud Gemini Flash) a través del servidor Vite sin requerir GPU o instalación de Ollama en local,
+> **Provocará** que los padres ahorren un 90% del tiempo al crear canciones e integren tutoría personalizada para la niña,
+> **Moviendo** la CPVM al acelerar el crecimiento del catálogo y la resolución autónoma de retos.
 
-* [ ] **Servicio de IA Local (`aiService.js`)**:
-  * Conectar el frontend con el endpoint local `http://localhost:11434/api/chat` usando el modelo `llama3` u otro instalado.
-  * Prompt System pedagógico refinado (tono respetuoso, adaptado a 9 años, en español).
-* [ ] **Generador de Retos**:
-  * Botón *"🤖 Generar Retos con IA"* para canciones marcadas con `letraPendienteIA: true`.
-  * Generación y formateo automático de estrofas, preguntas de comprensión infantil con opciones A/B y explicaciones del verso.
-* [ ] **Fallback Offline Inteligente**:
-  * Si la llamada a Ollama falla o no está activo, autogenerar un reto simplificado estático por defecto sin bloquear el guardado de la canción.
+* [ ] **Middleware Proxy Backend (`/api/ai/generate-quiz` en `vite.config.js`)**:
+  * Integración ligera que consulta APIs cloud de alta velocidad (Gemini 2.5 Flash / OpenAI compatible) con clave API configurable.
+  * Consumo nulo de recursos GPU/RAM locales.
+* [ ] **Generador de Retos e Historias en 1 Clic (Modo Admin / `SongManager.jsx`)**:
+  * Botón *"🪄 Generar Retos y Trivias con IA"* al importar canciones.
+  * Autogeneración de preguntas de comprensión adaptadas a 9 años, opciones A/B/C y explicaciones didácticas del verso.
+* [ ] **Tutor Didáctico "El Búho Sabio" 🦉 (Modo Detective)**:
+  * Asistente interactivo que ofrece pistas y explicaciones amigables cuando la niña duda o falla una pregunta de comprensión.
+* [ ] **Asistente de Verificación en el Buzón Familiar**:
+  * Evaluación previa automática para guiar a los padres al revisar y aprobar sugerencias de la niña.
+* [ ] **Fallback Offline**:
+  * Si no hay conexión o API Key, la aplicación permite la edición manual o usa retos por defecto sin bloquear el flujo.
 
 ---
 
