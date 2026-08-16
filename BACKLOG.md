@@ -81,6 +81,20 @@ Documento de seguimiento del desarrollo interactivo de **LitMusical** estructura
 
 ---
 
+### 🔬 `v0.4.1` - Refinamiento de Gamificación y Rediseño de Flujo (PENDIENTE)
+
+* **Objetivo**: Auditar la experiencia de juego de `v0.4.0` y rediseñar la transición de la tarjeta de retos de la derecha para evitar expansiones dinámicas molestas y desbordes.
+* **Entregables**:
+  * **Revisión de Gamificación**:
+    * Auditar y verificar el cálculo de rangos en la Navbar bajo diferentes puntuaciones de detective.
+    * Auditar la mochila de logros: contadores del Álbum de Placas y condiciones de desbloqueo.
+    * Verificar el volumen, frecuencia y durabilidad de los sonidos de Web Audio API para asegurar que sean amigables para el oído infantil.
+  * **Rediseño del botón "He leído la estrofa" y Transiciones del Reto**:
+    * **Alternativa a mostrar campos ocultos**: Reemplazar la acumulación vertical de bloques en la misma tarjeta por un **wizard de contenido dinámico sustitutivo**. Cada paso (Paso 1: Estrofa, Paso 2: Trivia, Paso 3: Figura, Paso 4: Éxito) reemplazará por completo el cuerpo de la tarjeta derecha en lugar de mostrar campos ocultos adicionales hacia abajo.
+    * **Limitación de alto y forzado de scroll**: Limpiar la expansión vertical de la tarjeta derecha limitando su alto máximo (`maxHeight: '420px'`) y forzando scroll interno (`overflowY: 'auto'`) para alinearse con la columna del karaoke de la izquierda y prevenir el scroll general de la ventana del navegador.
+
+---
+
 ### 🔍 `v0.5.0` - Modo Detective Proactivo (Sugerencia de Figuras) (PLANIFICADA)
 
 > 🧪 **Hipótesis Causal**:
