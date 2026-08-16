@@ -85,7 +85,7 @@ export default function SugerirFiguraModal({
 
     setTimeout(() => {
       onClose();
-    }, 1800);
+    }, 600);
   };
 
   return (
