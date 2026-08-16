@@ -77,30 +77,44 @@ export default function Navbar({
           }}>
             
             {/* Detective Activo (Encima y más grande) */}
-            {detectiveActivo && (
-              <div
-                onClick={onAbrirSelector}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  cursor: 'pointer',
-                  padding: '4px 14px',
-                  borderRadius: '12px',
-                  background: 'rgba(139, 92, 246, 0.12)',
-                  border: '1.5px solid rgba(139, 92, 246, 0.35)',
-                  transition: 'all 0.2s',
-                  boxShadow: '0 2px 10px rgba(139, 92, 246, 0.1)'
-                }}
-                title="Haz clic para cambiar de detective"
-                className="btn-detective-selector"
-              >
-                <span style={{ fontSize: '1.3rem', lineHeight: 1 }}>{detectiveActivo.avatar}</span>
-                <span style={{ fontWeight: 900, color: '#c084fc', fontSize: '0.98rem', letterSpacing: '0.02em' }}>
-                  {detectiveActivo.nombre} <span style={{ fontSize: '0.85rem', color: '#a78bfa' }}>▾</span>
-                </span>
-              </div>
-            )}
+            {detectiveActivo && (() => {
+              const obtenerRango = (pts) => {
+                if (pts <= 150) return { nombre: 'Novato', icono: '🔍', color: '#a78bfa' };
+                if (pts <= 350) return { nombre: 'Ayudante', icono: '🧥', color: '#ec4899' };
+                if (pts <= 600) return { nombre: 'Inspector', icono: '🕵️‍♀️', color: '#38bdf8' };
+                return { nombre: 'Súper de Oro', icono: '🏆', color: '#fbbf24' };
+              };
+              const rango = obtenerRango(puntos);
+              
+              return (
+                <div
+                  onClick={onAbrirSelector}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    cursor: 'pointer',
+                    padding: '4px 14px',
+                    borderRadius: '12px',
+                    background: 'rgba(139, 92, 246, 0.12)',
+                    border: '1.5px solid rgba(139, 92, 246, 0.35)',
+                    transition: 'all 0.2s',
+                    boxShadow: '0 2px 10px rgba(139, 92, 246, 0.1)'
+                  }}
+                  title="Haz clic para cambiar de detective"
+                  className="btn-detective-selector"
+                >
+                  <span style={{ fontSize: '1.3rem', lineHeight: 1 }}>{detectiveActivo.avatar}</span>
+                  <span style={{ fontWeight: 900, color: '#c084fc', fontSize: '0.98rem', letterSpacing: '0.02em', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    {detectiveActivo.nombre}
+                    <span style={{ fontSize: '0.72rem', background: 'rgba(15, 23, 42, 0.6)', color: rango.color, padding: '2px 8px', borderRadius: '6px', fontWeight: 800, display: 'inline-flex', alignItems: 'center', gap: '4px', border: `1px solid ${rango.color}30` }}>
+                      {rango.icono} {rango.nombre}
+                    </span>
+                    <span style={{ fontSize: '0.85rem', color: '#a78bfa' }}>▾</span>
+                  </span>
+                </div>
+              );
+            })()}
 
             {/* Sub-fila compacta con estadísticas de juego */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '14px', fontSize: '0.82rem' }}>

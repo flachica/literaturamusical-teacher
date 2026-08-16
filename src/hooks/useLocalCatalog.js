@@ -7,6 +7,7 @@ import {
   loadDetectives,
   saveDetectives
 } from '../utils/storage';
+import { playSuccessSound, playFailureSound, playAchievementSound } from '../utils/audioEffects';
 
 /**
  * Hook personalizado para gestionar el progreso de los detectives (multi-jugador),
@@ -20,6 +21,8 @@ export default function useLocalCatalog(cancionActual, setCancionActual) {
   // Detective activo actual
   const detectiveActivo = detectives.find(d => d.activo) || detectives[0] || null;
   const { puntos, nivel, estrellas } = detectiveActivo || { puntos: 0, nivel: 1, estrellas: 0 };
+  const logros = detectiveActivo?.logros || { abiertasRAE: 0, estrofasEscuchadas: 0, rachaComprension: 0, cancionesCompletadas: [] };
+  const placasDesbloqueadas = detectiveActivo?.placasDesbloqueadas || [];
 
   // Catalog states (Songs & Literary Figures)
   const [canciones, setCanciones] = useState(() => loadSongsCatalog());
@@ -109,6 +112,9 @@ export default function useLocalCatalog(cancionActual, setCancionActual) {
 
   // Sumar puntos al detective activo y subir de nivel
   const handleSumarPuntos = (cantidad) => {
+    // Reproducir feedback sonoro de éxito al ganar puntos
+    playSuccessSound();
+
     setDetectives(prev => {
       const listaActualizada = prev.map(d => {
         if (d.activo) {
@@ -153,7 +159,9 @@ export default function useLocalCatalog(cancionActual, setCancionActual) {
         nivel: 1,
         estrellas: 0,
         avatar,
-        activo: esElPrimero
+        activo: esElPrimero,
+        logros: { abiertasRAE: 0, estrofasEscuchadas: 0, rachaComprension: 0, cancionesCompletadas: [] },
+        placasDesbloqueadas: []
       };
       nuevoDetCreado = nuevoDet;
       const listaActualizada = [...prev, nuevoDet];
@@ -161,6 +169,133 @@ export default function useLocalCatalog(cancionActual, setCancionActual) {
       return listaActualizada;
     });
     return nuevoDetCreado;
+  };
+
+  // Lógica de registro y actualización de logros
+  const handleRegistrarLecturaDiccionario = () => {
+    setDetectives(prev => {
+      const listaActualizada = prev.map(d => {
+        if (d.activo) {
+          const logros = d.logros || { abiertasRAE: 0, estrofasEscuchadas: 0, rachaComprension: 0, cancionesCompletadas: [] };
+          const abiertasRAE = (logros.abiertasRAE || 0) + 1;
+          const nuevasPlacas = [...(d.placasDesbloqueadas || [])];
+          
+          if (abiertasRAE >= 5 && !nuevasPlacas.includes('lector')) {
+            nuevasPlacas.push('lector');
+            setTimeout(() => playAchievementSound(), 150);
+          }
+
+          return {
+            ...d,
+            logros: { ...logros, abiertasRAE },
+            placasDesbloqueadas: nuevasPlacas
+          };
+        }
+        return d;
+      });
+      saveDetectives(listaActualizada);
+      return listaActualizada;
+    });
+  };
+
+  const handleRegistrarEstrofaEscuchada = () => {
+    setDetectives(prev => {
+      const listaActualizada = prev.map(d => {
+        if (d.activo) {
+          const logros = d.logros || { abiertasRAE: 0, estrofasEscuchadas: 0, rachaComprension: 0, cancionesCompletadas: [] };
+          const estrofasEscuchadas = (logros.estrofasEscuchadas || 0) + 1;
+          const nuevasPlacas = [...(d.placasDesbloqueadas || [])];
+
+          if (estrofasEscuchadas >= 10 && !nuevasPlacas.includes('oido_lince')) {
+            nuevasPlacas.push('oido_lince');
+            setTimeout(() => playAchievementSound(), 150);
+          }
+
+          return {
+            ...d,
+            logros: { ...logros, estrofasEscuchadas },
+            placasDesbloqueadas: nuevasPlacas
+          };
+        }
+        return d;
+      });
+      saveDetectives(listaActualizada);
+      return listaActualizada;
+    });
+  };
+
+  const handleRegistrarResultadoComprension = (esCorrecta) => {
+    if (!esCorrecta) {
+      playFailureSound();
+      setDetectives(prev => {
+        const listaActualizada = prev.map(d => {
+          if (d.activo) {
+            const logros = d.logros || { abiertasRAE: 0, estrofasEscuchadas: 0, rachaComprension: 0, cancionesCompletadas: [] };
+            return {
+              ...d,
+              logros: { ...logros, rachaComprension: 0 }
+            };
+          }
+          return d;
+        });
+        saveDetectives(listaActualizada);
+        return listaActualizada;
+      });
+      return;
+    }
+
+    setDetectives(prev => {
+      const listaActualizada = prev.map(d => {
+        if (d.activo) {
+          const logros = d.logros || { abiertasRAE: 0, estrofasEscuchadas: 0, rachaComprension: 0, cancionesCompletadas: [] };
+          const rachaComprension = (logros.rachaComprension || 0) + 1;
+          const nuevasPlacas = [...(d.placasDesbloqueadas || [])];
+
+          if (rachaComprension >= 3 && !nuevasPlacas.includes('racha_poetica')) {
+            nuevasPlacas.push('racha_poetica');
+            setTimeout(() => playAchievementSound(), 150);
+          }
+
+          return {
+            ...d,
+            logros: { ...logros, rachaComprension },
+            placasDesbloqueadas: nuevasPlacas
+          };
+        }
+        return d;
+      });
+      saveDetectives(listaActualizada);
+      return listaActualizada;
+    });
+  };
+
+  const handleRegistrarCancionCompletada = (cancionId) => {
+    setDetectives(prev => {
+      const listaActualizada = prev.map(d => {
+        if (d.activo) {
+          const logros = d.logros || { abiertasRAE: 0, estrofasEscuchadas: 0, rachaComprension: 0, cancionesCompletadas: [] };
+          const cancionesCompletadas = [...(logros.cancionesCompletadas || [])];
+          if (!cancionesCompletadas.includes(cancionId)) {
+            cancionesCompletadas.push(cancionId);
+          }
+          const nuevasPlacas = [...(d.placasDesbloqueadas || [])];
+
+          if (cancionesCompletadas.length >= 3 && !nuevasPlacas.includes('melomano')) {
+            nuevasPlacas.push('melomano');
+            setTimeout(() => playAchievementSound(), 150);
+          }
+
+          return {
+            ...d,
+            logros: { ...logros, cancionesCompletadas },
+            placasDesbloqueadas: nuevasPlacas
+          };
+        }
+        return d;
+      });
+      saveDetectives(listaActualizada);
+      return listaActualizada;
+    });
   };
 
   // Renombrar un detective
@@ -229,9 +364,15 @@ export default function useLocalCatalog(cancionActual, setCancionActual) {
     puntos,
     nivel,
     estrellas,
+    logros,
+    placasDesbloqueadas,
     comprobarDisponibilidadAudios,
     handleSumarPuntos,
     handleResetProgreso,
-    handleGuardarCanciones
+    handleGuardarCanciones,
+    handleRegistrarLecturaDiccionario,
+    handleRegistrarEstrofaEscuchada,
+    handleRegistrarResultadoComprension,
+    handleRegistrarCancionCompletada
   };
 }

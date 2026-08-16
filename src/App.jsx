@@ -31,9 +31,15 @@ export default function App() {
     puntos,
     nivel,
     estrellas,
+    logros,
+    placasDesbloqueadas,
     handleSumarPuntos,
     handleResetProgreso,
-    handleGuardarCanciones
+    handleGuardarCanciones,
+    handleRegistrarLecturaDiccionario,
+    handleRegistrarEstrofaEscuchada,
+    handleRegistrarResultadoComprension,
+    handleRegistrarCancionCompletada
   } = useLocalCatalog(cancionActual, setCancionActual);
 
   // Custom hook for unified audio player playback state
@@ -229,6 +235,12 @@ export default function App() {
                   setPaso={setPaso}
                   mostrarLetraCompleta={mostrarLetraCompleta}
                   setMostrarLetraCompleta={setMostrarLetraCompleta}
+                  logros={logros}
+                  placasDesbloqueadas={placasDesbloqueadas}
+                  onRegistrarLecturaDiccionario={handleRegistrarLecturaDiccionario}
+                  onRegistrarEstrofaEscuchada={handleRegistrarEstrofaEscuchada}
+                  onRegistrarResultadoComprension={handleRegistrarResultadoComprension}
+                  onRegistrarCancionCompletada={handleRegistrarCancionCompletada}
                 />
               )}
             </>

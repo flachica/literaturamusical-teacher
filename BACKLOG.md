@@ -6,12 +6,12 @@ Documento de seguimiento del desarrollo interactivo de **LitMusical** estructura
 
 ## 📍 ESTADO ACTUAL DEL PROYECTO
 
-* **Sesión Actual**: 🔴 **SESIÓN 7 (CERRADA)** | **Próxima**: 🟢 **SESIÓN 8** (Gamificación Avanzada "Escuela de Detectives" `v0.4.0`)
+* **Sesión Actual**: 🟢 **SESIÓN 8 (EN DESARROLLO)** | **Próxima**: 🔴 **SESIÓN 9** (Modo Detective Proactivo `v0.5.0`)
 * **Subversión Alcanzada**: `v0.3.1` (Optimización de usabilidad del Modo Detective, resolución del error 403 en descargas, flujo de comprensión no intrusivo y tipografías aumentadas).
-* **Fallo Pendiente de Solucionar (Próxima Sesión)**: Ninguno crítico registrado de iteraciones anteriores.
+* **Fallo Pendiente de Solucionar (Próxima Sesión)**: Ninguno crítico registrado.
 * **Métrica Clave del Reto (CPVM)**: 
   $$\text{CPVM} = [\text{Retos de figuras literarias resueltos con éxito}] + [\text{por la niña de forma autónoma}]$$
-* **Próxima Iteración**: Gamificación Avanzada "Escuela de Detectives" (`v0.4.0`).
+* **Próxima Iteración**: Modo Detective Proactivo (`v0.5.0`).
 
 ---
 

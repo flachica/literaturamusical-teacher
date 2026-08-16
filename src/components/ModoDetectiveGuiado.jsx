@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import confetti from 'canvas-confetti';
 import { DICCIONARIO_RAE, FIGURAS_LITERARIAS } from '../data/initialData';
-import { Book, CheckCircle, ArrowRight, Trophy, RotateCcw, ListMusic, Sparkles, Play, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Book, CheckCircle, ArrowRight, Trophy, RotateCcw, ListMusic, Sparkles, Play, ChevronLeft, ChevronRight, Award } from 'lucide-react';
+import { playFailureSound } from '../utils/audioEffects';
 
 export default function ModoDetectiveGuiado({
   cancion,
@@ -17,7 +18,13 @@ export default function ModoDetectiveGuiado({
   setPaso,
   mostrarLetraCompleta,
   setMostrarLetraCompleta,
-  audioStatus
+  audioStatus,
+  logros,
+  placasDesbloqueadas,
+  onRegistrarLecturaDiccionario,
+  onRegistrarEstrofaEscuchada,
+  onRegistrarResultadoComprension,
+  onRegistrarCancionCompletada
 }) {
   const estadoAudio = audioStatus?.[cancion?.id] || 'vacio';
   const tieneAudio = cancion?.audioPreviewUrl && estadoAudio !== 'perdido' && estadoAudio !== 'vacio';
@@ -50,6 +57,7 @@ export default function ModoDetectiveGuiado({
     if (tieneAudio && typeof tiempoInicio === 'number' && onSeekTime) {
       onSeekTime(tiempoInicio);
       if (setIsPlaying) setIsPlaying(true);
+      if (onRegistrarEstrofaEscuchada) onRegistrarEstrofaEscuchada();
     }
   };
 
@@ -128,6 +136,12 @@ export default function ModoDetectiveGuiado({
 
   const handleResponderComprension = (opcion) => {
     setOpcionComprension(opcion);
+    if (onRegistrarResultadoComprension) {
+      onRegistrarResultadoComprension(opcion.correcta);
+    }
+    if (opcion.correcta && onGanarPuntos) {
+      onGanarPuntos(50);
+    }
   };
 
   const handleResponderFigura = (figuraId) => {
@@ -136,6 +150,9 @@ export default function ModoDetectiveGuiado({
       setPaso(4);
       confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
       if (onGanarPuntos) onGanarPuntos(150);
+      if (onRegistrarCancionCompletada) onRegistrarCancionCompletada(cancion.id);
+    } else {
+      playFailureSound();
     }
   };
 
@@ -158,14 +175,16 @@ export default function ModoDetectiveGuiado({
       
       {/* COLUMN 1: 100% FULL SONG LYRICS GROUPED BY STANZAS (LEFT PANEL) */}
       {mostrarLetraCompleta && (
-        <div ref={lyricsContainerRef} className="glass-panel" style={{
-          padding: '18px 20px',
-          height: 'fit-content',
-          maxHeight: '560px',
-          overflowY: 'auto',
-          background: 'rgba(15, 23, 42, 0.85)',
-          border: '1px solid rgba(56, 189, 248, 0.3)'
-        }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <div ref={lyricsContainerRef} className="glass-panel" style={{
+            padding: '18px 20px',
+            height: 'fit-content',
+            maxHeight: '420px',
+            overflowY: 'auto',
+            background: 'rgba(15, 23, 42, 0.85)',
+            border: '1px solid rgba(56, 189, 248, 0.3)',
+            marginBottom: 0
+          }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
             <h4 style={{ fontSize: '0.92rem', fontWeight: 800, color: '#38bdf8', margin: 0, display: 'flex', alignItems: 'center', gap: '6px' }}>
               📜 Lectura Completa — «{cancion.titulo}»
@@ -244,7 +263,140 @@ export default function ModoDetectiveGuiado({
             })}
           </div>
         </div>
-      )}
+
+        {/* ÁLBUM DE PLACAS Y LOGROS */}
+        <div className="glass-panel" style={{
+          padding: '16px',
+          background: 'rgba(15, 23, 42, 0.75)',
+          border: '1px solid rgba(139, 92, 246, 0.2)'
+        }}>
+          <h4 style={{
+            fontSize: '0.88rem',
+            fontWeight: 800,
+            color: '#c084fc',
+            margin: '0 0 12px 0',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '6px'
+          }}>
+            <Award size={16} /> Álbum de Placas y Logros
+          </h4>
+          
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(2, 1fr)',
+            gap: '12px'
+          }}>
+            
+            {/* Placa 1: Lector RAE */}
+            {(() => {
+              const tienePlaca = placasDesbloqueadas.includes('lector');
+              const prog = logros?.abiertasRAE || 0;
+              return (
+                <div style={{
+                  padding: '10px',
+                  borderRadius: '12px',
+                  background: tienePlaca ? 'rgba(139, 92, 246, 0.12)' : 'rgba(30, 41, 59, 0.25)',
+                  border: `1.5px ${tienePlaca ? 'solid rgba(139, 92, 246, 0.4)' : 'dashed rgba(255, 255, 255, 0.08)'}`,
+                  opacity: tienePlaca ? 1 : 0.5,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  textAlign: 'center',
+                  transition: 'all 0.3s ease'
+                }}>
+                  <span style={{ fontSize: '1.6rem', marginBottom: '4px', filter: tienePlaca ? 'none' : 'grayscale(100%)' }}>📖</span>
+                  <div style={{ fontSize: '0.78rem', fontWeight: 800, color: tienePlaca ? '#c084fc' : '#94a3b8' }}>Placa del Lector</div>
+                  <div style={{ fontSize: '0.68rem', color: 'var(--text-muted)', marginTop: '2px' }}>
+                    {tienePlaca ? '¡Curioso como un búho!' : `Diccionario: ${prog}/5`}
+                  </div>
+                </div>
+              );
+            })()}
+
+            {/* Placa 2: Oído de Lince */}
+            {(() => {
+              const tienePlaca = placasDesbloqueadas.includes('oido_lince');
+              const prog = logros?.estrofasEscuchadas || 0;
+              return (
+                <div style={{
+                  padding: '10px',
+                  borderRadius: '12px',
+                  background: tienePlaca ? 'rgba(236, 72, 153, 0.12)' : 'rgba(30, 41, 59, 0.25)',
+                  border: `1.5px ${tienePlaca ? 'solid rgba(236, 72, 153, 0.4)' : 'dashed rgba(255, 255, 255, 0.08)'}`,
+                  opacity: tienePlaca ? 1 : 0.5,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  textAlign: 'center',
+                  transition: 'all 0.3s ease'
+                }}>
+                  <span style={{ fontSize: '1.6rem', marginBottom: '4px', filter: tienePlaca ? 'none' : 'grayscale(100%)' }}>🦊</span>
+                  <div style={{ fontSize: '0.78rem', fontWeight: 800, color: tienePlaca ? '#f472b6' : '#94a3b8' }}>Oído de Lince</div>
+                  <div style={{ fontSize: '0.68rem', color: 'var(--text-muted)', marginTop: '2px' }}>
+                    {tienePlaca ? '¡Oído musical agudo!' : `Escuchar: ${prog}/10`}
+                  </div>
+                </div>
+              );
+            })()}
+
+            {/* Placa 3: Racha Poética */}
+            {(() => {
+              const tienePlaca = placasDesbloqueadas.includes('racha_poetica');
+              const prog = logros?.rachaComprension || 0;
+              return (
+                <div style={{
+                  padding: '10px',
+                  borderRadius: '12px',
+                  background: tienePlaca ? 'rgba(56, 189, 248, 0.12)' : 'rgba(30, 41, 59, 0.25)',
+                  border: `1.5px ${tienePlaca ? 'solid rgba(56, 189, 248, 0.4)' : 'dashed rgba(255, 255, 255, 0.08)'}`,
+                  opacity: tienePlaca ? 1 : 0.5,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  textAlign: 'center',
+                  transition: 'all 0.3s ease'
+                }}>
+                  <span style={{ fontSize: '1.6rem', marginBottom: '4px', filter: tienePlaca ? 'none' : 'grayscale(100%)' }}>✨</span>
+                  <div style={{ fontSize: '0.78rem', fontWeight: 800, color: tienePlaca ? '#38bdf8' : '#94a3b8' }}>Racha Poética</div>
+                  <div style={{ fontSize: '0.68rem', color: 'var(--text-muted)', marginTop: '2px' }}>
+                    {tienePlaca ? '¡Comprensión de acero!' : `Racha: ${prog}/3`}
+                  </div>
+                </div>
+              );
+            })()}
+
+            {/* Placa 4: Melómano Literario */}
+            {(() => {
+              const tienePlaca = placasDesbloqueadas.includes('melomano');
+              const prog = logros?.cancionesCompletadas?.length || 0;
+              return (
+                <div style={{
+                  padding: '10px',
+                  borderRadius: '12px',
+                  background: tienePlaca ? 'rgba(245, 158, 11, 0.12)' : 'rgba(30, 41, 59, 0.25)',
+                  border: `1.5px ${tienePlaca ? 'solid rgba(245, 158, 11, 0.4)' : 'dashed rgba(255, 255, 255, 0.08)'}`,
+                  opacity: tienePlaca ? 1 : 0.5,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  textAlign: 'center',
+                  transition: 'all 0.3s ease'
+                }}>
+                  <span style={{ fontSize: '1.6rem', marginBottom: '4px', filter: tienePlaca ? 'none' : 'grayscale(100%)' }}>🎵</span>
+                  <div style={{ fontSize: '0.78rem', fontWeight: 800, color: tienePlaca ? '#fbbf24' : '#94a3b8' }}>Melómano</div>
+                  <div style={{ fontSize: '0.68rem', color: 'var(--text-muted)', marginTop: '2px' }}>
+                    {tienePlaca ? '¡Gran explorador!' : `Canciones: ${prog}/3`}
+                  </div>
+                </div>
+              );
+            })()}
+
+          </div>
+        </div>
+
+      </div>
+    )}
 
       {/* COLUMN 2: ACTIVE VERSE DETECTIVE CHALLENGE (RIGHT PANEL / FULL WIDTH WHEN TOGGLED OFF) */}
       <div className="glass-panel" style={{ padding: '24px', height: 'fit-content', border: paso === 4 ? '2px solid #10b981' : '1px solid rgba(139, 92, 246, 0.3)' }}>
@@ -372,6 +524,7 @@ export default function ModoDetectiveGuiado({
                               onClick={(e) => {
                                 e.stopPropagation();
                                 setPalabraRaeActiva(DICCIONARIO_RAE[limpia] || { palabra: limpia, definicion: 'Palabra destacada de la canción.' });
+                                if (onRegistrarLecturaDiccionario) onRegistrarLecturaDiccionario();
                               }}
                               style={{
                                 color: '#fbbf24',
