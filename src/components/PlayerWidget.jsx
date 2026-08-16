@@ -80,7 +80,15 @@ export default function PlayerWidget({
   const handleSliderChange = (e) => {
     const newPos = Number(e.target.value);
     setPosicion(newPos);
-    executeSeek(newPos);
+    
+    // Si se está arrastrando, solo actualizamos visualmente el tiempo
+    const targetDuration = duration || 180;
+    const targetSeconds = (newPos / 100) * targetDuration;
+    setCurrentTime(targetSeconds);
+
+    if (!isDraggingRef.current) {
+      executeSeek(newPos);
+    }
   };
 
   const handlePointerDown = () => {

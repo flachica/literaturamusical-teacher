@@ -37,11 +37,19 @@ function jsonStoragePlugin() {
                 fs.mkdirSync(audioDir, { recursive: true })
               }
 
+              let cleanUrl = url
+              const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/
+              const match = url.match(regExp)
+              const videoId = (match && match[2].length === 11) ? match[2] : null
+              if (videoId) {
+                cleanUrl = `https://www.youtube.com/watch?v=${videoId}`
+              }
+
               const fileId = `audio_${Date.now()}`
               const outputPathPattern = path.join(audioDir, `${fileId}.%(ext)s`)
               
               // Extracción de pista de audio puro nativa (251 webm / 140 m4a)
-              const targetQuery = (url.includes('youtube.com') || url.includes('youtu.be')) ? url : `ytsearch1:${url}`
+              const targetQuery = (cleanUrl.includes('youtube.com') || cleanUrl.includes('youtu.be')) ? cleanUrl : `ytsearch1:${cleanUrl}`
               const cmd = `yt-dlp --no-playlist -f "251/249/140/139/ba" -o "${outputPathPattern}" "${targetQuery}"`
               exec(cmd, (err) => {
                 if (err) {

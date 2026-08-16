@@ -37,11 +37,10 @@ Cuando una IA inicie una nueva sesión o iteración en este repositorio, DEBE ej
 - **Idioma de Commits en Git:** Todos los mensajes de commit de Git DEBEN redactarse siempre en el idioma del usuario (**Español**). Ejemplo: `git commit -m "feat: prototipo v0.1.2 con Modo Detective, RAE y Ondas Musicales"`.
 - **Debate Socrático & SDD:** Toda decisión técnica o funcional importante debe discutirse brevemente usando un enfoque SDD.
 
-- **Enfoque por Subversiones e Iteraciones Granulares (Babysteps y Propuesta Previa Obligatoria):** 
+- **Enfoque de Desarrollo y Delegación de Pruebas:** 
   * Priorizar pasos de bebé extremadamente pequeños e incrementales (*babysteps*).
-  * **NUNCA** modificar código de la aplicación directamente sin antes presentar una propuesta del plan en tu respuesta para que el usuario la revise, refine y apruebe.
-  * Las propuestas presentadas deben ser **estrictamente de carácter funcional y descriptivo**. **NO incluir bloques de código fuente, fragmentos o diffs técnicos** en las propuestas para no entorpecer ni abrumar la lectura del usuario.
-  * El flujo interactivo debe alternar dinámicamente entre el Modo Plan (presentar propuesta funcional y refinar con el usuario) y el Modo Edición (ejecutar la tarea granular aprobada).
+  * **Delegación de Pruebas:** La IA no ejecutará pruebas ni verificaciones de funcionamiento en la aplicación; el agente delegará al usuario la tarea de arrancar, usar e inspeccionar la aplicación para verificar los cambios.
+
 
 
 ### 3. Protocolo de CIERRE DE SESIÓN Y MEMORIA LOCAL

@@ -1,4 +1,4 @@
-# 📋 BACKLOG DE INICIATIVAS Y VERSIONES - LitMusical (Próxima: Sesión 7)
+# 📋 BACKLOG DE INICIATIVAS Y VERSIONES - LitMusical (Próxima: Sesión 8)
 
 Documento de seguimiento del desarrollo interactivo de **LitMusical** estructurado mediante la metodología **Impact-Driven Growth (IDG)** para garantizar que cada entrega genere cambios reales de comportamiento (*outcomes*) y valor en el aprendizaje pedagógico.
 
@@ -6,12 +6,12 @@ Documento de seguimiento del desarrollo interactivo de **LitMusical** estructura
 
 ## 📍 ESTADO ACTUAL DEL PROYECTO
 
-* **Sesión Actual**: 🔴 **SESIÓN 6 (CERRADA)** | **Próxima**: 🟢 **SESIÓN 7** (Resolver fallo 403 en descargas / Usabilidad `v0.3.1`)
-* **Subversión Alcanzada**: `v0.3.0` (Persistencia Activa, Indicador Multi-Detective, Erradicación de `alert()` y Modales Accesibles con Teclado).
-* **Fallo Pendiente de Solucionar (Próxima Sesión)**: ⚠️ Error `HTTP Error 403: Forbidden` al intentar descargar/recuperar audio con `yt-dlp` debido a parámetros de lista de reproducción (`&list=...`). Solución propuesta y aprobada: Sanitizar los enlaces en el servidor (`vite.config.js`) para extraer únicamente el ID del vídeo antes de ejecutar `yt-dlp`.
+* **Sesión Actual**: 🔴 **SESIÓN 7 (CERRADA)** | **Próxima**: 🟢 **SESIÓN 8** (Gamificación Avanzada "Escuela de Detectives" `v0.4.0`)
+* **Subversión Alcanzada**: `v0.3.1` (Optimización de usabilidad del Modo Detective, resolución del error 403 en descargas, flujo de comprensión no intrusivo y tipografías aumentadas).
+* **Fallo Pendiente de Solucionar (Próxima Sesión)**: Ninguno crítico registrado de iteraciones anteriores.
 * **Métrica Clave del Reto (CPVM)**: 
   $$\text{CPVM} = [\text{Retos de figuras literarias resueltos con éxito}] + [\text{por la niña de forma autónoma}]$$
-* **Próxima Iteración**: Optimización de Usabilidad del Modo Detective Guiado (`v0.3.1`).
+* **Próxima Iteración**: Gamificación Avanzada "Escuela de Detectives" (`v0.4.0`).
 
 ---
 
@@ -51,12 +51,13 @@ Documento de seguimiento del desarrollo interactivo de **LitMusical** estructura
 
 ---
 
-### 🔍 `v0.3.1` - Iteración de Usabilidad: Optimización del Modo Detective Guiado (PLANIFICADA)
+### 🔍 `v0.3.1` - Iteración de Usabilidad: Optimización del Modo Detective Guiado (COMPLETADA - SESIÓN 7)
 * **Objetivo**: Mejorar la experiencia interactiva del juego para la niña de 9 años, asegurando que el flujo didáctico sea fluido y sin distracciones.
 * **Entregables**:
-  * Ajustes en la interfaz del visualizador de ondas y scroll de letras para asegurar una perfecta coherencia visual y de respuesta en pantallas táctiles y escritorio.
-  * Simplificación del flujo de la trivia de comprensión de letras, guiando paso a paso de forma más amigable antes de pasar a la identificación de la figura.
-  * Ajuste de tipografías y espaciados generales para mejorar la lectura infantil de los versos de la canción.
+  * Ajustes en la interfaz del visualizador de ondas y scroll de letras: se optimizó el seek del scrubber de música en `PlayerWidget.jsx` para evitar ruidos de buffer y desfases al arrastrar en caliente. Además, se añadió un resaltado dinámico de verso activo dentro de la estrofa del reto actual en `ModoDetectiveGuiado.jsx`.
+  * Simplificación del flujo de la trivia de comprensión de letras: se sustituyó el avance temporal automático tras responder por un panel de éxito que felicita a la detective y un botón explícito de avance al Paso 3 para guiar a la niña a su propio ritmo.
+  * Ajuste de tipografías y espaciados generales: se incrementó el tamaño de los versos activos de 1.15rem a 1.3rem, con mayor interlineado y espaciado de margen, y se amplió la definición/explicación final de acierto para mejorar la lectura infantil.
+  * Resolución del error 403 de YouTube: sanitizado de enlaces con parámetros de lista de reproducción en el backend local (`vite.config.js`) para extraer únicamente el ID del vídeo.
 
 ---
 

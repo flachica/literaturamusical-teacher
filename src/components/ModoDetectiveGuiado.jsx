@@ -128,11 +128,6 @@ export default function ModoDetectiveGuiado({
 
   const handleResponderComprension = (opcion) => {
     setOpcionComprension(opcion);
-    if (opcion.correcta) {
-      setTimeout(() => {
-        setPaso(3);
-      }, 600);
-    }
   };
 
   const handleResponderFigura = (figuraId) => {
@@ -347,43 +342,64 @@ export default function ModoDetectiveGuiado({
                 </button>
               </div>
 
-              {/* Single Continuous Poetic Block with a subtle purple left border */}
+              {/* Single Continuous Poetic Block */}
               <div style={{
-                paddingLeft: '14px',
-                borderLeft: '3px solid #8b5cf6',
                 display: 'flex',
                 flexDirection: 'column',
-                gap: '10px'
+                gap: '8px'
               }}>
-                {estrofaVersos.map((v) => (
-                  <div key={v.linea} style={{ fontSize: '1.15rem', fontWeight: 600, color: '#f8fafc', lineHeight: 1.6 }}>
-                    {v.texto.split(' ').map((palabra, i) => {
-                      const limpia = palabra.toLowerCase().replace(/[.,/#!$%^&*;:{}=\-_`~()]/g, "");
-                      const esDificil = v.palabrasDificiles && v.palabrasDificiles.includes(limpia);
-                      if (esDificil) {
-                        return (
-                          <span
-                            key={i}
-                            onClick={() => setPalabraRaeActiva(DICCIONARIO_RAE[limpia] || { palabra: limpia, definicion: 'Palabra destacada de la canción.' })}
-                            style={{
-                              color: '#fbbf24',
-                              textDecoration: 'underline dotted #fbbf24',
-                              cursor: 'pointer',
-                              background: 'rgba(245, 158, 11, 0.25)',
-                              padding: '2px 8px',
-                              borderRadius: '8px',
-                              margin: '0 2px'
-                            }}
-                            title="Haz clic para ver el secreto de la palabra en el Diccionario RAE"
-                          >
-                            {palabra}{' '}
-                          </span>
-                        );
-                      }
-                      return palabra + ' ';
-                    })}
-                  </div>
-                ))}
+                {estrofaVersos.map((v) => {
+                  const esVersoActivo = v.linea === versoActual?.linea;
+                  return (
+                    <div
+                      key={v.linea}
+                      style={{
+                        fontSize: esVersoActivo ? '1.3rem' : '1.15rem',
+                        fontWeight: esVersoActivo ? 800 : 500,
+                        color: esVersoActivo ? '#ffffff' : '#94a3b8',
+                        lineHeight: 1.7,
+                        padding: '8px 16px',
+                        borderRadius: '12px',
+                        background: esVersoActivo ? 'linear-gradient(90deg, rgba(139, 92, 246, 0.25), transparent)' : 'transparent',
+                        borderLeft: esVersoActivo ? '4px solid #ec4899' : '4px solid transparent',
+                        transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
+                        boxShadow: esVersoActivo ? '0 4px 12px rgba(139, 92, 246, 0.1)' : 'none',
+                        transform: esVersoActivo ? 'translateX(4px)' : 'none'
+                      }}
+                    >
+                      {esVersoActivo && <span style={{ marginRight: '6px', color: '#ec4899', fontSize: '1rem', verticalAlign: 'middle' }}>▶</span>}
+                      {v.texto.split(' ').map((palabra, i) => {
+                        const limpia = palabra.toLowerCase().replace(/[.,/#!$%^&*;:{}=\-_`~()]/g, "");
+                        const esDificil = v.palabrasDificiles && v.palabrasDificiles.includes(limpia);
+                        if (esDificil) {
+                          return (
+                            <span
+                              key={i}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setPalabraRaeActiva(DICCIONARIO_RAE[limpia] || { palabra: limpia, definicion: 'Palabra destacada de la canción.' });
+                              }}
+                              style={{
+                                color: '#fbbf24',
+                                textDecoration: 'underline dotted #fbbf24',
+                                cursor: 'pointer',
+                                background: 'rgba(245, 158, 11, 0.25)',
+                                padding: '2px 6px',
+                                borderRadius: '6px',
+                                margin: '0 2px',
+                                display: 'inline-block'
+                              }}
+                              title="Haz clic para ver el secreto de la palabra en el Diccionario RAE"
+                            >
+                              {palabra}
+                            </span>
+                          );
+                        }
+                        return palabra + ' ';
+                      })}
+                    </div>
+                  );
+                })}
               </div>
 
               {tienePalabrasDificiles && (
@@ -447,6 +463,7 @@ export default function ModoDetectiveGuiado({
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
               {versoActual.opcionesComprension.map((opcion) => {
                 const isSelected = opcionComprension?.id === opcion.id;
+                const isCorrectAnswerSelected = opcionComprension?.correcta === true;
                 let bg = 'rgba(15, 23, 42, 0.6)';
                 let border = '1px solid rgba(255, 255, 255, 0.1)';
 
@@ -455,9 +472,13 @@ export default function ModoDetectiveGuiado({
                   border = opcion.correcta ? '1px solid #10b981' : '1px solid #ef4444';
                 }
 
+                // Deshabilitar otros botones una vez seleccionada la correcta
+                const isDisabled = isCorrectAnswerSelected && !isSelected;
+
                 return (
                   <button
                     key={opcion.id}
+                    disabled={isDisabled}
                     onClick={() => handleResponderComprension(opcion)}
                     style={{
                       padding: '12px 16px',
@@ -468,10 +489,12 @@ export default function ModoDetectiveGuiado({
                       color: '#ffffff',
                       fontWeight: 700,
                       fontSize: '0.92rem',
-                      cursor: 'pointer',
+                      cursor: isDisabled ? 'default' : 'pointer',
+                      opacity: isDisabled ? 0.45 : 1,
                       display: 'flex',
                       alignItems: 'center',
-                      justifyContent: 'space-between'
+                      justifyContent: 'space-between',
+                      transition: 'all 0.2s ease'
                     }}
                   >
                     <span>{opcion.texto}</span>
@@ -481,6 +504,46 @@ export default function ModoDetectiveGuiado({
                 );
               })}
             </div>
+
+            {opcionComprension?.correcta && (
+              <div
+                className="modal-content-animate"
+                style={{
+                  marginTop: '18px',
+                  padding: '16px',
+                  borderRadius: '16px',
+                  background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(56, 189, 248, 0.1))',
+                  border: '1.5px solid rgba(16, 185, 129, 0.4)',
+                  textAlign: 'center',
+                  boxShadow: '0 4px 16px rgba(16, 185, 129, 0.15)'
+                }}
+              >
+                <p style={{ fontSize: '0.95rem', color: '#f8fafc', fontWeight: 700, margin: '0 0 12px 0', lineHeight: 1.5 }}>
+                  🌟 ¡Excelente trabajo de detective! Has comprendido muy bien la historia de estos versos.
+                </p>
+                <button
+                  onClick={() => setPaso(3)}
+                  style={{
+                    width: '100%',
+                    padding: '12px',
+                    borderRadius: '12px',
+                    background: 'linear-gradient(135deg, #10b981, #059669)',
+                    color: '#ffffff',
+                    fontWeight: 800,
+                    fontSize: '0.95rem',
+                    border: 'none',
+                    cursor: 'pointer',
+                    boxShadow: '0 4px 14px rgba(16, 185, 129, 0.4)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '8px'
+                  }}
+                >
+                  <span>Paso 3: Identificar la Figura Poética</span> <ArrowRight size={16} />
+                </button>
+              </div>
+            )}
           </div>
         )}
 
@@ -538,10 +601,10 @@ export default function ModoDetectiveGuiado({
         {paso === 4 && (
           <div style={{ paddingTop: '10px', textAlign: 'center', background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(139, 92, 246, 0.15))', padding: '20px', borderRadius: '16px' }}>
             <div style={{ fontSize: '2.2rem', marginBottom: '6px' }}>🎉 🔮</div>
-            <h3 style={{ fontSize: '1.2rem', fontWeight: 900, color: '#ffffff', marginBottom: '6px' }}>
+            <h3 style={{ fontSize: '1.4rem', fontWeight: 900, color: '#ffffff', marginBottom: '8px' }}>
               ¡Gran Trabajo, Detective Literaria!
             </h3>
-            <p style={{ fontSize: '0.9rem', color: '#f8fafc', maxWidth: '600px', margin: '0 auto 14px', lineHeight: 1.5 }}>
+            <p style={{ fontSize: '1.05rem', color: '#f8fafc', maxWidth: '600px', margin: '0 auto 16px', lineHeight: 1.6 }}>
               {versoActual.explicacion}
             </p>
 
