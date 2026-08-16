@@ -50,7 +50,7 @@ function jsonStoragePlugin() {
               
               // Extracción de pista de audio puro nativa (251 webm / 140 m4a)
               const targetQuery = (cleanUrl.includes('youtube.com') || cleanUrl.includes('youtu.be')) ? cleanUrl : `ytsearch1:${cleanUrl}`
-              const cmd = `yt-dlp --no-playlist -f "251/249/140/139/ba" -o "${outputPathPattern}" "${targetQuery}"`
+              const cmd = `yt-dlp --no-playlist --remote-components ejs:github --extractor-args "youtube:player_client=web_embedded,android" -f "251/249/140/139/ba" -o "${outputPathPattern}" "${targetQuery}"`
               exec(cmd, (err) => {
                 if (err) {
                   res.statusCode = 500

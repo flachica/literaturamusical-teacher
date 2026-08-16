@@ -221,21 +221,21 @@ export default function ModoDetectiveGuiado({
                       <div
                         key={v.linea}
                         style={{
-                          fontSize: isCurrentLine ? '1.02rem' : '0.94rem',
+                          fontSize: isCurrentLine ? '1.25rem' : '1.05rem',
                           fontWeight: isCurrentLine ? 800 : 500,
-                          color: isCurrentLine ? '#ffffff' : isEstrofaActiva ? '#f1f5f9' : '#cbd5e1',
-                          padding: '3px 6px',
-                          borderRadius: '6px',
-                          background: isCurrentLine ? 'rgba(236, 72, 153, 0.2)' : 'transparent',
+                          color: isCurrentLine ? '#ffffff' : isEstrofaActiva ? '#f8fafc' : '#cbd5e1',
+                          padding: '6px 10px',
+                          borderRadius: '8px',
+                          background: isCurrentLine ? 'rgba(236, 72, 153, 0.25)' : 'transparent',
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'space-between',
                           gap: '8px',
-                          transition: 'all 0.15s ease'
+                          transition: 'all 0.18s ease'
                         }}
                       >
                         <span>«{v.texto}»</span>
-                        {isCurrentLine && <span style={{ fontSize: '0.75rem', color: '#ec4899', flexShrink: 0 }}>▶</span>}
+                        {isCurrentLine && <span style={{ fontSize: '0.85rem', color: '#ec4899', flexShrink: 0 }}>▶</span>}
                       </div>
                     );
                   })}
@@ -346,28 +346,22 @@ export default function ModoDetectiveGuiado({
               <div style={{
                 display: 'flex',
                 flexDirection: 'column',
-                gap: '8px'
+                gap: '8px',
+                paddingLeft: '14px',
+                borderLeft: '3px solid #8b5cf6'
               }}>
                 {estrofaVersos.map((v) => {
-                  const esVersoActivo = v.linea === versoActual?.linea;
                   return (
                     <div
                       key={v.linea}
                       style={{
-                        fontSize: esVersoActivo ? '1.3rem' : '1.15rem',
-                        fontWeight: esVersoActivo ? 800 : 500,
-                        color: esVersoActivo ? '#ffffff' : '#94a3b8',
+                        fontSize: '1.25rem',
+                        fontWeight: 600,
+                        color: '#f8fafc',
                         lineHeight: 1.7,
-                        padding: '8px 16px',
-                        borderRadius: '12px',
-                        background: esVersoActivo ? 'linear-gradient(90deg, rgba(139, 92, 246, 0.25), transparent)' : 'transparent',
-                        borderLeft: esVersoActivo ? '4px solid #ec4899' : '4px solid transparent',
-                        transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
-                        boxShadow: esVersoActivo ? '0 4px 12px rgba(139, 92, 246, 0.1)' : 'none',
-                        transform: esVersoActivo ? 'translateX(4px)' : 'none'
+                        padding: '2px 0'
                       }}
                     >
-                      {esVersoActivo && <span style={{ marginRight: '6px', color: '#ec4899', fontSize: '1rem', verticalAlign: 'middle' }}>▶</span>}
                       {v.texto.split(' ').map((palabra, i) => {
                         const limpia = palabra.toLowerCase().replace(/[.,/#!$%^&*;:{}=\-_`~()]/g, "");
                         const esDificil = v.palabrasDificiles && v.palabrasDificiles.includes(limpia);
