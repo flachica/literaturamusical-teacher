@@ -100,9 +100,9 @@ export function loadSongsCatalog() {
       const parsed = JSON.parse(saved);
       if (Array.isArray(parsed)) {
         return parsed.map(s => {
-          // Si el elemento tenía guardada una URL directa de YouTube no reproducible, limpiar la URL de vista previa
           let fixedAudioUrl = s.audioPreviewUrl || s.audioUrl;
-          if (fixedAudioUrl && (fixedAudioUrl.includes('youtube.com') || fixedAudioUrl.includes('youtu.be') || fixedAudioUrl.endsWith('.mp4'))) {
+          // Solo si es un enlace directo a YouTube (no un archivo local descargado /audio/...)
+          if (fixedAudioUrl && (fixedAudioUrl.includes('youtube.com') || fixedAudioUrl.includes('youtu.be'))) {
             fixedAudioUrl = `/audio/${s.id}.webm`;
           }
           return {

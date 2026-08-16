@@ -45,7 +45,21 @@ function jsonStoragePlugin() {
                 cleanUrl = `https://www.youtube.com/watch?v=${videoId}`
               }
 
-              const fileId = `audio_${Date.now()}`
+              const rawSongId = body.songId || body.id
+              const fileId = rawSongId 
+                ? rawSongId.replace(/[^a-zA-Z0-9_-]/g, '_') 
+                : `audio_${Date.now()}`
+
+              // Limpiar archivos anteriores de este songId para evitar duplicados residuales
+              if (fs.existsSync(audioDir)) {
+                const oldFiles = fs.readdirSync(audioDir)
+                oldFiles.forEach(oldF => {
+                  if (oldF.startsWith(fileId + '.')) {
+                    try { fs.unlinkSync(path.join(audioDir, oldF)) } catch (_) {}
+                  }
+                })
+              }
+
               const outputPathPattern = path.join(audioDir, `${fileId}.%(ext)s`)
               
               // Extracción de pista de audio puro nativa (251 webm / 140 m4a / 18 mp4)
@@ -59,7 +73,7 @@ function jsonStoragePlugin() {
                 }
 
                 const files = fs.readdirSync(audioDir)
-                const downloadedFile = files.find(f => f.startsWith(fileId))
+                const downloadedFile = files.find(f => f.startsWith(fileId + '.'))
                 if (!downloadedFile) {
                   res.statusCode = 500
                   res.setHeader('Content-Type', 'application/json')

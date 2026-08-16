@@ -71,7 +71,7 @@ export default function SongManager({ canciones, audioStatus, onGuardarCanciones
       const res = await fetch('/api/download-audio', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ url: queryUrl })
+        body: JSON.stringify({ url: queryUrl, songId: song.id })
       });
       const data = await res.json();
       if (data.success && data.audioPath) {
@@ -139,7 +139,7 @@ export default function SongManager({ canciones, audioStatus, onGuardarCanciones
         const res = await fetch('/api/download-audio', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ url: queryUrl })
+          body: JSON.stringify({ url: queryUrl, songId: song.id })
         });
         const data = await res.json();
         if (data.success && data.audioPath) {
@@ -185,10 +185,11 @@ export default function SongManager({ canciones, audioStatus, onGuardarCanciones
     }
     setCargandoAudioYouTube(true);
     try {
+      const tempSongId = `custom-${Date.now()}`;
       const res = await fetch('/api/download-audio', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ url: targetUrl })
+        body: JSON.stringify({ url: targetUrl, songId: tempSongId })
       });
       const data = await res.json();
       if (data.success && data.audioPath) {
