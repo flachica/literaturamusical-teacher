@@ -1,5 +1,5 @@
 import React from 'react';
-import { Book, Play, ArrowRight } from 'lucide-react';
+import { Book, Play, ArrowRight, Sparkles } from 'lucide-react';
 import { DICCIONARIO_RAE } from '../../data/initialData';
 
 export default function StanzaReader({
@@ -9,7 +9,8 @@ export default function StanzaReader({
   palabraRaeActiva,
   setPalabraRaeActiva,
   onRegistrarLecturaDiccionario,
-  onSiguientePaso
+  onSiguientePaso,
+  onAbrirSugerirModal
 }) {
   const estrofaVersos = versoActual.estrofaNum
     ? cancion.versos.filter(v => v.estrofaNum === versoActual.estrofaNum)
@@ -129,6 +130,33 @@ export default function StanzaReader({
           </div>
         )}
       </div>
+
+      {/* Detective Proactivo: Botón "¡He descubierto una figura!" */}
+      {onAbrirSugerirModal && (
+        <button
+          onClick={onAbrirSugerirModal}
+          style={{
+            width: '100%',
+            padding: '11px',
+            borderRadius: '12px',
+            background: 'linear-gradient(135deg, rgba(236, 72, 153, 0.2), rgba(139, 92, 246, 0.2))',
+            border: '1.5px solid #ec4899',
+            color: '#f472b6',
+            fontWeight: 800,
+            fontSize: '0.88rem',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '8px',
+            cursor: 'pointer',
+            boxShadow: '0 0 12px rgba(236, 72, 153, 0.2)',
+            transition: 'all 0.2s'
+          }}
+        >
+          <Sparkles size={16} color="#ec4899" />
+          <span>🔍 ¡He descubierto una nueva figura literaria en este verso!</span>
+        </button>
+      )}
 
       <button
         onClick={onSiguientePaso}

@@ -40,6 +40,11 @@ export default function App() {
     handleSumarPuntos,
     handleResetProgreso,
     handleGuardarCanciones,
+    sugerencias,
+    handleEnviarSugerencia,
+    handleAprobarSugerencia,
+    handleMarcarCenaSugerencia,
+    handleEliminarSugerencia,
     handleRegistrarLecturaDiccionario,
     handleRegistrarEstrofaEscuchada,
     handleRegistrarResultadoComprension,
@@ -215,6 +220,8 @@ export default function App() {
                   setPaso={setPaso}
                   mostrarLetraCompleta={mostrarLetraCompleta}
                   setMostrarLetraCompleta={setMostrarLetraCompleta}
+                  detectiveActivo={detectiveActivo}
+                  onEnviarSugerencia={handleEnviarSugerencia}
                   logros={logros}
                   placasDesbloqueadas={placasDesbloqueadas}
                   onRegistrarLecturaDiccionario={handleRegistrarLecturaDiccionario}
@@ -252,6 +259,10 @@ export default function App() {
           onCrearDetective={handleCrearDetective}
           onRenombrarDetective={handleRenombrarDetective}
           onEliminarDetective={handleEliminarDetective}
+          sugerencias={sugerencias}
+          onAprobarSugerencia={handleAprobarSugerencia}
+          onMarcarCenaSugerencia={handleMarcarCenaSugerencia}
+          onEliminarSugerencia={handleEliminarSugerencia}
         />
       )}
 

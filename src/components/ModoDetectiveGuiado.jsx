@@ -8,10 +8,13 @@ import StanzaReader from './detective/StanzaReader';
 import ComprehensionChallenge from './detective/ComprehensionChallenge';
 import FigureChallenge from './detective/FigureChallenge';
 import ChallengeCelebration from './detective/ChallengeCelebration';
+import SugerirFiguraModal from './detective/SugerirFiguraModal';
 
 export default function ModoDetectiveGuiado({
   cancion,
   onGanarPuntos,
+  detectiveActivo,
+  onEnviarSugerencia,
   isPlaying,
   setIsPlaying,
   posicion,
@@ -38,6 +41,7 @@ export default function ModoDetectiveGuiado({
   const [palabraRaeActiva, setPalabraRaeActiva] = useState(null);
   const [opcionComprension, setOpcionComprension] = useState(null);
   const [opcionFigura, setOpcionFigura] = useState(null);
+  const [sugerirModalAbierto, setSugerirModalAbierto] = useState(false);
   const estrofasDomRefs = React.useRef({});
   const lyricsContainerRef = React.useRef(null);
 
@@ -266,6 +270,7 @@ export default function ModoDetectiveGuiado({
               setPalabraRaeActiva={setPalabraRaeActiva}
               onRegistrarLecturaDiccionario={onRegistrarLecturaDiccionario}
               onSiguientePaso={() => setPaso(2)}
+              onAbrirSugerirModal={() => setSugerirModalAbierto(true)}
             />
           )}
 
@@ -311,6 +316,16 @@ export default function ModoDetectiveGuiado({
         </div>
 
       </div>
+
+      {/* Modal Detective Proactivo para Sugerir Nuevas Figuras Literarias */}
+      <SugerirFiguraModal
+        isOpen={sugerirModalAbierto}
+        onClose={() => setSugerirModalAbierto(false)}
+        cancion={cancion}
+        versoActual={versoActual}
+        detectiveActivo={detectiveActivo}
+        onEnviarSugerencia={onEnviarSugerencia}
+      />
 
     </div>
   );

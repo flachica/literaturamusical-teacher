@@ -3,6 +3,7 @@ import SongManager from './SongManager';
 import FigureCatalog from './FigureCatalog';
 import ConfirmModal from './ConfirmModal';
 import DetectiveProfileManager from './admin/DetectiveProfileManager';
+import FamilySuggestions from './FamilySuggestions';
 
 export default function ModoAdmin({
   canciones,
@@ -20,7 +21,11 @@ export default function ModoAdmin({
   onSeleccionarDetective,
   onCrearDetective,
   onRenombrarDetective,
-  onEliminarDetective
+  onEliminarDetective,
+  sugerencias = [],
+  onAprobarSugerencia,
+  onMarcarCenaSugerencia,
+  onEliminarSugerencia
 }) {
   const [mostrarConfirmReset, setMostrarConfirmReset] = useState(false);
   const [detectiveAReiniciar, setDetectiveAReiniciar] = useState(null);
@@ -120,6 +125,14 @@ export default function ModoAdmin({
 
             </div>
           </div>
+
+          {/* Buzón Familiar de Descubrimientos (v0.5.0) */}
+          <FamilySuggestions
+            sugerencias={sugerencias}
+            onAprobarSugerencia={onAprobarSugerencia}
+            onMarcarCenaSugerencia={onMarcarCenaSugerencia}
+            onEliminarSugerencia={onEliminarSugerencia}
+          />
 
           {/* Sección de Gestión Multidetective */}
           <DetectiveProfileManager

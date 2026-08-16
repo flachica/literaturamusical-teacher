@@ -255,3 +255,26 @@ export function saveDetectives(list) {
     console.error('Error guardando detectives:', err);
   }
 }
+
+const SUGGESTIONS_KEY = 'litmusical_suggestions_v1';
+
+export function loadSuggestions() {
+  try {
+    const saved = localStorage.getItem(SUGGESTIONS_KEY);
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      if (Array.isArray(parsed)) return parsed;
+    }
+  } catch (err) {
+    console.error('Error cargando sugerencias:', err);
+  }
+  return [];
+}
+
+export function saveSuggestions(list) {
+  try {
+    localStorage.setItem(SUGGESTIONS_KEY, JSON.stringify(list));
+  } catch (err) {
+    console.error('Error guardando sugerencias:', err);
+  }
+}

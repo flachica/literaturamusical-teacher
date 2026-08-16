@@ -5,7 +5,9 @@ import {
   loadFiguresCatalog,
   saveFiguresCatalog,
   loadDetectives,
-  saveDetectives
+  saveDetectives,
+  loadSuggestions,
+  saveSuggestions
 } from '../utils/storage';
 import { playSuccessSound, playFailureSound, playAchievementSound } from '../utils/audioEffects';
 
@@ -27,7 +29,53 @@ export default function useLocalCatalog(cancionActual, setCancionActual) {
   // Catalog states (Songs & Literary Figures)
   const [canciones, setCanciones] = useState(() => loadSongsCatalog());
   const [figuras, setFiguras] = useState(() => loadFiguresCatalog());
+  const [sugerencias, setSugerencias] = useState(() => loadSuggestions());
   const [audioStatus, setAudioStatus] = useState({});
+
+  const handleEnviarSugerencia = (nuevaSug) => {
+    const listaActualizada = [nuevaSug, ...sugerencias];
+    setSugerencias(listaActualizada);
+    saveSuggestions(listaActualizada);
+    handleSumarPuntos(50);
+  };
+
+  const handleAprobarSugerencia = (sugId) => {
+    const listaActualizada = sugerencias.map(s => s.id === sugId ? { ...s, estado: 'aprobada' } : s);
+    setSugerencias(listaActualizada);
+    saveSuggestions(listaActualizada);
+    
+    // Reward detective with +100 points and +1 star
+    const targetSug = sugerencias.find(s => s.id === sugId);
+    if (targetSug) {
+      setDetectives(prev => {
+        const actualizados = prev.map(d => {
+          if (d.id === targetSug.detectiveId) {
+            return {
+              ...d,
+              puntos: d.puntos + 100,
+              estrellas: d.estrellas + 1
+            };
+          }
+          return d;
+        });
+        saveDetectives(actualizados);
+        return actualizados;
+      });
+      playAchievementSound();
+    }
+  };
+
+  const handleMarcarCenaSugerencia = (sugId) => {
+    const listaActualizada = sugerencias.map(s => s.id === sugId ? { ...s, estado: 'cena' } : s);
+    setSugerencias(listaActualizada);
+    saveSuggestions(listaActualizada);
+  };
+
+  const handleEliminarSugerencia = (sugId) => {
+    const listaActualizada = sugerencias.filter(s => s.id !== sugId);
+    setSugerencias(listaActualizada);
+    saveSuggestions(listaActualizada);
+  };
 
   // Verify availability of audio files on Deno/Node backend in development
   const comprobarDisponibilidadAudios = async (catalogToCheck = canciones) => {
@@ -370,6 +418,11 @@ export default function useLocalCatalog(cancionActual, setCancionActual) {
     handleSumarPuntos,
     handleResetProgreso,
     handleGuardarCanciones,
+    sugerencias,
+    handleEnviarSugerencia,
+    handleAprobarSugerencia,
+    handleMarcarCenaSugerencia,
+    handleEliminarSugerencia,
     handleRegistrarLecturaDiccionario,
     handleRegistrarEstrofaEscuchada,
     handleRegistrarResultadoComprension,
