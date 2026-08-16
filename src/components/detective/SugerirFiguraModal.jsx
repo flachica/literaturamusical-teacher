@@ -113,9 +113,9 @@ export default function SugerirFiguraModal({
           padding: '18px 22px',
           borderRadius: '20px',
           border: '2px solid #ec4899',
-          maxWidth: '600px',
+          maxWidth: '680px',
           width: '100%',
-          maxHeight: 'calc(100vh - 30px)',
+          maxHeight: '90vh',
           display: 'flex',
           flexDirection: 'column',
           boxShadow: '0 0 45px rgba(236, 72, 153, 0.35)',
@@ -162,9 +162,9 @@ export default function SugerirFiguraModal({
             </p>
           </div>
         ) : (
-          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '10px', overflowY: 'auto', paddingRight: '4px' }}>
+          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '12px', overflowY: 'auto', paddingRight: '4px' }}>
             
-            {/* Selector de Versos Multi-Estrofa (Limpio y Compacto) */}
+            {/* Selector de Versos Multi-Estrofa (Mayor altura para ver 7-8 versos holgadamente) */}
             <div>
               <label style={{ fontSize: '0.82rem', color: '#f8fafc', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '6px' }}>
                 <Layers size={14} color="#c084fc" /> Selecciona uno o varios versos de la canción ({lineasSeleccionadas.length} marcados):
@@ -174,9 +174,9 @@ export default function SugerirFiguraModal({
                 background: 'rgba(15, 23, 42, 0.8)',
                 borderRadius: '12px',
                 border: '1.5px solid rgba(139, 92, 246, 0.3)',
-                maxHeight: '140px',
+                maxHeight: '260px',
                 overflowY: 'auto',
-                padding: '6px 8px',
+                padding: '8px 10px',
                 display: 'flex',
                 flexDirection: 'column',
                 gap: '4px'
