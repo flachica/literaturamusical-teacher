@@ -80,12 +80,8 @@ export default function SugerirFiguraModal({
     };
 
     onEnviarSugerencia(nuevaSugerencia);
-    setEnviadoExito(true);
     confetti({ particleCount: 120, spread: 75, origin: { y: 0.6 } });
-
-    setTimeout(() => {
-      onClose();
-    }, 600);
+    onClose();
   };
 
   return (
