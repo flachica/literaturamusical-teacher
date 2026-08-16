@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Play, Pause, Disc, Upload, ListMusic, ChevronDown } from 'lucide-react';
-import SongSelectorModal from './detective/SongSelectorModal';
 
 export default function PlayerWidget({
   cancion,
   canciones = [],
-  onSeleccionarCancion,
+  onAbrirCajaDiscos,
   isPlaying,
   setIsPlaying,
   posicion,
@@ -24,8 +23,6 @@ export default function PlayerWidget({
   setMostrarLetraCompleta,
   audioStatus
 }) {
-  const [selectorAbierto, setSelectorAbierto] = useState(false);
-
   // Determine if physical audio file is available and not a mockup fallback
   const estadoAudio = audioStatus?.[cancion?.id] || 'vacio';
   const tieneAudio = cancion?.audioPreviewUrl && estadoAudio !== 'perdido' && estadoAudio !== 'vacio';
@@ -140,9 +137,9 @@ export default function PlayerWidget({
               {cancion.titulo} <span style={{ fontWeight: 400, color: 'var(--text-muted)', fontSize: '0.9rem' }}>— {cancion.artistaNombre}</span>
             </h3>
 
-            {canciones.length > 1 && (
+            {canciones.length > 1 && onAbrirCajaDiscos && (
               <button
-                onClick={() => setSelectorAbierto(true)}
+                onClick={onAbrirCajaDiscos}
                 style={{
                   background: 'rgba(139, 92, 246, 0.18)',
                   color: '#c084fc',
@@ -381,16 +378,6 @@ export default function PlayerWidget({
         </div>
 
       </div>
-
-      {/* Modal Caja de Discos Poéticos */}
-      <SongSelectorModal
-        isOpen={selectorAbierto}
-        onClose={() => setSelectorAbierto(false)}
-        canciones={canciones}
-        cancionActual={cancion}
-        onSeleccionarCancion={onSeleccionarCancion}
-        audioStatus={audioStatus}
-      />
 
     </div>
   );

@@ -5,6 +5,7 @@ import ModoAdmin from './components/ModoAdmin';
 import FigureCatalog from './components/FigureCatalog';
 import PlayerWidget from './components/PlayerWidget';
 import MochilaModal from './components/MochilaModal';
+import SongSelectorModal from './components/detective/SongSelectorModal';
 import { X } from 'lucide-react';
 
 import useAudioPlayer from './hooks/useAudioPlayer';
@@ -17,6 +18,7 @@ export default function App() {
   const [pestanaActiva, setPestanaActiva] = useState('canciones'); // 'canciones' | 'figuras' | 'ajustes'
   const [mostrarSelectorDetectives, setMostrarSelectorDetectives] = useState(false);
   const [mochilaAbierta, setMochilaAbierta] = useState(false);
+  const [cajaDiscosAbierta, setCajaDiscosAbierta] = useState(false);
 
   // Custom hook for catalogs, physical audio checks, user progress and multi-detectives
   const {
@@ -176,7 +178,7 @@ export default function App() {
                 <PlayerWidget
                   cancion={cancionActual}
                   canciones={canciones}
-                  onSeleccionarCancion={setCancionActual}
+                  onAbrirCajaDiscos={() => setCajaDiscosAbierta(true)}
                   audioStatus={audioStatus}
                   isPlaying={isPlaying}
                   setIsPlaying={setIsPlaying}
@@ -376,6 +378,16 @@ export default function App() {
         estrellas={estrellas}
         logros={logros}
         placasDesbloqueadas={placasDesbloqueadas}
+      />
+
+      {/* Modal Caja de Discos Poéticos (Global a nivel de raíz) */}
+      <SongSelectorModal
+        isOpen={cajaDiscosAbierta}
+        onClose={() => setCajaDiscosAbierta(false)}
+        canciones={canciones}
+        cancionActual={cancionActual}
+        onSeleccionarCancion={setCancionActual}
+        audioStatus={audioStatus}
       />
 
     </div>
