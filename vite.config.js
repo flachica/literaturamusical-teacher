@@ -48,9 +48,9 @@ function jsonStoragePlugin() {
               const fileId = `audio_${Date.now()}`
               const outputPathPattern = path.join(audioDir, `${fileId}.%(ext)s`)
               
-              // Extracción de pista de audio puro nativa (251 webm / 140 m4a)
+              // Extracción de pista de audio puro nativa (251 webm / 140 m4a / 18 mp4)
               const targetQuery = (cleanUrl.includes('youtube.com') || cleanUrl.includes('youtu.be')) ? cleanUrl : `ytsearch1:${cleanUrl}`
-              const cmd = `yt-dlp --js-runtimes node --no-playlist --remote-components ejs:github -f "251/249/140/139/ba/18/b" -o "${outputPathPattern}" "${targetQuery}"`
+              const cmd = `yt-dlp --js-runtimes node:/usr/bin/node --no-playlist --remote-components ejs:github --extractor-args "youtube:player_client=android,mweb" -f "251/249/140/139/ba/18/b" -o "${outputPathPattern}" "${targetQuery}"`
               exec(cmd, (err) => {
                 if (err) {
                   res.statusCode = 500
