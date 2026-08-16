@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Disc, Search, X, Check, Sparkles, Filter } from 'lucide-react';
+import { Disc, Search, X, Check, Sparkles } from 'lucide-react';
 import { TEMAS_EMOCIONES } from '../../data/initialData';
 
 export default function SongSelectorModal({
@@ -135,10 +135,7 @@ export default function SongSelectorModal({
           </div>
 
           {/* Filtros de Categorías Poéticas */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', overflowX: 'auto', paddingBottom: '4px' }}>
-            <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: 800, whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: '4px' }}>
-              <Filter size={12} /> Temas:
-            </span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
             {TEMAS_EMOCIONES.map(t => {
               const isSelected = temaFiltro === t.id;
               return (

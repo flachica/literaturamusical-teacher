@@ -569,7 +569,7 @@ export default function SongManager({ canciones, audioStatus, onGuardarCanciones
               {[
                 { step: 1, title: '1. Buscar Letra', icon: '📜' },
                 { step: 2, title: '2. Enlazar Audio', icon: '🎵' },
-                { step: 3, title: '3. Temática Didáctica', icon: '✨' }
+                { step: 3, title: '3. Categoría', icon: '✨' }
               ].map(s => {
                 const isActive = pasoWizard === s.step;
                 const isPassed = pasoWizard > s.step;
