@@ -69,14 +69,22 @@ export default function FamilySuggestions({
                     </span>
                   </div>
 
-                  {/* Verso propuesto */}
-                  <div style={{ background: 'rgba(15, 23, 42, 0.6)', padding: '10px 12px', borderRadius: '10px', borderLeft: `3px solid ${item.figuraColor || '#ec4899'}`, marginBottom: '10px' }}>
-                    <span style={{ fontSize: '0.72rem', color: '#94a3b8', display: 'block', marginBottom: '2px' }}>
-                      🎵 {item.cancionTitulo}
+                  {/* Versos propuestos */}
+                  <div style={{ background: 'rgba(15, 23, 42, 0.6)', padding: '10px 12px', borderRadius: '10px', borderLeft: `3.5px solid ${item.figuraColor || '#ec4899'}`, marginBottom: '10px' }}>
+                    <span style={{ fontSize: '0.72rem', color: '#94a3b8', display: 'block', marginBottom: '4px' }}>
+                      🎵 {item.cancionTitulo} {item.lineasTexto?.length > 1 ? `(${item.lineasTexto.length} versos)` : ''}
                     </span>
-                    <p style={{ fontSize: '0.95rem', fontWeight: 700, color: '#ffffff', margin: 0, fontStyle: 'italic' }}>
-                      «{item.lineaTexto}»
-                    </p>
+                    {Array.isArray(item.lineasTexto) && item.lineasTexto.length > 0 ? (
+                      item.lineasTexto.map((linea, idx) => (
+                        <p key={idx} style={{ fontSize: '0.92rem', fontWeight: 700, color: '#ffffff', margin: '2px 0', fontStyle: 'italic', lineHeight: 1.4 }}>
+                          «{linea}»
+                        </p>
+                      ))
+                    ) : (
+                      <p style={{ fontSize: '0.92rem', fontWeight: 700, color: '#ffffff', margin: 0, fontStyle: 'italic' }}>
+                        «{item.lineaTexto}»
+                      </p>
+                    )}
                   </div>
 
                   {/* Figura propuesta por la niña */}

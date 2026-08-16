@@ -154,7 +154,7 @@ export default function StanzaReader({
           }}
         >
           <Sparkles size={16} color="#ec4899" />
-          <span>🔍 ¡He descubierto una nueva figura literaria en esta estrofa!</span>
+          <span>🔍 ¡He descubierto una figura literaria entre estos versos!</span>
         </button>
       )}
 

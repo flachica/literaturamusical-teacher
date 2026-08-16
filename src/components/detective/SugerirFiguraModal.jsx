@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Sparkles, X, Send, Check } from 'lucide-react';
+import { Sparkles, X, Send, CheckSquare, Square, Layers } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { FIGURAS_LITERARIAS } from '../../data/initialData';
 
@@ -12,6 +12,7 @@ export default function SugerirFiguraModal({
   onEnviarSugerencia
 }) {
   const [figuraSeleccionada, setFiguraSeleccionada] = useState(FIGURAS_LITERARIAS[0].id);
+  const [lineasSeleccionadas, setLineasSeleccionadas] = useState([]);
   const [comentario, setComentario] = useState('');
   const [enviadoExito, setEnviadoExito] = useState(false);
 
@@ -21,6 +22,16 @@ export default function SugerirFiguraModal({
     setComentario('');
     setFiguraSeleccionada(versoActual?.figuraId || FIGURAS_LITERARIAS[0].id);
 
+    // Preseleccionar los versos de la estrofa actual
+    if (cancion?.versos && versoActual) {
+      const estrofaVersos = versoActual.estrofaNum
+        ? cancion.versos.filter(v => v.estrofaNum === versoActual.estrofaNum)
+        : [versoActual];
+      setLineasSeleccionadas(estrofaVersos.map(v => v.linea));
+    } else {
+      setLineasSeleccionadas([versoActual?.linea || 1]);
+    }
+
     const handleKeyDown = (e) => {
       if (e.key === 'Escape') {
         e.preventDefault();
@@ -29,9 +40,22 @@ export default function SugerirFiguraModal({
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, versoActual, onClose]);
+  }, [isOpen, cancion, versoActual, onClose]);
 
   if (!isOpen) return null;
+
+  const toggleSeleccionLinea = (lineaNum) => {
+    if (lineasSeleccionadas.includes(lineaNum)) {
+      // Evitar desmarcar absolutamente todos los versos
+      if (lineasSeleccionadas.length > 1) {
+        setLineasSeleccionadas(lineasSeleccionadas.filter(l => l !== lineaNum));
+      }
+    } else {
+      setLineasSeleccionadas([...lineasSeleccionadas, lineaNum].sort((a, b) => a - b));
+    }
+  };
+
+  const versosObjetosSeleccionados = (cancion?.versos || []).filter(v => lineasSeleccionadas.includes(v.linea));
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -45,20 +69,20 @@ export default function SugerirFiguraModal({
       cancionId: cancion.id,
       cancionTitulo: cancion.titulo,
       artistaNombre: cancion.artistaNombre,
-      lineaTexto: versoActual?.texto || '',
-      estrofaNum: versoActual?.estrofaNum || 1,
+      lineasTexto: versosObjetosSeleccionados.map(v => v.texto),
+      lineaTexto: versosObjetosSeleccionados.map(v => v.texto).join(' / '),
       figuraId: figObj.id,
       figuraNombre: figObj.nombre,
       figuraIcono: figObj.icono,
       figuraColor: figObj.color,
-      comentario: comentario.trim() || '¡He descubierto este truco poético!',
+      comentario: comentario.trim() || '¡He descubierto este truco poético entre estos versos!',
       fecha: new Date().toLocaleDateString('es-ES', { hour: '2-digit', minute: '2-digit' }),
       estado: 'pendiente' // 'pendiente' | 'aprobada' | 'cena'
     };
 
     onEnviarSugerencia(nuevaSugerencia);
     setEnviadoExito(true);
-    confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+    confetti({ particleCount: 120, spread: 75, origin: { y: 0.6 } });
 
     setTimeout(() => {
       onClose();
@@ -90,23 +114,23 @@ export default function SugerirFiguraModal({
           padding: '24px',
           borderRadius: '24px',
           border: '2px solid #ec4899',
-          maxWidth: '560px',
+          maxWidth: '640px',
           width: '100%',
-          maxHeight: 'calc(100vh - 60px)',
+          maxHeight: 'calc(100vh - 40px)',
           display: 'flex',
           flexDirection: 'column',
-          boxShadow: '0 0 40px rgba(236, 72, 153, 0.35)',
+          boxShadow: '0 0 45px rgba(236, 72, 153, 0.35)',
           textAlign: 'left'
         }}
       >
         {/* Header */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px', borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '12px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px', borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '12px' }}>
           <div>
             <h3 style={{ fontSize: '1.25rem', fontWeight: 900, color: '#ffffff', margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
-              🔍 ¡He descubierto una figura literaria!
+              🔍 Marca los versos del descubrimiento
             </h3>
             <p style={{ fontSize: '0.82rem', color: '#ec4899', margin: '4px 0 0 0', fontWeight: 700 }}>
-              Propuesta de {detectiveActivo?.avatar} {detectiveActivo?.nombre || 'Detective'}
+              Propuesta de {detectiveActivo?.avatar} {detectiveActivo?.nombre || 'Detective'} — «{cancion.titulo}»
             </p>
           </div>
           <button
@@ -134,28 +158,83 @@ export default function SugerirFiguraModal({
             <h4 style={{ fontSize: '1.3rem', fontWeight: 900, color: '#34d399', margin: 0 }}>
               ¡Sugerencia Enviada al Buzón Familiar!
             </h4>
-            <p style={{ fontSize: '0.9rem', color: '#cbd5e1', maxWidth: '400px' }}>
-              +50 Puntos de Detective por tu lectura atenta. Papá y Mamá la revisarán en la sección de administración.
+            <p style={{ fontSize: '0.9rem', color: '#cbd5e1', maxWidth: '420px' }}>
+              +50 Puntos de Detective por tu investigación entre versos. Papá y Mamá la revisarán en la administración.
             </p>
           </div>
         ) : (
-          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            {/* Frase / Verso Seleccionado */}
-            <div style={{ background: 'rgba(15, 23, 42, 0.7)', padding: '14px 16px', borderRadius: '14px', border: '1.5px solid rgba(139, 92, 246, 0.3)' }}>
-              <span style={{ fontSize: '0.75rem', color: '#c084fc', fontWeight: 800, textTransform: 'uppercase', display: 'block', marginBottom: '4px' }}>
-                Estrofa / Verso Investigado de «{cancion.titulo}»:
-              </span>
-              <p style={{ fontSize: '1.05rem', fontWeight: 700, color: '#ffffff', margin: 0, fontStyle: 'italic' }}>
-                «{versoActual?.texto || 'Línea de la canción'}»
-              </p>
+          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '14px', overflowY: 'auto', paddingRight: '4px' }}>
+            
+            {/* Selector de Versos Multi-Estrofa */}
+            <div>
+              <label style={{ fontSize: '0.85rem', color: '#f8fafc', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '6px' }}>
+                <Layers size={15} color="#c084fc" /> Marca el verso o versos que forman la figura literaria ({lineasSeleccionadas.length} marcados):
+              </label>
+              
+              <div style={{
+                background: 'rgba(15, 23, 42, 0.8)',
+                borderRadius: '14px',
+                border: '1.5px solid rgba(139, 92, 246, 0.3)',
+                maxHeight: '160px',
+                overflowY: 'auto',
+                padding: '8px 12px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '6px'
+              }}>
+                {(cancion?.versos || []).map((v) => {
+                  const isSelected = lineasSeleccionadas.includes(v.linea);
+                  return (
+                    <div
+                      key={v.linea}
+                      onClick={() => toggleSeleccionLinea(v.linea)}
+                      style={{
+                        padding: '8px 12px',
+                        borderRadius: '10px',
+                        background: isSelected ? 'rgba(139, 92, 246, 0.25)' : 'rgba(255, 255, 255, 0.02)',
+                        border: `1.5px solid ${isSelected ? '#c084fc' : 'rgba(255, 255, 255, 0.06)'}`,
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '10px',
+                        transition: 'all 0.15s'
+                      }}
+                    >
+                      <span style={{ color: isSelected ? '#c084fc' : '#64748b' }}>
+                        {isSelected ? <CheckSquare size={16} color="#c084fc" /> : <Square size={16} />}
+                      </span>
+                      <span style={{ fontSize: '0.78rem', color: '#94a3b8', fontWeight: 800, flexShrink: 0 }}>
+                        V{v.linea} (Estrofa {v.estrofaNum || 1}):
+                      </span>
+                      <span style={{ fontSize: '0.9rem', color: isSelected ? '#ffffff' : '#cbd5e1', fontWeight: isSelected ? 700 : 400, fontStyle: 'italic' }}>
+                        «{v.texto}»
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
+
+            {/* Vista Previa del Fragmento Poético Seleccionado */}
+            {versosObjetosSeleccionados.length > 0 && (
+              <div style={{ background: 'rgba(236, 72, 153, 0.12)', padding: '10px 14px', borderRadius: '12px', borderLeft: '4px solid #ec4899' }}>
+                <span style={{ fontSize: '0.72rem', color: '#f472b6', fontWeight: 900, textTransform: 'uppercase', display: 'block', marginBottom: '4px' }}>
+                  Fragmento Poético Seleccionado:
+                </span>
+                {versosObjetosSeleccionados.map((v, i) => (
+                  <p key={i} style={{ fontSize: '0.92rem', fontWeight: 700, color: '#ffffff', margin: '2px 0', fontStyle: 'italic' }}>
+                    «{v.texto}»
+                  </p>
+                ))}
+              </div>
+            )}
 
             {/* Selector de Figura Poética */}
             <div>
               <label style={{ fontSize: '0.85rem', color: '#f8fafc', fontWeight: 800, display: 'block', marginBottom: '8px' }}>
-                ¿Qué truco o figura crees que es? *
+                ¿Qué figura o truco literario hay entre estos versos? *
               </label>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '8px', maxHeight: '180px', overflowY: 'auto' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '8px', maxHeight: '160px', overflowY: 'auto' }}>
                 {FIGURAS_LITERARIAS.map((fig) => {
                   const isSelected = figuraSeleccionada === fig.id;
                   return (
@@ -193,13 +272,13 @@ export default function SugerirFiguraModal({
                 ¿Por qué crees que es esta figura? (Opcional):
               </label>
               <textarea
-                placeholder="Ej: Compara el sol con un reloj de oro sin usar la palabra como..."
+                placeholder="Ej: Se repite la palabra al inicio o compara el viento con un animal..."
                 value={comentario}
                 onChange={e => setComentario(e.target.value)}
                 rows={2}
                 style={{
                   width: '100%',
-                  padding: '10px 12px',
+                  padding: '8px 12px',
                   borderRadius: '10px',
                   background: '#0f172a',
                   color: '#fff',
@@ -211,7 +290,7 @@ export default function SugerirFiguraModal({
             </div>
 
             {/* Action Buttons */}
-            <div style={{ display: 'flex', gap: '10px', marginTop: '6px' }}>
+            <div style={{ display: 'flex', gap: '10px', marginTop: '4px' }}>
               <button
                 type="button"
                 onClick={onClose}
@@ -248,7 +327,7 @@ export default function SugerirFiguraModal({
                   gap: '6px'
                 }}
               >
-                <Send size={15} /> 🚀 Enviar a Papá y Mamá (+50 PTS)
+                <Send size={15} /> 🚀 Enviar al Buzón Familiar (+50 PTS)
               </button>
             </div>
           </form>
