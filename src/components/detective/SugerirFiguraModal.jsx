@@ -143,7 +143,7 @@ export default function SugerirFiguraModal({
             {/* Frase / Verso Seleccionado */}
             <div style={{ background: 'rgba(15, 23, 42, 0.7)', padding: '14px 16px', borderRadius: '14px', border: '1.5px solid rgba(139, 92, 246, 0.3)' }}>
               <span style={{ fontSize: '0.75rem', color: '#c084fc', fontWeight: 800, textTransform: 'uppercase', display: 'block', marginBottom: '4px' }}>
-                Verso Investigado de «{cancion.titulo}»:
+                Estrofa / Verso Investigado de «{cancion.titulo}»:
               </span>
               <p style={{ fontSize: '1.05rem', fontWeight: 700, color: '#ffffff', margin: 0, fontStyle: 'italic' }}>
                 «{versoActual?.texto || 'Línea de la canción'}»
