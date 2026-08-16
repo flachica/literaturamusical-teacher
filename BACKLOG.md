@@ -7,7 +7,7 @@ Documento de seguimiento del desarrollo interactivo de **LitMusical** estructura
 ## 📍 ESTADO ACTUAL DEL PROYECTO
 
 * **Sesión Actual**: 🟢 **SESIÓN 8 (EN DESARROLLO)** | **Próxima**: 🔴 **SESIÓN 9** (Modo Detective Proactivo `v0.5.0`)
-* **Subversión Alcanzada**: `v0.3.1` (Optimización de usabilidad del Modo Detective, resolución del error 403 en descargas, flujo de comprensión no intrusivo y tipografías aumentadas).
+* **Subversión Alcanzada**: `v0.4.2` (Refactorización de componentes extensos: `ModoDetectiveGuiado.jsx`, `SongManager.jsx` y `ModoAdmin.jsx`).
 * **Fallo Pendiente de Solucionar (Próxima Sesión)**: Ninguno crítico registrado.
 * **Métrica Clave del Reto (CPVM)**: 
   $$\text{CPVM} = [\text{Retos de figuras literarias resueltos con éxito}] + [\text{por la niña de forma autónoma}]$$
@@ -107,7 +107,7 @@ Documento de seguimiento del desarrollo interactivo de **LitMusical** estructura
 
 ---
 
-### 🧹 `v0.4.2` - Refactorización de Componentes Extensos (PLANIFICADA)
+### 🧹 `v0.4.2` - Refactorización de Componentes Extensos (COMPLETADA - SESIÓN 8)
 
 * **Objetivo**: Reducir el tamaño y complejidad cognitiva de los ficheros de código más largos para optimizar el rendimiento y facilitar su lectura/mantenimiento por parte de desarrolladores e IAs.
 * **Entregables**:

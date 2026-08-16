@@ -1,7 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { Plus, Trash2, Download, Upload, RotateCcw, Music, Sparkles, Check, AlertCircle, Bot, Edit3 } from 'lucide-react';
+import React, { useState } from 'react';
+import { Plus, Trash2, Download, Upload, RotateCcw, Music, Sparkles, Check, AlertCircle, Edit3 } from 'lucide-react';
 import { FIGURAS_LITERARIAS, TEMAS_EMOCIONES } from '../data/initialData';
 import ConfirmModal from './ConfirmModal';
+import SongManagerToolbar from './admin/SongManagerToolbar';
+import SongCard from './admin/SongCard';
+import MissingLyricsModal from './admin/MissingLyricsModal';
 
 // Función auxiliar para extraer el ID de YouTube
 const obtenerYoutubeId = (url) => {
@@ -20,21 +23,6 @@ export default function SongManager({ canciones, audioStatus, onGuardarCanciones
 
   // Estados de modal de confirmación integrado
   const [cancionAEliminar, setCancionAEliminar] = useState(null);
-
-  useEffect(() => {
-    if (!mostrarPromptLetraIA) return;
-    const handleKeyDown = (e) => {
-      if (e.key === 'Escape') {
-        e.preventDefault();
-        setMostrarPromptLetraIA(false);
-      } else if (e.key === 'Enter') {
-        e.preventDefault();
-        setMostrarPromptLetraIA(false);
-      }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [mostrarPromptLetraIA]);
 
   // Estado para el formulario de nueva canción
   const [nuevoTitulo, setNuevoTitulo] = useState('');
@@ -247,7 +235,6 @@ export default function SongManager({ canciones, audioStatus, onGuardarCanciones
       if (Array.isArray(data) && data.length > 0) {
         const match = data.find(d => d.syncedLyrics) || data[0];
         
-        // Autorellenar automáticamente el título, artista y álbum si estaban vacíos
         if (match.trackName && !nuevoTitulo.trim()) setNuevoTitulo(match.trackName);
         if (match.artistName && !nuevoArtista.trim()) setNuevoArtista(match.artistName);
         if (match.albumName && !nuevoAlbum.trim()) setNuevoAlbum(match.albumName);
@@ -269,12 +256,8 @@ export default function SongManager({ canciones, audioStatus, onGuardarCanciones
 
           for (let i = 0; i < rawLines.length; i++) {
             const current = rawLines[i];
-            if (current.text.length === 0) {
-              // Es una línea de silencio instrumental en el LRC, no genera verso
-              continue;
-            }
+            if (current.text.length === 0) continue;
 
-            // El fin de este verso es el inicio del siguiente elemento (sea vacío o texto)
             let nextTime = current.time + 5;
             if (i + 1 < rawLines.length) {
               nextTime = rawLines[i + 1].time;
@@ -300,7 +283,7 @@ export default function SongManager({ canciones, audioStatus, onGuardarCanciones
           }
 
           setVersosObtenidosAPI(versos);
-          setPasoWizard(2); // Avanzar automáticamente al Paso 2 (Vincular Audio)
+          setPasoWizard(2);
           setMensajeExito(`¡Encontrada! «${tituloFinal}» de ${artistaFinal} (${versos.length} versos sincronizados). Avanzando al Paso 2...`);
         } else if (match.plainLyrics) {
           const plainLines = match.plainLyrics.split('\n').filter(l => l.trim().length > 0);
@@ -511,112 +494,16 @@ export default function SongManager({ canciones, audioStatus, onGuardarCanciones
   return (
     <div style={{ marginBottom: '24px' }}>
       
-      {/* Barra de herramientas compacta de Gestión de Canciones */}
-      <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        flexWrap: 'wrap',
-        gap: '12px',
-        marginBottom: '20px',
-        padding: '8px 0',
-        borderBottom: '1px solid rgba(255, 255, 255, 0.05)'
-      }}>
-        
-        {/* Lado izquierdo: Añadir Nueva Canción (principal) */}
-        <div>
-          <button
-            onClick={() => setMostrarForm(!mostrarForm)}
-            style={{
-              padding: '10px 18px',
-              borderRadius: '12px',
-              background: mostrarForm ? 'rgba(255, 255, 255, 0.1)' : 'linear-gradient(135deg, #10b981, #059669)',
-              color: '#ffffff',
-              fontWeight: 800,
-              fontSize: '0.85rem',
-              border: mostrarForm ? '1px solid rgba(255, 255, 255, 0.2)' : 'none',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px',
-              cursor: 'pointer',
-              boxShadow: mostrarForm ? 'none' : '0 0 14px rgba(16, 185, 129, 0.35)',
-              transition: 'all 0.2s'
-            }}
-          >
-            <Plus size={16} /> {mostrarForm ? 'Cancelar' : 'Añadir Canción'}
-          </button>
-        </div>
-
-        {/* Lado derecho: Acciones de catálogo e importación/exportación */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-          
-          {/* Botón de Reparar audios (solo si hay audios perdidos) */}
-          {hayAudiosPerdidos && (
-            <button
-              onClick={handleRepararTodosLosAudiosPerdidos}
-              disabled={reparandoGlobal}
-              style={{
-                padding: '8px 14px',
-                borderRadius: '10px',
-                background: reparandoGlobal
-                  ? 'rgba(71, 85, 105, 0.4)'
-                  : 'linear-gradient(135deg, #f59e0b, #d97706)',
-                color: '#ffffff',
-                border: 'none',
-                fontWeight: 800,
-                fontSize: '0.85rem',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '6px',
-                cursor: reparandoGlobal ? 'not-allowed' : 'pointer',
-                boxShadow: '0 0 12px rgba(245, 158, 11, 0.35)'
-              }}
-              title="Descarga los archivos de audio perdidos a partir de sus enlaces de YouTube"
-            >
-              <RotateCcw size={14} style={{ animation: reparandoGlobal ? 'spin 2s linear infinite' : 'none' }} />
-              {reparandoGlobal ? '⏳ Reparando...' : '🔄 Reparar Audios'}
-            </button>
-          )}
-
-          <button
-            onClick={handleExportarJSON}
-            style={{
-              padding: '8px 14px',
-              borderRadius: '10px',
-              background: 'rgba(255, 255, 255, 0.03)',
-              color: '#cbd5e1',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
-              fontWeight: 700,
-              fontSize: '0.85rem',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px',
-              cursor: 'pointer',
-              transition: 'all 0.2s'
-            }}
-          >
-            <Download size={14} /> Exportar JSON
-          </button>
-
-          <label style={{
-            padding: '8px 14px',
-            borderRadius: '10px',
-            background: 'rgba(255, 255, 255, 0.03)',
-            color: '#cbd5e1',
-            border: '1px solid rgba(255, 255, 255, 0.1)',
-            fontWeight: 700,
-            fontSize: '0.85rem',
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '6px',
-            cursor: 'pointer',
-            transition: 'all 0.2s'
-          }}>
-            <Upload size={14} /> Importar JSON
-            <input type="file" accept=".json" onChange={handleImportarJSON} style={{ display: 'none' }} />
-          </label>
-        </div>
-      </div>
+      {/* Barra de herramientas de Gestión de Canciones */}
+      <SongManagerToolbar
+        mostrarForm={mostrarForm}
+        setMostrarForm={setMostrarForm}
+        hayAudiosPerdidos={hayAudiosPerdidos}
+        reparandoGlobal={reparandoGlobal}
+        onRepararTodos={handleRepararTodosLosAudiosPerdidos}
+        onExportarJSON={handleExportarJSON}
+        onImportarJSON={handleImportarJSON}
+      />
 
       {/* Feedback Messages */}
       {mensajeExito && (
@@ -1016,177 +903,26 @@ export default function SongManager({ canciones, audioStatus, onGuardarCanciones
       )}
 
       {/* PROMPT MODAL WHEN LYRICS ARE MISSING */}
-      {mostrarPromptLetraIA && (
-        <div style={{
-          position: 'fixed',
-          inset: 0,
-          background: 'rgba(0, 0, 0, 0.8)',
-          backdropFilter: 'blur(4px)',
-          zIndex: 1000,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          padding: '16px'
-        }}>
-          <div style={{
-            background: 'linear-gradient(135deg, #1e293b, #0f172a)',
-            border: '2px solid #f59e0b',
-            borderRadius: '20px',
-            padding: '24px',
-            maxWidth: '520px',
-            width: '100%',
-            boxShadow: '0 0 30px rgba(245, 158, 11, 0.3)'
-          }}>
-            <h3 style={{ fontSize: '1.2rem', fontWeight: 900, color: '#fbbf24', marginBottom: '10px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <AlertCircle size={22} /> No se ha introducido la letra para «{nuevoTitulo}»
-            </h3>
-            
-            <p style={{ fontSize: '0.9rem', color: '#cbd5e1', lineHeight: 1.5, marginBottom: '20px' }}>
-              Para que tu hija pueda cantar y resolver el reto de figuras literarias, la canción necesita la letra en texto. ¿Cómo prefieres proceder?
-            </p>
-
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '20px' }}>
-              <button
-                onClick={() => setMostrarPromptLetraIA(false)}
-                style={{
-                  padding: '12px 16px',
-                  borderRadius: '12px',
-                  background: 'rgba(56, 189, 248, 0.15)',
-                  color: '#38bdf8',
-                  border: '1px solid rgba(56, 189, 248, 0.4)',
-                  fontWeight: 800,
-                  fontSize: '0.9rem',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '10px',
-                  textAlign: 'left',
-                  cursor: 'pointer'
-                }}
-              >
-                <Edit3 size={20} />
-                <div>
-                  <div>✍️ Completar la letra manualmente ahora</div>
-                  <div style={{ fontSize: '0.75rem', fontWeight: 400, color: 'var(--text-muted)' }}>Volver al formulario y escribir el verso principal</div>
-                </div>
-              </button>
-
-              <button
-                onClick={() => guardarCancionFinal(false)}
-                style={{
-                  padding: '12px 16px',
-                  borderRadius: '12px',
-                  background: 'rgba(255, 255, 255, 0.05)',
-                  color: '#ffffff',
-                  border: '1px solid rgba(255, 255, 255, 0.15)',
-                  fontWeight: 800,
-                  fontSize: '0.9rem',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '10px',
-                  textAlign: 'left',
-                  cursor: 'pointer'
-                }}
-              >
-                <Music size={20} color="#94a3b8" />
-                <div>
-                  <div>💾 Guardar sin letra (modo borrador)</div>
-                  <div style={{ fontSize: '0.75rem', fontWeight: 400, color: 'var(--text-muted)' }}>La canción se guardará y podrás editar su letra más tarde.</div>
-                </div>
-              </button>
-            </div>
-
-            <button
-              onClick={() => setMostrarPromptLetraIA(false)}
-              style={{ width: '100%', padding: '8px', background: 'transparent', border: 'none', color: 'var(--text-muted)', fontSize: '0.85rem', cursor: 'pointer' }}
-            >
-              Cancelar
-            </button>
-          </div>
-        </div>
-      )}
+      <MissingLyricsModal
+        isOpen={mostrarPromptLetraIA}
+        nuevoTitulo={nuevoTitulo}
+        onCompletarManualmente={() => setMostrarPromptLetraIA(false)}
+        onGuardarModoBorrador={() => guardarCancionFinal(false)}
+        onCancelar={() => setMostrarPromptLetraIA(false)}
+      />
 
       {/* Catalog List */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '16px' }}>
         {canciones.map((c) => (
-          <div
+          <SongCard
             key={c.id}
-            className="admin-song-card"
-          >
-            <div>
-              <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '8px' }}>
-                <h4 style={{ fontSize: '1.18rem', fontWeight: 800, color: '#ffffff', letterSpacing: '0.01em', marginBottom: '2px' }}>🎵 {c.titulo}</h4>
-                <button
-                  onClick={() => handleSolicitarEliminar(c)}
-                  className="btn-trash"
-                  style={{ background: 'none', border: 'none', padding: '4px', cursor: 'pointer' }}
-                  title="Eliminar del catálogo"
-                >
-                  <Trash2 size={16} />
-                </button>
-              </div>
-              <p style={{ fontSize: '0.92rem', color: '#fbbf24', fontWeight: 700, marginTop: '2px' }}>
-                {c.artistaNombre} <span style={{ color: 'var(--text-muted)', fontWeight: 400 }}>({c.album})</span>
-              </p>
-
-              {/* Indicador de estado del audio */}
-              <div style={{ marginTop: '10px', display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
-                {audioStatus[c.id] === 'disponible' && (
-                  <span style={{ fontSize: '0.78rem', background: 'rgba(16, 185, 129, 0.15)', color: '#34d399', padding: '3px 8px', borderRadius: '8px', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-                    🟢 Audio en disco
-                  </span>
-                )}
-                {audioStatus[c.id] === 'red' && (
-                  <span style={{ fontSize: '0.78rem', background: 'rgba(56, 189, 248, 0.15)', color: '#38bdf8', padding: '3px 8px', borderRadius: '8px', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-                    🌐 Audio en Red
-                  </span>
-                )}
-                {audioStatus[c.id] === 'perdido' && (
-                  <span style={{ fontSize: '0.78rem', background: 'rgba(239, 68, 68, 0.15)', color: '#f87171', border: '1px solid rgba(239, 68, 68, 0.25)', padding: '3px 8px', borderRadius: '8px', fontWeight: 800, display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-                    ⚠️ Audio no encontrado
-                  </span>
-                )}
-                {audioStatus[c.id] === 'checking' && (
-                  <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-                    🔍 Comprobando audio...
-                  </span>
-                )}
-
-                {/* Botón de recuperar individual */}
-                {audioStatus[c.id] === 'perdido' && (
-                  <button
-                    onClick={() => handleRecuperarAudio(c)}
-                    disabled={reparandoSongId === c.id || reparandoGlobal}
-                    style={{
-                      padding: '3px 8px',
-                      borderRadius: '6px',
-                      background: reparandoSongId === c.id ? '#475569' : 'linear-gradient(135deg, #f59e0b, #d97706)',
-                      color: '#ffffff',
-                      border: 'none',
-                      fontWeight: 800,
-                      fontSize: '0.75rem',
-                      cursor: (reparandoSongId === c.id || reparandoGlobal) ? 'wait' : 'pointer',
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '4px'
-                    }}
-                  >
-                    {reparandoSongId === c.id ? '⏳ Descargando...' : '⚡ Recuperar'}
-                  </button>
-                )}
-              </div>
-
-              <p style={{ fontSize: '0.88rem', color: '#cbd5e1', marginTop: '12px', lineHeight: 1.5 }}>
-                {c.resumen_didactico}
-              </p>
-            </div>
-
-            <div style={{ marginTop: '14px', paddingTop: '10px', borderTop: '1px solid rgba(255, 255, 255, 0.06)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '0.82rem', color: 'var(--text-muted)' }}>
-              <span>Versos interactivos: <strong>{c.versos ? c.versos.length : 0}</strong></span>
-              <span style={{ background: 'rgba(245, 158, 11, 0.15)', color: '#fbbf24', border: '1px solid rgba(245, 158, 11, 0.3)', padding: '2px 8px', borderRadius: '8px', fontWeight: 700 }}>
-                {c.temaNombre || 'Poesía'}
-              </span>
-            </div>
-          </div>
+            cancion={c}
+            audioStatus={audioStatus}
+            reparandoSongId={reparandoSongId}
+            reparandoGlobal={reparandoGlobal}
+            onSolicitarEliminar={handleSolicitarEliminar}
+            onRecuperarAudio={handleRecuperarAudio}
+          />
         ))}
       </div>
 
@@ -1211,8 +947,6 @@ export default function SongManager({ canciones, audioStatus, onGuardarCanciones
         variante={modalAlerta?.variante || 'peligro'}
         onConfirm={() => setModalAlerta(null)}
       />
-
-
 
     </div>
   );
