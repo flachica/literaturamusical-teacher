@@ -103,9 +103,10 @@ Cuando el usuario o la IA soliciten cargar o sincronizar una nueva canción educ
 - **v0.3.1:** Iteración de Usabilidad: Optimización del Modo Detective Guiado (Visualizador de ondas, scroll y tipografías infantiles) + Corrección de error 403 en descargas de listas de reproducción. [COMPLETADO CON ÉXITO - SESIÓN 7]
 - **v0.4.0:** Gamificación Avanzada "Escuela de Detectives" (Rangos, Logros persistidos en LocalStorage, Audio Feedback sintetizado con Web Audio API). [COMPLETADO CON ÉXITO - SESIÓN 8]
 - **v0.4.1:** Refinamiento de Gamificación y Rediseño de Flujo (MochilaModal colapsable, Wizard dinámico sustitutivo de retos, contención de scroll a 560px, navegación atrás y limpieza de recordatorios de verso sueltos). [COMPLETADO CON ÉXITO - SESIÓN 8]
-- **v0.4.2:** Refactorización de Componentes Extensos (Dividir `ModoDetectiveGuiado.jsx` en subcomponentes en `src/components/detective/` y modularizar `SongManager.jsx` y `ModoAdmin.jsx` en `src/components/admin/`). [COMPLETADO CON ÉXITO - SESIÓN 8 / ACTUAL]
-- **v0.5.0:** Modo Detective Proactivo (Buzón Familiar, sugerencia de figuras de la niña). [PLANIFICADO / SIGUIENTE PASO]
+- **v0.4.2:** Refactorización de Componentes Extensos (Dividir `ModoDetectiveGuiado.jsx` en subcomponentes en `src/components/detective/` y modularizar `SongManager.jsx` y `ModoAdmin.jsx` en `src/components/admin/`). [COMPLETADO CON ÉXITO - SESIÓN 8]
+- **v0.5.0:** Modo Detective Proactivo (Buzón Familiar, sugerencia de figuras de la niña). [EN DESARROLLO - SESIÓN 9 / ACTUAL]
 - **v0.6.0:** Asistente de Comprensión con IA Local (Conexión Ollama, prompt system didáctico, botón generar retos, fallback offline). [PLANIFICADO]
+- **v1.0.0:** Lanzamiento Final Local-First (Empaquetado offline PWA/Desktop, backup JSON). [PLANIFICADO]
 
 ---
 

@@ -1,4 +1,4 @@
-# 📋 BACKLOG DE INICIATIVAS Y VERSIONES - LitMusical (Próxima: Sesión 8)
+# 📋 BACKLOG DE INICIATIVAS Y VERSIONES - LitMusical (Sesión 9)
 
 Documento de seguimiento del desarrollo interactivo de **LitMusical** estructurado mediante la metodología **Impact-Driven Growth (IDG)** para garantizar que cada entrega genere cambios reales de comportamiento (*outcomes*) y valor en el aprendizaje pedagógico.
 
@@ -6,8 +6,8 @@ Documento de seguimiento del desarrollo interactivo de **LitMusical** estructura
 
 ## 📍 ESTADO ACTUAL DEL PROYECTO
 
-* **Sesión Actual**: 🟢 **SESIÓN 8 (EN DESARROLLO)** | **Próxima**: 🔴 **SESIÓN 9** (Modo Detective Proactivo `v0.5.0`)
-* **Subversión Alcanzada**: `v0.4.2` (Refactorización de componentes extensos: `ModoDetectiveGuiado.jsx`, `SongManager.jsx` y `ModoAdmin.jsx`).
+* **Sesión Actual**: 🟢 **SESIÓN 9 (EN DESARROLLO)** | **Próxima**: 🔴 **SESIÓN 10** (IA Local Ollama `v0.6.0`)
+* **Subversión Alcanzada**: `v0.5.0` (Modo Detective Proactivo - Sugerencias y Buzón Familiar).
 * **Fallo Pendiente de Solucionar (Próxima Sesión)**: Ninguno crítico registrado.
 * **Métrica Clave del Reto (CPVM)**: 
   $$\text{CPVM} = [\text{Retos de figuras literarias resueltos con éxito}] + [\text{por la niña de forma autónoma}]$$
@@ -122,7 +122,7 @@ Documento de seguimiento del desarrollo interactivo de **LitMusical** estructura
 
 ---
 
-### 🔍 `v0.5.0` - Modo Detective Proactivo (Sugerencia de Figuras) (PLANIFICADA)
+### 🔍 `v0.5.0` - Modo Detective Proactivo (Sugerencia de Figuras) (EN DESARROLLO - SESIÓN 9)
 
 > 🧪 **Hipótesis Causal**:
 > **Si** permitimos que la niña marque libremente palabras o frases y sugiera nuevas figuras que ha descubierto,
@@ -153,6 +153,13 @@ Documento de seguimiento del desarrollo interactivo de **LitMusical** estructura
   * Generación y formateo automático de estrofas, preguntas de comprensión infantil con opciones A/B y explicaciones del verso.
 * [ ] **Fallback Offline Inteligente**:
   * Si la llamada a Ollama falla o no está activo, autogenerar un reto simplificado estático por defecto sin bloquear el guardado de la canción.
+
+---
+
+### 🚀 `v1.0.0` - Lanzamiento Final Local-First (PLANIFICADA)
+
+* [ ] **Empaquetado Offline PWA/Desktop**: Compilación y empaquetado para uso completamente offline.
+* [ ] **Gestión de Backups JSON**: Exportación e importación completa del estado de la aplicación.
 
 ---
 
