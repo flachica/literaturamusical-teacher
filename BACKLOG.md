@@ -187,4 +187,6 @@ Documento de seguimiento del desarrollo interactivo de **LitMusical** estructura
 3. **Cierre de la v0.6.0 sin Middleware Complejo**: La v0.6.0 queda cerrada con la integración de plugins JSON y la edición visual en caliente (`StanzaEditorModal.jsx`), logrando la generación de retos y lecciones sin añadir complejidad ni latencia de red.
 4. **Offline PWA y Backups JSON (`v1.0.0`)**: Incorporado manifiesto PWA, caché offline de navegador y panel de backups JSON para asegurar portabilidad y soberanía de datos del usuario.
 5. **No Spotify**: Descartada para evitar barreras de autenticación OAuth e IDs de tracks de terceros, garantizando que el juego sea offline/local-first y duradero.
+6. **Plugins Intercambiables de Tipo Storage**: El sistema admite plugins de tipo `"storage"`. Se permite estrictamente **uno y solo un plugin activo de tipo storage** a la vez en la app base. La persistencia backend en `vite.config.js` detecta dinámicamente el plugin storage instalado en `plugins/` sin hardcodear nombres de carpetas en el código de la aplicación principal.
+
 

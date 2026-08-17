@@ -118,6 +118,33 @@ function jsonStoragePlugin() {
           return
         }
 
+        // Obtener el único plugin de tipo storage activo
+        function getActiveStoragePluginDir() {
+          const pluginsDir = path.resolve(__dirname, 'plugins')
+          if (!fs.existsSync(pluginsDir)) return null
+          const dirs = fs.readdirSync(pluginsDir)
+          const storagePlugins = []
+          for (const dir of dirs) {
+            const pluginPath = path.join(pluginsDir, dir)
+            try {
+              if (fs.statSync(pluginPath).isDirectory()) {
+                const manifestPath = path.join(pluginPath, 'manifest.json')
+                let type = 'storage'
+                if (fs.existsSync(manifestPath)) {
+                  try {
+                    const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'))
+                    if (manifest.type) type = manifest.type
+                  } catch (_) {}
+                }
+                if (type === 'storage') {
+                  storagePlugins.push(pluginPath)
+                }
+              }
+            } catch (_) {}
+          }
+          return storagePlugins.length > 0 ? storagePlugins[0] : null
+        }
+
         if (pathname === '/api/plugins') {
           const pluginsDir = path.resolve(__dirname, 'plugins')
           if (req.method === 'GET') {
@@ -126,6 +153,7 @@ function jsonStoragePlugin() {
               if (!fs.existsSync(pluginsDir)) {
                 return res.end(JSON.stringify([]))
               }
+              const activeStorageDir = getActiveStoragePluginDir()
               const pluginDirs = fs.readdirSync(pluginsDir)
               const pluginsList = []
               for (const dir of pluginDirs) {
@@ -135,6 +163,9 @@ function jsonStoragePlugin() {
                   if (fs.existsSync(manifestPath)) {
                     try {
                       const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'))
+                      const pluginType = manifest.type || 'storage'
+                      const isStorageActive = pluginType === 'storage' && pluginPath === activeStorageDir
+
                       let songs = []
                       const songsDir = path.join(pluginPath, 'songs')
                       if (fs.existsSync(songsDir)) {
@@ -165,6 +196,8 @@ function jsonStoragePlugin() {
                       }
                       pluginsList.push({
                         ...manifest,
+                        type: pluginType,
+                        isStorageActive,
                         dirName: dir,
                         pluginPath,
                         songsCount: songs.length,
@@ -237,15 +270,12 @@ function jsonStoragePlugin() {
             if (fs.existsSync(figurasFilePath)) {
               try { localFigures = JSON.parse(fs.readFileSync(figurasFilePath, 'utf8')) } catch (_) {}
             }
-            // Agrupar figuras de plugins
-            const pluginsDir = path.resolve(__dirname, 'plugins')
+            const activeStorageDir = getActiveStoragePluginDir()
             let pluginFigures = []
-            if (fs.existsSync(pluginsDir)) {
-              for (const dir of fs.readdirSync(pluginsDir)) {
-                const fPath = path.join(pluginsDir, dir, 'figures', 'figuras_catalog.json')
-                if (fs.existsSync(fPath)) {
-                  try { pluginFigures.push(...JSON.parse(fs.readFileSync(fPath, 'utf8'))) } catch (_) {}
-                }
+            if (activeStorageDir) {
+              const fPath = path.join(activeStorageDir, 'figures', 'figuras_catalog.json')
+              if (fs.existsSync(fPath)) {
+                try { pluginFigures.push(...JSON.parse(fs.readFileSync(fPath, 'utf8'))) } catch (_) {}
               }
             }
             const figureMap = new Map()
@@ -264,14 +294,17 @@ function jsonStoragePlugin() {
                 }
                 fs.writeFileSync(figurasFilePath, body, 'utf8')
 
-                // Si existe el plugin oficial literaturamusical-lessons, actualizar también su fichero para git
-                const officialPluginFigPath = path.resolve(__dirname, 'plugins/literaturamusical-lessons/figures/figuras_catalog.json')
-                if (fs.existsSync(path.dirname(officialPluginFigPath))) {
-                  fs.writeFileSync(officialPluginFigPath, body, 'utf8')
+                const activeStorageDir = getActiveStoragePluginDir()
+                if (activeStorageDir) {
+                  const pluginFigPath = path.join(activeStorageDir, 'figures', 'figuras_catalog.json')
+                  if (!fs.existsSync(path.dirname(pluginFigPath))) {
+                    fs.mkdirSync(path.dirname(pluginFigPath), { recursive: true })
+                  }
+                  fs.writeFileSync(pluginFigPath, body, 'utf8')
                 }
 
                 res.setHeader('Content-Type', 'application/json')
-                res.end(JSON.stringify({ success: true, message: 'Fichero figuras_catalog.json guardado en disco y plugin.' }))
+                res.end(JSON.stringify({ success: true, message: 'Fichero figuras_catalog.json guardado en disco y plugin storage activo.' }))
               } catch (err) {
                 res.statusCode = 500
                 res.end(JSON.stringify({ error: err.message }))
@@ -290,19 +323,17 @@ function jsonStoragePlugin() {
             if (fs.existsSync(songsFilePath)) {
               try { localSongs = JSON.parse(fs.readFileSync(songsFilePath, 'utf8')) } catch (_) {}
             }
-            const pluginsDir = path.resolve(__dirname, 'plugins')
+            const activeStorageDir = getActiveStoragePluginDir()
             let pluginSongs = []
-            if (fs.existsSync(pluginsDir)) {
-              for (const dir of fs.readdirSync(pluginsDir)) {
-                const sDir = path.join(pluginsDir, dir, 'songs')
-                if (fs.existsSync(sDir)) {
-                  for (const sf of fs.readdirSync(sDir).filter(f => f.endsWith('.json'))) {
-                    try {
-                      const content = JSON.parse(fs.readFileSync(path.join(sDir, sf), 'utf8'))
-                      if (Array.isArray(content)) pluginSongs.push(...content)
-                      else if (content && typeof content === 'object') pluginSongs.push(content)
-                    } catch (_) {}
-                  }
+            if (activeStorageDir) {
+              const sDir = path.join(activeStorageDir, 'songs')
+              if (fs.existsSync(sDir)) {
+                for (const sf of fs.readdirSync(sDir).filter(f => f.endsWith('.json'))) {
+                  try {
+                    const content = JSON.parse(fs.readFileSync(path.join(sDir, sf), 'utf8'))
+                    if (Array.isArray(content)) pluginSongs.push(...content)
+                    else if (content && typeof content === 'object') pluginSongs.push(content)
+                  } catch (_) {}
                 }
               }
             }
@@ -322,14 +353,17 @@ function jsonStoragePlugin() {
                 }
                 fs.writeFileSync(songsFilePath, body, 'utf8')
 
-                // Si existe el plugin oficial literaturamusical-lessons, actualizar también su fichero para git
-                const officialPluginSongPath = path.resolve(__dirname, 'plugins/literaturamusical-lessons/songs/songs_catalog.json')
-                if (fs.existsSync(path.dirname(officialPluginSongPath))) {
-                  fs.writeFileSync(officialPluginSongPath, body, 'utf8')
+                const activeStorageDir = getActiveStoragePluginDir()
+                if (activeStorageDir) {
+                  const pluginSongPath = path.join(activeStorageDir, 'songs', 'songs_catalog.json')
+                  if (!fs.existsSync(path.dirname(pluginSongPath))) {
+                    fs.mkdirSync(path.dirname(pluginSongPath), { recursive: true })
+                  }
+                  fs.writeFileSync(pluginSongPath, body, 'utf8')
                 }
 
                 res.setHeader('Content-Type', 'application/json')
-                res.end(JSON.stringify({ success: true, message: 'Fichero songs_catalog.json guardado en disco y plugin.' }))
+                res.end(JSON.stringify({ success: true, message: 'Fichero songs_catalog.json guardado en disco y plugin storage activo.' }))
               } catch (err) {
                 res.statusCode = 500
                 res.end(JSON.stringify({ error: err.message }))
