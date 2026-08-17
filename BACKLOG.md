@@ -6,8 +6,8 @@ Documento de seguimiento del desarrollo interactivo de **LitMusical** estructura
 
 ## 📍 ESTADO ACTUAL DEL PROYECTO
 
-* **Sesión Actual**: 🟢 **SESIÓN 10 (CERRADA - HITO v1.0.0 ALCANZADO)**
-* **Subversión Alcanzada**: `v1.0.0` (Sistema de Plugins Git `v0.5.1`, Motor Dinámico de Retos `v0.5.2`, Limpieza de Detectives `v0.5.3` y Soporte Offline PWA + Backups JSON `v1.0.0` completados).
+* **Sesión Actual**: 🟢 **SESIÓN 11 (CERRADA - HITO v1.1.0 ALCANZADO)**
+* **Subversión Alcanzada**: `v1.1.0` (Arquitectura de Plugins Storage Intercambiables desacoplada en `vite.config.js` y repositorio público de prueba vacía `literaturamusical-lessons-sample`).
 * **Fallo Pendiente de Solucionar**: Ninguno.
 * **Métrica Clave del Reto (CPVM)**: 
   $$\text{CPVM} = [\text{Retos de figuras literarias resueltos con éxito}] + [\text{por la niña de forma autónoma}]$$
@@ -174,10 +174,12 @@ Documento de seguimiento del desarrollo interactivo de **LitMusical** estructura
 
 ---
 
-### 🚀 `v1.0.0` - Lanzamiento Final Local-First (COMPLETADA CON ÉXITO - SESIÓN 10)
+### 🔌 `v1.1.0` - Arquitectura de Plugins Storage Intercambiables (COMPLETADA CON ÉXITO - SESIÓN 11)
 
-* [x] **Empaquetado Offline PWA/Desktop**: Manifiesto PWA (`manifest.json`) y Service Worker (`sw.js`) para soporte y caché offline.
-* [x] **Gestión de Backups JSON**: Módulo `BackupManager.jsx` integrado en Modo Admin para exportación e importación completa en un clic.
+* [x] **Desacoplamiento de Plugins Backend (`vite.config.js`)**: Detección dinámica del primer plugin activo de tipo `"storage"` sin hardcodear nombres de carpetas en el código de la app principal.
+* [x] **Repositorio de Muestra Vacío (`literaturamusical-lessons-sample`)**: Repositorio público plantilla publicado en `git@github.com:flachica/literaturamusical-lessons-sample.git` para publicar e intercambiar lecciones sin exponer datos reales ni canciones familiares.
+* [x] **Limpieza Estricta de Inicialización**: Eliminación del perfil inicial hardcodeado y puntos por defecto para garantizar que un inicio limpio comience a 0 PTS y con catálogo guiado.
+
 
 ---
 
