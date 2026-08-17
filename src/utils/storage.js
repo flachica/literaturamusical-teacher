@@ -5,9 +5,9 @@ const SONGS_KEY = 'litmusical_songs_catalog_v1';
 
 // Initial default progress
 export const DEFAULT_PROGRESS = {
-  puntos: 450,
-  nivel: 3,
-  estrellas: 5
+  puntos: 0,
+  nivel: 1,
+  estrellas: 0
 };
 
 /**
@@ -224,20 +224,7 @@ export function loadDetectives() {
     console.error('Error cargando detectives de LocalStorage:', err);
   }
 
-  // Si no existen datos previos en absoluto (primera carga de la app)
-  const progresoAntiguo = loadUserProgress();
-  const defaultDetective = {
-    id: 'detective_valeria',
-    nombre: 'Valeria',
-    puntos: progresoAntiguo.puntos,
-    nivel: progresoAntiguo.nivel,
-    estrellas: progresoAntiguo.estrellas,
-    avatar: '🕵️‍♀️',
-    activo: true
-  };
-  const lista = [defaultDetective];
-  saveDetectives(lista);
-  return lista;
+  return [];
 }
 
 /**
