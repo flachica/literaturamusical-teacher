@@ -106,7 +106,7 @@ Cuando el usuario o la IA soliciten cargar o sincronizar una nueva canción educ
 - **v0.4.2:** Refactorización de Componentes Extensos (Dividir `ModoDetectiveGuiado.jsx` en subcomponentes en `src/components/detective/` y modularizar `SongManager.jsx` y `ModoAdmin.jsx` en `src/components/admin/`). [COMPLETADO CON ÉXITO - SESIÓN 8]
 - **v0.5.0:** Modo Detective Proactivo (Buzón Familiar, selector multi-verso, sugerencia de figuras e indicador de puntos en revisión). [COMPLETADO CON ÉXITO - SESIÓN 9]
 - **v0.5.1 / v0.5.2 / v0.5.3:** Sistema de Plugins Git (`plugins/literaturamusical-lessons/`), Motor Dinámico de Retos (`quizUtils.js` con barajado Fisher-Yates), Editor de Estrofas (`StanzaEditorModal.jsx`) y Limpieza Automática de Sugerencias de Detectives Eliminados. [COMPLETADO CON ÉXITO - SESIÓN 10]
-- **v0.6.0:** Evaluación de Generador IA descartada por sobreingeniería en favor del sistema de lecciones decouples en plugins JSON y edición visual en caliente en UI. [REVISION / DESCARTADO EN SESIÓN 10]
+- **v0.6.0:** Generador Didáctico de Retos, Plugins decoupled y Edición de Estrofas en Caliente. [COMPLETADO CON ÉXITO - SESIÓN 10]
 - **v1.0.0:** Lanzamiento Final Local-First (Empaquetado offline PWA `manifest.json` + `sw.js` y módulo `BackupManager.jsx` para exportar e importar copias de seguridad JSON). [COMPLETADO CON ÉXITO - SESIÓN 10]
 
 ---

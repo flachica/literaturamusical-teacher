@@ -163,6 +163,17 @@ Documento de seguimiento del desarrollo interactivo de **LitMusical** estructura
 
 ---
 
+### 🤖 `v0.6.0` - Motor Dinámico de Retos, Plugins e Integración Didáctica (COMPLETADA CON ÉXITO - SESIÓN 10)
+
+* [x] **Arquitectura de Lecciones decoupled por Plugins Git**:
+  * Repositorios de lecciones en `plugins/literaturamusical-lessons/` autogenerables por LLMs fuera de banda.
+* [x] **Edición en Caliente de Estrofas y Retos (`StanzaEditorModal.jsx`)**:
+  * Interfaz de edición directa en Modo Admin para ajustar explicaciones y retos sin requerir middleware de IA runtime.
+* [x] **Motor Dinámico de Trivia Infantil (`quizUtils.js`)**:
+  * Algoritmo Fisher-Yates para rotar opciones A/B/C didácticas y evitar repetición de patrones.
+
+---
+
 ### 🚀 `v1.0.0` - Lanzamiento Final Local-First (COMPLETADA CON ÉXITO - SESIÓN 10)
 
 * [x] **Empaquetado Offline PWA/Desktop**: Manifiesto PWA (`manifest.json`) y Service Worker (`sw.js`) para soporte y caché offline.
@@ -173,7 +184,7 @@ Documento de seguimiento del desarrollo interactivo de **LitMusical** estructura
 ## 🏛️ MEMORIA DE DECISIONES DE ARQUITECTURA (IDG)
 1. **Persistencia Local-First y Privacidad de Progreso**: LocalStorage es la base de datos de estado inmediato. Los ficheros JSON de disco (`songs_catalog.json` y `figuras_catalog.json`) se sincronizan en Git para persistir el catálogo de canciones y diccionario de figuras. Sin embargo, los datos dinámicos de uso (`user_progress.json` y `detectives.json`) se escriben localmente en el servidor de desarrollo pero están excluidos de Git para que cada entorno sea independiente y el progreso no se comparta de forma global ni ensucie el control de versiones.
 2. **Audio Autogenerado**: Para evitar subir archivos de sonido pesados a Git, todos los efectos sonoros de recompensa de la v0.4.0 se sintetizan dinámicamente usando la **Web Audio API** del navegador (osciladores y envolventes de volumen).
-3. **Simplificación Didáctica sin Generator IA (`v0.6.0`)**: Descartado definitivamente el middleware redundante de IA para priorizar el sistema de plugins JSON fuera de banda (generables por LLM) y la edición visual en caliente (`StanzaEditorModal.jsx`).
-4. **Offline PWA y Backups JSON**: Incorporado manifiesto PWA, caché offline de navegador y panel de backups JSON para asegurar portabilidad y soberanía de datos del usuario.
+3. **Cierre de la v0.6.0 sin Middleware Complejo**: La v0.6.0 queda cerrada con la integración de plugins JSON y la edición visual en caliente (`StanzaEditorModal.jsx`), logrando la generación de retos y lecciones sin añadir complejidad ni latencia de red.
+4. **Offline PWA y Backups JSON (`v1.0.0`)**: Incorporado manifiesto PWA, caché offline de navegador y panel de backups JSON para asegurar portabilidad y soberanía de datos del usuario.
 5. **No Spotify**: Descartada para evitar barreras de autenticación OAuth e IDs de tracks de terceros, garantizando que el juego sea offline/local-first y duradero.
 
