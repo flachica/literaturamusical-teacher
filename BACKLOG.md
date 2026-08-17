@@ -6,12 +6,12 @@ Documento de seguimiento del desarrollo interactivo de **LitMusical** estructura
 
 ## 📍 ESTADO ACTUAL DEL PROYECTO
 
-* **Sesión Actual**: 🔴 **SESIÓN 9 (CERRADA)** | **Próxima**: 🟢 **SESIÓN 10** (IA Local Ollama `v0.6.0`)
-* **Subversión Alcanzada**: `v0.5.0` (Modo Detective Proactivo - Selector multi-verso y Buzón Familiar completados).
+* **Sesión Actual**: 🟢 **SESIÓN 10 (COMPLETADA)** | **Próxima**: 🟢 **SESIÓN 11** (Asistente IA Nube `v0.6.0`)
+* **Subversión Alcanzada**: `v0.5.2` (Sistema de Plugins Git `v0.5.1` y Motor Dinámico de Retos e Interacción Trivia `v0.5.2` completados).
 * **Fallo Pendiente de Solucionar (Próxima Sesión)**: Ninguno crítico registrado.
 * **Métrica Clave del Reto (CPVM)**: 
   $$\text{CPVM} = [\text{Retos de figuras literarias resueltos con éxito}] + [\text{por la niña de forma autónoma}]$$
-* **Próxima Iteración**: IA Local Ollama (`v0.6.0`).
+* **Próxima Iteración**: Asistente Pedagógico con IA Nube (`v0.6.0`).
 
 ---
 
@@ -137,6 +137,27 @@ Documento de seguimiento del desarrollo interactivo de **LitMusical** estructura
   * Opciones para *"Aprobar e integrar en la canción"* (otorgando +100 PTS y +1 Estrella extra) o *"Guardar para la cena"*.
 * [x] **Mochila de Detective**:
   * Visualización en vivo de la tarjeta *"EN REVISIÓN (+100 PTS)"* con los descubrimientos pendientes de aprobación.
+
+---
+
+### 🔌 `v0.5.1` - Sistema de Plugins & Repositorios Git (COMPLETADA CON ÉXITO - SESIÓN 10)
+
+* [x] **Estructura Decoupled de Plugin (`plugins/literaturamusical-lessons/`)**:
+  * Creación de la estructura del primer repositorio de lecciones oficial con `manifest.json`, `songs/`, `figures/` y `dictionary/`.
+* [x] **Exclusión Estricta de Audios**:
+  * Archivos `.gitignore` configurados para evitar la subida de audios pesados (`*.webm`, `*.m4a`, `*.mp3`) a Git.
+  * Preservación del metadato `youtubeUrl` en las lecciones para descargas locales de audios en 1 clic.
+* [x] **Endpoints API & Persistencia Git Backend (`vite.config.js`)**:
+  * Endpoints `/api/plugins`, `/api/plugins/register` (clone/pull) y exportación sincronizada en disco.
+
+---
+
+### 🎲 `v0.5.2` - Motor Dinámico de Retos e Interacción Trivia (COMPLETADA CON ÉXITO - SESIÓN 10)
+
+* [x] **Barajado Aleatorio de Opciones (`quizUtils.js`)**:
+  * Algoritmo Fisher-Yates en tiempo de ejecución para evitar la posición fija de la opción correcta.
+* [x] **Consolidación de Figuras y Diccionario RAE desde Plugins**:
+  * Lectura dinámica de figuras poéticas y términos difíciles de la RAE traídos desde los repositorios de lecciones.
 
 ---
 

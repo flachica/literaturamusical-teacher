@@ -1,27 +1,51 @@
 import React from 'react';
-import { Trash2 } from 'lucide-react';
+import { Trash2, Edit3 } from 'lucide-react';
 
 export default function SongCard({
   cancion,
-  audioStatus,
+  audioStatus = {},
   reparandoSongId,
   reparandoGlobal,
   onSolicitarEliminar,
-  onRecuperarAudio
+  onRecuperarAudio,
+  onEditarCancion
 }) {
   return (
     <div className="admin-song-card">
       <div>
         <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '8px' }}>
           <h4 style={{ fontSize: '1.18rem', fontWeight: 800, color: '#ffffff', letterSpacing: '0.01em', marginBottom: '2px' }}>🎵 {cancion.titulo}</h4>
-          <button
-            onClick={() => onSolicitarEliminar(cancion)}
-            className="btn-trash"
-            style={{ background: 'none', border: 'none', padding: '4px', cursor: 'pointer' }}
-            title="Eliminar del catálogo"
-          >
-            <Trash2 size={16} />
-          </button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+            {onEditarCancion && (
+              <button
+                onClick={() => onEditarCancion(cancion)}
+                style={{
+                  background: 'rgba(56, 189, 248, 0.15)',
+                  border: '1px solid rgba(56, 189, 248, 0.3)',
+                  color: '#38bdf8',
+                  borderRadius: '6px',
+                  padding: '4px 8px',
+                  fontSize: '0.75rem',
+                  fontWeight: 800,
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '4px'
+                }}
+                title="Editar estrofas, trivias y palabras RAE"
+              >
+                <Edit3 size={13} /> Editar
+              </button>
+            )}
+            <button
+              onClick={() => onSolicitarEliminar(cancion)}
+              className="btn-trash"
+              style={{ background: 'none', border: 'none', padding: '4px', cursor: 'pointer' }}
+              title="Eliminar del catálogo"
+            >
+              <Trash2 size={16} />
+            </button>
+          </div>
         </div>
         <p style={{ fontSize: '0.92rem', color: '#fbbf24', fontWeight: 700, marginTop: '2px' }}>
           {cancion.artistaNombre} <span style={{ color: 'var(--text-muted)', fontWeight: 400 }}>({cancion.album})</span>

@@ -12,6 +12,8 @@ import SugerirFiguraModal from './detective/SugerirFiguraModal';
 
 export default function ModoDetectiveGuiado({
   cancion,
+  figuras,
+  diccionario,
   onGanarPuntos,
   detectiveActivo,
   onEnviarSugerencia,
@@ -271,6 +273,7 @@ export default function ModoDetectiveGuiado({
               onRegistrarLecturaDiccionario={onRegistrarLecturaDiccionario}
               onSiguientePaso={() => setPaso(2)}
               onAbrirSugerirModal={() => setSugerirModalAbierto(true)}
+              diccionario={diccionario}
             />
           )}
 
@@ -295,6 +298,7 @@ export default function ModoDetectiveGuiado({
               versoActual={versoActual}
               opcionFigura={opcionFigura}
               onResponderFigura={handleResponderFigura}
+              figuras={figuras}
               onVolverPaso={() => {
                 setOpcionFigura(null);
                 setPaso(2);

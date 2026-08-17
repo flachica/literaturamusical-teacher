@@ -19,12 +19,28 @@ export default function ChallengeCelebration({
         flexShrink: 0
       }}>
         <div style={{ fontSize: '1.8rem', marginBottom: '4px' }}>🎉 🔮</div>
-        <h3 style={{ fontSize: '1.2rem', fontWeight: 950, color: '#ffffff', marginBottom: '4px' }}>
+        <h3 style={{ fontSize: '1.2rem', fontWeight: 950, color: '#ffffff', marginBottom: '8px' }}>
           ¡Gran Trabajo, Detective!
         </h3>
-        <p style={{ fontSize: '0.9rem', color: '#e2e8f0', maxWidth: '440px', margin: '0 auto 10px', lineHeight: 1.45 }}>
-          {versoActual.explicacion}
-        </p>
+        
+        <div style={{ background: 'rgba(15, 23, 42, 0.7)', padding: '12px 14px', borderRadius: '12px', textAlign: 'left', marginBottom: '12px', border: '1px solid rgba(255, 255, 255, 0.08)' }}>
+          <div style={{ fontSize: '0.82rem', fontWeight: 900, color: '#f472b6', marginBottom: '4px' }}>
+            🔮 {versoActual.figuraNombre || 'Figura Literaria'}
+          </div>
+          {versoActual.textoLiteral && (
+            <div style={{ fontSize: '0.8rem', color: '#f8fafc', marginBottom: '3px' }}>
+              📖 <strong>Lo que dice literalmente:</strong> «{versoActual.textoLiteral}»
+            </div>
+          )}
+          {versoActual.significadoReal && (
+            <div style={{ fontSize: '0.8rem', color: '#fbbf24', marginBottom: '3px' }}>
+              ✨ <strong>Lo que significa realmente:</strong> {versoActual.significadoReal}
+            </div>
+          )}
+          <div style={{ fontSize: '0.8rem', color: '#cbd5e1', lineHeight: 1.4, marginTop: '4px', paddingTop: '4px', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+            💡 <strong>¿Por qué es esta figura?:</strong> {versoActual.explicacionFigura || versoActual.explicacion}
+          </div>
+        </div>
 
         <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: '#10b981', color: '#ffffff', padding: '6px 14px', borderRadius: '9999px', fontWeight: 800, fontSize: '0.82rem' }}>
           <Trophy size={14} /> +150 Puntos de Detective Añadidos

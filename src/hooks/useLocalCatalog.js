@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
   loadSongsCatalog,
   saveSongsCatalog,
@@ -26,9 +26,11 @@ export default function useLocalCatalog(cancionActual, setCancionActual) {
   const logros = detectiveActivo?.logros || { abiertasRAE: 0, estrofasEscuchadas: 0, rachaComprension: 0, cancionesCompletadas: [] };
   const placasDesbloqueadas = detectiveActivo?.placasDesbloqueadas || [];
 
-  // Catalog states (Songs & Literary Figures)
+  // Catalog states (Songs, Literary Figures, Plugins & Dictionary)
   const [canciones, setCanciones] = useState(() => loadSongsCatalog());
   const [figuras, setFiguras] = useState(() => loadFiguresCatalog());
+  const [plugins, setPlugins] = useState([]);
+  const [diccionarioPlugins, setDiccionarioPlugins] = useState({});
   const [sugerencias, setSugerencias] = useState(() => loadSuggestions());
   const [audioStatus, setAudioStatus] = useState({});
 
@@ -102,12 +104,15 @@ export default function useLocalCatalog(cancionActual, setCancionActual) {
     setAudioStatus(statuses);
   };
 
+  const isInitialMount = useRef(true);
+
   // Fetch latest catalogs from disk endpoints on mount
   useEffect(() => {
     fetch(`/api/songs?t=${Date.now()}`)
       .then(res => res.json())
       .then(diskSongs => {
         if (Array.isArray(diskSongs) && diskSongs.length > 0) {
+          try { localStorage.setItem('litmusical_songs_catalog_v1', JSON.stringify(diskSongs)); } catch (_) {}
           setCanciones(diskSongs);
           comprobarDisponibilidadAudios(diskSongs);
           if (setCancionActual) {
@@ -124,6 +129,7 @@ export default function useLocalCatalog(cancionActual, setCancionActual) {
       .then(res => res.json())
       .then(diskFigures => {
         if (Array.isArray(diskFigures) && diskFigures.length > 0) {
+          try { localStorage.setItem('litmusical_figures_catalog_v1', JSON.stringify(diskFigures)); } catch (_) {}
           setFiguras(diskFigures);
         }
       })
@@ -137,20 +143,44 @@ export default function useLocalCatalog(cancionActual, setCancionActual) {
         }
       })
       .catch(err => console.warn('Aviso al cargar detectives de disco:', err));
+
+    fetch(`/api/plugins?t=${Date.now()}`)
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data)) {
+          setPlugins(data);
+          const mergedDict = {};
+          data.forEach(p => {
+            if (p.dictionary && typeof p.dictionary === 'object') {
+              Object.assign(mergedDict, p.dictionary);
+            }
+          });
+          setDiccionarioPlugins(mergedDict);
+        }
+      })
+      .catch(err => console.warn('Aviso al cargar plugins:', err));
   }, []);
 
   // Sync songs catalog when changed
   useEffect(() => {
-    saveSongsCatalog(canciones);
-    comprobarDisponibilidadAudios(canciones);
-    if (setCancionActual) {
-      setCancionActual(prev => {
-        if (!prev || !canciones.some(c => c.id === prev.id)) {
-          return canciones[0] || null;
-        }
-        return prev;
-      });
+    if (Array.isArray(canciones) && canciones.length > 0) {
+      comprobarDisponibilidadAudios(canciones);
+      if (setCancionActual) {
+        setCancionActual(prev => {
+          if (!prev || !canciones.some(c => c.id === prev.id)) {
+            return canciones[0] || null;
+          }
+          return prev;
+        });
+      }
     }
+
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      return;
+    }
+
+    saveSongsCatalog(canciones);
   }, [canciones]);
 
   // Sync figures catalog when changed
@@ -402,6 +432,8 @@ export default function useLocalCatalog(cancionActual, setCancionActual) {
     setCanciones,
     figuras,
     setFiguras,
+    plugins,
+    diccionarioPlugins,
     audioStatus,
     detectives,
     detectiveActivo,

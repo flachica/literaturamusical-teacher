@@ -5,8 +5,11 @@ export default function FigureChallenge({
   versoActual,
   opcionFigura,
   onResponderFigura,
-  onVolverPaso
+  onVolverPaso,
+  figuras
 }) {
+  const listadoFiguras = (figuras && Array.isArray(figuras) && figuras.length > 0) ? figuras : FIGURAS_LITERARIAS;
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', textAlign: 'left' }}>
       <h4 style={{ fontSize: '1.05rem', fontWeight: 800, color: '#f472b6', marginBottom: '4px' }}>
@@ -17,7 +20,7 @@ export default function FigureChallenge({
       </p>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '10px' }}>
-        {FIGURAS_LITERARIAS.map((fig) => {
+        {listadoFiguras.map((fig) => {
           const isSelected = opcionFigura === fig.id;
           const esCorrecto = fig.id === versoActual.figuraId;
 
@@ -62,6 +65,49 @@ export default function FigureChallenge({
           );
         })}
       </div>
+
+      {/* EXPLICACIÓN DIDÁCTICA AL SELECCIONAR FIGURA */}
+      {opcionFigura && (
+        <div
+          style={{
+            marginTop: '8px',
+            padding: '14px 16px',
+            borderRadius: '14px',
+            background: opcionFigura === versoActual.figuraId ? 'linear-gradient(135deg, rgba(16, 185, 129, 0.18), rgba(56, 189, 248, 0.1))' : 'rgba(239, 68, 68, 0.15)',
+            border: opcionFigura === versoActual.figuraId ? '1.5px solid #10b981' : '1.5px solid #ef4444',
+            textAlign: 'left',
+            boxShadow: opcionFigura === versoActual.figuraId ? '0 4px 16px rgba(16, 185, 129, 0.15)' : 'none'
+          }}
+        >
+          {opcionFigura === versoActual.figuraId ? (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+              <div style={{ fontSize: '0.94rem', fontWeight: 900, color: '#34d399', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                🎉 ¡Excelente acertijo! Es una {versoActual.figuraNombre || 'Figura Literaria'}
+              </div>
+
+              {versoActual.textoLiteral && (
+                <div style={{ fontSize: '0.82rem', color: '#f8fafc', lineHeight: 1.4 }}>
+                  📖 <strong>Lo que dice literalmente:</strong> «{versoActual.textoLiteral}»
+                </div>
+              )}
+
+              {versoActual.significadoReal && (
+                <div style={{ fontSize: '0.82rem', color: '#fbbf24', lineHeight: 1.4 }}>
+                  ✨ <strong>Lo que significa realmente:</strong> {versoActual.significadoReal}
+                </div>
+              )}
+
+              <div style={{ fontSize: '0.82rem', color: '#cbd5e1', lineHeight: 1.45, marginTop: '2px', borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: '6px' }}>
+                💡 <strong>¿Por qué es una {versoActual.figuraNombre}?:</strong> {versoActual.explicacionFigura || versoActual.explicacion}
+              </div>
+            </div>
+          ) : (
+            <div style={{ fontSize: '0.82rem', color: '#fca5a5', fontWeight: 600 }}>
+              ❌ No es esa figura. Lee con atención la estrofa y busca el truco de magia poética que utiliza el autor. ¡Puedes lograrlo!
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Botón de arrepentirse / volver atrás */}
       <div style={{ display: 'flex', justifyContent: 'flex-start', marginTop: '6px' }}>

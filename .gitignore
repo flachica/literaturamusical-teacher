@@ -43,3 +43,7 @@ public/data/detectives.json
 public/data/user_progress.json
 public/data/songs_catalog.json
 public/data/*_backup.json
+
+# Plugins y repositorios de lecciones externos
+plugins/
+

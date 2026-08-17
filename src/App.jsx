@@ -25,6 +25,8 @@ export default function App() {
     canciones,
     figuras,
     setFiguras,
+    plugins,
+    diccionarioPlugins,
     audioStatus,
     detectives,
     detectiveActivo,
@@ -207,6 +209,8 @@ export default function App() {
               {cancionActual && (
                 <ModoDetectiveGuiado
                   cancion={cancionActual}
+                  figuras={figuras}
+                  diccionario={diccionarioPlugins}
                   audioStatus={audioStatus}
                   onGanarPuntos={handleSumarPuntos}
                   isPlaying={isPlaying}

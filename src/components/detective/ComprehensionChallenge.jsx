@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { ArrowRight } from 'lucide-react';
+import { prepareQuizOptions } from '../../utils/quizUtils';
 
 export default function ComprehensionChallenge({
   versoActual,
@@ -17,6 +18,11 @@ export default function ComprehensionChallenge({
     return pg;
   })();
 
+  // Barajar opciones dinámicamente cuando cambie el verso actual
+  const opcionesBarajadas = useMemo(() => {
+    return prepareQuizOptions(versoActual.opcionesComprension || []);
+  }, [versoActual?.linea, versoActual?.opcionesComprension]);
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', textAlign: 'left' }}>
       <h4 style={{ fontSize: '1.15rem', fontWeight: 900, color: '#38bdf8', marginBottom: '6px', lineHeight: 1.4 }}>
@@ -24,7 +30,7 @@ export default function ComprehensionChallenge({
       </h4>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-        {versoActual.opcionesComprension.map((opcion) => {
+        {opcionesBarajadas.map((opcion) => {
           const isSelected = opcionComprension?.id === opcion.id;
           const isCorrectAnswerSelected = opcionComprension?.correcta === true;
           let bg = 'rgba(15, 23, 42, 0.6)';

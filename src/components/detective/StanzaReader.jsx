@@ -10,7 +10,8 @@ export default function StanzaReader({
   setPalabraRaeActiva,
   onRegistrarLecturaDiccionario,
   onSiguientePaso,
-  onAbrirSugerirModal
+  onAbrirSugerirModal,
+  diccionario
 }) {
   const estrofaVersos = versoActual.estrofaNum
     ? cancion.versos.filter(v => v.estrofaNum === versoActual.estrofaNum)
@@ -98,7 +99,8 @@ export default function StanzaReader({
                         key={i}
                         onClick={(e) => {
                           e.stopPropagation();
-                          setPalabraRaeActiva(DICCIONARIO_RAE[limpia] || { palabra: limpia, definicion: 'Palabra destacada de la canción.' });
+                          const defEncontrada = (diccionario && diccionario[limpia]) || DICCIONARIO_RAE[limpia] || { palabra: limpia, definicion: 'Palabra destacada de la canción.' };
+                          setPalabraRaeActiva(defEncontrada);
                           if (onRegistrarLecturaDiccionario) onRegistrarLecturaDiccionario();
                         }}
                         style={{

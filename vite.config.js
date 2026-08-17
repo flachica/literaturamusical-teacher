@@ -118,15 +118,140 @@ function jsonStoragePlugin() {
           return
         }
 
+        if (pathname === '/api/plugins') {
+          const pluginsDir = path.resolve(__dirname, 'plugins')
+          if (req.method === 'GET') {
+            res.setHeader('Content-Type', 'application/json')
+            try {
+              if (!fs.existsSync(pluginsDir)) {
+                return res.end(JSON.stringify([]))
+              }
+              const pluginDirs = fs.readdirSync(pluginsDir)
+              const pluginsList = []
+              for (const dir of pluginDirs) {
+                const pluginPath = path.join(pluginsDir, dir)
+                if (fs.statSync(pluginPath).isDirectory()) {
+                  const manifestPath = path.join(pluginPath, 'manifest.json')
+                  if (fs.existsSync(manifestPath)) {
+                    try {
+                      const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'))
+                      let songs = []
+                      const songsDir = path.join(pluginPath, 'songs')
+                      if (fs.existsSync(songsDir)) {
+                        const sFiles = fs.readdirSync(songsDir).filter(f => f.endsWith('.json'))
+                        for (const sf of sFiles) {
+                          const content = JSON.parse(fs.readFileSync(path.join(songsDir, sf), 'utf8'))
+                          if (Array.isArray(content)) songs.push(...content)
+                          else if (content && typeof content === 'object') songs.push(content)
+                        }
+                      }
+                      let figures = []
+                      const figuresDir = path.join(pluginPath, 'figures')
+                      if (fs.existsSync(figuresDir)) {
+                        const fFiles = fs.readdirSync(figuresDir).filter(f => f.endsWith('.json'))
+                        for (const ff of fFiles) {
+                          const content = JSON.parse(fs.readFileSync(path.join(figuresDir, ff), 'utf8'))
+                          if (Array.isArray(content)) figures.push(...content)
+                        }
+                      }
+                      let dictionary = {}
+                      const dictDir = path.join(pluginPath, 'dictionary')
+                      if (fs.existsSync(dictDir)) {
+                        const dFiles = fs.readdirSync(dictDir).filter(f => f.endsWith('.json'))
+                        for (const df of dFiles) {
+                          const content = JSON.parse(fs.readFileSync(path.join(dictDir, df), 'utf8'))
+                          if (content && typeof content === 'object') Object.assign(dictionary, content)
+                        }
+                      }
+                      pluginsList.push({
+                        ...manifest,
+                        dirName: dir,
+                        pluginPath,
+                        songsCount: songs.length,
+                        figuresCount: figures.length,
+                        dictionaryCount: Object.keys(dictionary).length,
+                        songs,
+                        figures,
+                        dictionary
+                      })
+                    } catch (e) {
+                      console.error(`Error leyendo manifest de plugin ${dir}:`, e.message)
+                    }
+                  }
+                }
+              }
+              return res.end(JSON.stringify(pluginsList))
+            } catch (err) {
+              res.statusCode = 500
+              return res.end(JSON.stringify({ error: err.message }))
+            }
+          }
+
+          if (req.method === 'POST') {
+            let body = ''
+            req.on('data', chunk => { body += chunk })
+            req.on('end', () => {
+              try {
+                const { repoUrl } = JSON.parse(body)
+                if (!repoUrl) {
+                  res.statusCode = 400
+                  return res.end(JSON.stringify({ error: 'URL del repositorio no proporcionada.' }))
+                }
+                const repoName = repoUrl.split('/').pop().replace(/\.git$/, '')
+                const targetDir = path.join(pluginsDir, repoName)
+                if (fs.existsSync(targetDir)) {
+                  exec(`git -C "${targetDir}" pull`, (err) => {
+                    if (err) {
+                      res.statusCode = 500
+                      return res.end(JSON.stringify({ error: 'Error al actualizar repositorio git pull: ' + err.message }))
+                    }
+                    res.setHeader('Content-Type', 'application/json')
+                    return res.end(JSON.stringify({ success: true, message: `Plugin ${repoName} actualizado con éxito.` }))
+                  })
+                } else {
+                  if (!fs.existsSync(pluginsDir)) fs.mkdirSync(pluginsDir, { recursive: true })
+                  exec(`git clone "${repoUrl}" "${targetDir}"`, (err) => {
+                    if (err) {
+                      res.statusCode = 500
+                      return res.end(JSON.stringify({ error: 'Error al clonar repositorio git clone: ' + err.message }))
+                    }
+                    res.setHeader('Content-Type', 'application/json')
+                    return res.end(JSON.stringify({ success: true, message: `Plugin ${repoName} clonado e instalado.` }))
+                  })
+                }
+              } catch (err) {
+                res.statusCode = 500
+                return res.end(JSON.stringify({ error: err.message }))
+              }
+            })
+            return
+          }
+        }
+
         if (pathname === '/api/figuras') {
           const figurasFilePath = path.join(dataDir, 'figuras_catalog.json')
 
           if (req.method === 'GET') {
             res.setHeader('Content-Type', 'application/json')
+            let localFigures = []
             if (fs.existsSync(figurasFilePath)) {
-              return res.end(fs.readFileSync(figurasFilePath, 'utf8'))
+              try { localFigures = JSON.parse(fs.readFileSync(figurasFilePath, 'utf8')) } catch (_) {}
             }
-            return res.end(JSON.stringify([]))
+            // Agrupar figuras de plugins
+            const pluginsDir = path.resolve(__dirname, 'plugins')
+            let pluginFigures = []
+            if (fs.existsSync(pluginsDir)) {
+              for (const dir of fs.readdirSync(pluginsDir)) {
+                const fPath = path.join(pluginsDir, dir, 'figures', 'figuras_catalog.json')
+                if (fs.existsSync(fPath)) {
+                  try { pluginFigures.push(...JSON.parse(fs.readFileSync(fPath, 'utf8'))) } catch (_) {}
+                }
+              }
+            }
+            const figureMap = new Map()
+            localFigures.forEach(f => figureMap.set(f.id, f))
+            pluginFigures.forEach(f => figureMap.set(f.id, f))
+            return res.end(JSON.stringify(Array.from(figureMap.values())))
           }
 
           if (req.method === 'POST') {
@@ -138,8 +263,15 @@ function jsonStoragePlugin() {
                   fs.mkdirSync(dataDir, { recursive: true })
                 }
                 fs.writeFileSync(figurasFilePath, body, 'utf8')
+
+                // Si existe el plugin oficial literaturamusical-lessons, actualizar también su fichero para git
+                const officialPluginFigPath = path.resolve(__dirname, 'plugins/literaturamusical-lessons/figures/figuras_catalog.json')
+                if (fs.existsSync(path.dirname(officialPluginFigPath))) {
+                  fs.writeFileSync(officialPluginFigPath, body, 'utf8')
+                }
+
                 res.setHeader('Content-Type', 'application/json')
-                res.end(JSON.stringify({ success: true, message: 'Fichero figuras_catalog.json guardado en disco.' }))
+                res.end(JSON.stringify({ success: true, message: 'Fichero figuras_catalog.json guardado en disco y plugin.' }))
               } catch (err) {
                 res.statusCode = 500
                 res.end(JSON.stringify({ error: err.message }))
@@ -154,10 +286,30 @@ function jsonStoragePlugin() {
 
           if (req.method === 'GET') {
             res.setHeader('Content-Type', 'application/json')
+            let localSongs = []
             if (fs.existsSync(songsFilePath)) {
-              return res.end(fs.readFileSync(songsFilePath, 'utf8'))
+              try { localSongs = JSON.parse(fs.readFileSync(songsFilePath, 'utf8')) } catch (_) {}
             }
-            return res.end(JSON.stringify([]))
+            const pluginsDir = path.resolve(__dirname, 'plugins')
+            let pluginSongs = []
+            if (fs.existsSync(pluginsDir)) {
+              for (const dir of fs.readdirSync(pluginsDir)) {
+                const sDir = path.join(pluginsDir, dir, 'songs')
+                if (fs.existsSync(sDir)) {
+                  for (const sf of fs.readdirSync(sDir).filter(f => f.endsWith('.json'))) {
+                    try {
+                      const content = JSON.parse(fs.readFileSync(path.join(sDir, sf), 'utf8'))
+                      if (Array.isArray(content)) pluginSongs.push(...content)
+                      else if (content && typeof content === 'object') pluginSongs.push(content)
+                    } catch (_) {}
+                  }
+                }
+              }
+            }
+            const songMap = new Map()
+            localSongs.forEach(s => songMap.set(s.id, s))
+            pluginSongs.forEach(s => songMap.set(s.id, s))
+            return res.end(JSON.stringify(Array.from(songMap.values())))
           }
 
           if (req.method === 'POST') {
@@ -169,8 +321,15 @@ function jsonStoragePlugin() {
                   fs.mkdirSync(dataDir, { recursive: true })
                 }
                 fs.writeFileSync(songsFilePath, body, 'utf8')
+
+                // Si existe el plugin oficial literaturamusical-lessons, actualizar también su fichero para git
+                const officialPluginSongPath = path.resolve(__dirname, 'plugins/literaturamusical-lessons/songs/songs_catalog.json')
+                if (fs.existsSync(path.dirname(officialPluginSongPath))) {
+                  fs.writeFileSync(officialPluginSongPath, body, 'utf8')
+                }
+
                 res.setHeader('Content-Type', 'application/json')
-                res.end(JSON.stringify({ success: true, message: 'Fichero songs_catalog.json guardado en disco.' }))
+                res.end(JSON.stringify({ success: true, message: 'Fichero songs_catalog.json guardado en disco y plugin.' }))
               } catch (err) {
                 res.statusCode = 500
                 res.end(JSON.stringify({ error: err.message }))
@@ -256,3 +415,4 @@ export default defineConfig({
     open: true
   }
 })
+

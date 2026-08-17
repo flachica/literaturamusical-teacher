@@ -5,6 +5,7 @@ import ConfirmModal from './ConfirmModal';
 import SongManagerToolbar from './admin/SongManagerToolbar';
 import SongCard from './admin/SongCard';
 import MissingLyricsModal from './admin/MissingLyricsModal';
+import StanzaEditorModal from './admin/StanzaEditorModal';
 
 // Función auxiliar para extraer el ID de YouTube
 const obtenerYoutubeId = (url) => {
@@ -14,15 +15,16 @@ const obtenerYoutubeId = (url) => {
   return (match && match[2].length === 11) ? match[2] : '';
 };
 
-export default function SongManager({ canciones, audioStatus, onGuardarCanciones }) {
+export default function SongManager({ canciones = [], figuras = [], audioStatus = {}, onGuardarCanciones }) {
   const [mostrarForm, setMostrarForm] = useState(false);
   const [mensajeExito, setMensajeExito] = useState('');
   const [errorImport, setErrorImport] = useState('');
   const [mostrarPromptLetraIA, setMostrarPromptLetraIA] = useState(false);
   const [modalAlerta, setModalAlerta] = useState(null);
 
-  // Estados de modal de confirmación integrado
+  // Estados de modal de confirmación y edición integrada
   const [cancionAEliminar, setCancionAEliminar] = useState(null);
+  const [cancionAEditar, setCancionAEditar] = useState(null);
 
   // Estado para el formulario de nueva canción
   const [nuevoTitulo, setNuevoTitulo] = useState('');
@@ -960,9 +962,26 @@ export default function SongManager({ canciones, audioStatus, onGuardarCanciones
             reparandoGlobal={reparandoGlobal}
             onSolicitarEliminar={handleSolicitarEliminar}
             onRecuperarAudio={handleRecuperarAudio}
+            onEditarCancion={(cancion) => setCancionAEditar(cancion)}
           />
         ))}
       </div>
+
+      {/* Modal Editor de Estrofas, Palabras RAE y Trivias */}
+      {cancionAEditar && (
+        <StanzaEditorModal
+          cancion={cancionAEditar}
+          figuras={figuras}
+          onGuardar={(cancionActualizada) => {
+            const catalogoActualizado = canciones.map(c => c.id === cancionActualizada.id ? cancionActualizada : c);
+            onGuardarCanciones(catalogoActualizado);
+            setCancionAEditar(null);
+            setMensajeExito(`¡Lección y trivias de «${cancionActualizada.titulo}» guardadas en disco y plugin!`);
+            setTimeout(() => setMensajeExito(''), 3500);
+          }}
+          onCerrar={() => setCancionAEditar(null)}
+        />
+      )}
 
       {/* Modal de confirmación para eliminar canción */}
       <ConfirmModal
