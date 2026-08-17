@@ -274,6 +274,11 @@ export function loadSuggestions() {
 export function saveSuggestions(list) {
   try {
     localStorage.setItem(SUGGESTIONS_KEY, JSON.stringify(list));
+    fetch('/api/sugerencias', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(list)
+    }).catch(() => {});
   } catch (err) {
     console.error('Error guardando sugerencias:', err);
   }

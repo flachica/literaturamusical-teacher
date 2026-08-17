@@ -374,6 +374,13 @@ function jsonStoragePlugin() {
 
           if (req.method === 'GET') {
             res.setHeader('Content-Type', 'application/json')
+            const activeStorageDir = getActiveStoragePluginDir()
+            if (activeStorageDir) {
+              const pPath = path.join(activeStorageDir, 'progress', 'user_progress.json')
+              if (fs.existsSync(pPath)) {
+                try { return res.end(fs.readFileSync(pPath, 'utf8')) } catch (_) {}
+              }
+            }
             if (fs.existsSync(progressFilePath)) {
               return res.end(fs.readFileSync(progressFilePath, 'utf8'))
             }
@@ -389,8 +396,18 @@ function jsonStoragePlugin() {
                   fs.mkdirSync(dataDir, { recursive: true })
                 }
                 fs.writeFileSync(progressFilePath, body, 'utf8')
+
+                const activeStorageDir = getActiveStoragePluginDir()
+                if (activeStorageDir) {
+                  const pluginProgressPath = path.join(activeStorageDir, 'progress', 'user_progress.json')
+                  if (!fs.existsSync(path.dirname(pluginProgressPath))) {
+                    fs.mkdirSync(path.dirname(pluginProgressPath), { recursive: true })
+                  }
+                  fs.writeFileSync(pluginProgressPath, body, 'utf8')
+                }
+
                 res.setHeader('Content-Type', 'application/json')
-                res.end(JSON.stringify({ success: true, message: 'Fichero user_progress.json guardado en disco.' }))
+                res.end(JSON.stringify({ success: true, message: 'Fichero user_progress.json guardado en disco y plugin storage activo.' }))
               } catch (err) {
                 res.statusCode = 500
                 res.end(JSON.stringify({ error: err.message }))
@@ -405,6 +422,13 @@ function jsonStoragePlugin() {
 
           if (req.method === 'GET') {
             res.setHeader('Content-Type', 'application/json')
+            const activeStorageDir = getActiveStoragePluginDir()
+            if (activeStorageDir) {
+              const dPath = path.join(activeStorageDir, 'detectives', 'detectives.json')
+              if (fs.existsSync(dPath)) {
+                try { return res.end(fs.readFileSync(dPath, 'utf8')) } catch (_) {}
+              }
+            }
             if (fs.existsSync(detectivesFilePath)) {
               return res.end(fs.readFileSync(detectivesFilePath, 'utf8'))
             }
@@ -420,8 +444,66 @@ function jsonStoragePlugin() {
                   fs.mkdirSync(dataDir, { recursive: true })
                 }
                 fs.writeFileSync(detectivesFilePath, body, 'utf8')
+
+                const activeStorageDir = getActiveStoragePluginDir()
+                if (activeStorageDir) {
+                  const pluginDetPath = path.join(activeStorageDir, 'detectives', 'detectives.json')
+                  if (!fs.existsSync(path.dirname(pluginDetPath))) {
+                    fs.mkdirSync(path.dirname(pluginDetPath), { recursive: true })
+                  }
+                  fs.writeFileSync(pluginDetPath, body, 'utf8')
+                }
+
                 res.setHeader('Content-Type', 'application/json')
-                res.end(JSON.stringify({ success: true, message: 'Fichero detectives.json guardado en disco.' }))
+                res.end(JSON.stringify({ success: true, message: 'Fichero detectives.json guardado en disco y plugin storage activo.' }))
+              } catch (err) {
+                res.statusCode = 500
+                res.end(JSON.stringify({ error: err.message }))
+              }
+            })
+            return
+          }
+        }
+
+        if (pathname === '/api/sugerencias') {
+          const sugerenciasFilePath = path.join(dataDir, 'sugerencias.json')
+
+          if (req.method === 'GET') {
+            res.setHeader('Content-Type', 'application/json')
+            const activeStorageDir = getActiveStoragePluginDir()
+            if (activeStorageDir) {
+              const sPath = path.join(activeStorageDir, 'suggestions', 'sugerencias_detectives.json')
+              if (fs.existsSync(sPath)) {
+                try { return res.end(fs.readFileSync(sPath, 'utf8')) } catch (_) {}
+              }
+            }
+            if (fs.existsSync(sugerenciasFilePath)) {
+              return res.end(fs.readFileSync(sugerenciasFilePath, 'utf8'))
+            }
+            return res.end(JSON.stringify([]))
+          }
+
+          if (req.method === 'POST') {
+            let body = ''
+            req.on('data', chunk => { body += chunk })
+            req.on('end', () => {
+              try {
+                if (!fs.existsSync(dataDir)) {
+                  fs.mkdirSync(dataDir, { recursive: true })
+                }
+                fs.writeFileSync(sugerenciasFilePath, body, 'utf8')
+
+                const activeStorageDir = getActiveStoragePluginDir()
+                if (activeStorageDir) {
+                  const pluginSugPath = path.join(activeStorageDir, 'suggestions', 'sugerencias_detectives.json')
+                  if (!fs.existsSync(path.dirname(pluginSugPath))) {
+                    fs.mkdirSync(path.dirname(pluginSugPath), { recursive: true })
+                  }
+                  fs.writeFileSync(pluginSugPath, body, 'utf8')
+                }
+
+                res.setHeader('Content-Type', 'application/json')
+                res.end(JSON.stringify({ success: true, message: 'Fichero sugerencias_detectives.json guardado en disco y plugin storage activo.' }))
               } catch (err) {
                 res.statusCode = 500
                 res.end(JSON.stringify({ error: err.message }))

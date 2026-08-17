@@ -85,9 +85,20 @@ npm run preview
 
 ## 🔌 Arquitectura de Plugins de Almacenamiento (Storage Plugins)
 
+Un plugin de almacenamiento de tipo `storage` es un repositorio desacoplado que contiene todas las lecciones, estado de detectives y sugerencias:
+
+- `songs/songs_catalog.json`: Catálogo de canciones, letras LRC y retos didácticos.
+- `figures/figuras_catalog.json`: Definiciones y medallas de figuras literarias.
+- `dictionary/rae_dictionary.json`: Diccionario infantil de palabras complejas.
+- `detectives/detectives.json`: Perfiles de detectives, puntos acumulados, nivel, estrellas e insignias.
+- `progress/user_progress.json`: Puntos acumulados de la jugadora.
+- `suggestions/sugerencias_detectives.json`: Descubrimientos poéticos propuestos por detectives en el Buzón Familiar.
+
+### Principios del Almacenamiento:
 - **Regla del Único Storage Activo:** La aplicación base detecta automáticamente los plugins en `plugins/` que tengan `"type": "storage"` en su `manifest.json`. El primer plugin storage encontrado se utiliza como fuente de verdad.
+- **Persistencia en Repositorio Privado:** Al hacer commit/push en tu repositorio storage privado, **todo el progreso de los detectives y las sugerencias del buzón familiar quedan respaldados en Git de forma segura**.
 - **Intercambiables sin Código:** Para cambiar de repositorio de lecciones, simplemente añade o quita la carpeta correspondiente dentro de `plugins/` sin tocar una sola línea de código ni variables de entorno.
-- **Privacidad y Exclusión de Audio:** Los audios pesados (`*.webm`, `*.m4a`, `*.mp3`) están en `.gitignore` en todos los repositorios para garantizar repositorios ligeros y portables.
+- **Privacidad y Exclusión de Audio:** Los audios pesados (`*.webm`, `*.m4a`, `*.mp3`) están en `.gitignore` para garantizar repositorios ligeros y portables.
 
 ### Repositorio Plantilla / Muestra Público:
 👉 [**literaturamusical-lessons-sample**](https://github.com/flachica/literaturamusical-lessons-sample) (`git@github.com:flachica/literaturamusical-lessons-sample.git`)

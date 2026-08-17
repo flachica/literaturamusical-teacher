@@ -144,6 +144,15 @@ export default function useLocalCatalog(cancionActual, setCancionActual) {
       })
       .catch(err => console.warn('Aviso al cargar detectives de disco:', err));
 
+    fetch('/api/sugerencias')
+      .then(res => res.json())
+      .then(diskSuggestions => {
+        if (Array.isArray(diskSuggestions)) {
+          setSugerencias(diskSuggestions);
+        }
+      })
+      .catch(err => console.warn('Aviso al cargar sugerencias de disco:', err));
+
     fetch(`/api/plugins?t=${Date.now()}`)
       .then(res => res.json())
       .then(data => {
