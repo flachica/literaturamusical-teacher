@@ -24,8 +24,13 @@ El plugin backend `jsonStoragePlugin` integrado en `vite.config.js` expone los e
 ## ⚡ Instalación Paso a Paso
 
 ### 1. Clonar el repositorio principal
+[![GitHub Repo](https://img.shields.io/badge/GitHub-flachica%2Fliteraturamusical--teacher-181717?logo=github)](https://github.com/flachica/literaturamusical-teacher)
 ```bash
+# Opción HTTPS (Recomendada):
+git clone https://github.com/flachica/literaturamusical-teacher.git
+# Opción SSH:
 git clone git@github.com:flachica/literaturamusical-teacher.git
+
 cd literaturamusical-teacher
 ```
 
@@ -34,24 +39,14 @@ cd literaturamusical-teacher
 npm install
 ```
 
-### 3. Instalar un Plugin de Lecciones (Storage Plugin)
-
-LitMusical utiliza una arquitectura desacoplada donde el catálogo de canciones, figuras y diccionario vive en un repositorio de plugin de tipo `storage` dentro de la carpeta `plugins/`.
-
-Elige una de las siguientes opciones:
-
-#### 🔹 Opción A: Usar la plantilla de muestra limpia (Recomendado para pruebas o crear contenido desde 0)
+### 3. Ejecutar en desarrollo
 ```bash
-git clone git@github.com:flachica/literaturamusical-lessons-sample.git plugins/literaturamusical-lessons-sample
+npm run dev
 ```
 
-#### 🔹 Opción B: Usar un catálogo oficial o propio existente
-```bash
-git clone git@github.com:flachica/literaturamusical-lessons.git plugins/literaturamusical-lessons
-```
+Abre tu navegador en la URL indicada por Vite (por defecto `http://localhost:5173/` o `http://localhost:3000/`).
 
-#### 🔹 Opción C: Clonar desde la interfaz web (Modo Admin)
-Puedes omitir el comando manual, arrancar la app y clonar cualquier repositorio Git desde **Modo Admin > Ajustes / Plugins > Clonar Plugin Git**.
+> 💡 **Persistencia Local por Defecto:** LitMusical funciona **out-of-the-box** almacenando todos los datos (canciones, figuras, detectives y sugerencias) localmente en la carpeta `public/data/`. No se requiere ninguna configuración ni clonar repositorios adicionales para empezar a usar la aplicación.
 
 ---
 
@@ -100,8 +95,12 @@ Un plugin de almacenamiento de tipo `storage` es un repositorio desacoplado que 
 - **Intercambiables sin Código:** Para cambiar de repositorio de lecciones, simplemente añade o quita la carpeta correspondiente dentro de `plugins/` sin tocar una sola línea de código ni variables de entorno.
 - **Privacidad y Exclusión de Audio:** Los audios pesados (`*.webm`, `*.m4a`, `*.mp3`) están en `.gitignore` para garantizar repositorios ligeros y portables.
 
-### Repositorio Plantilla / Muestra Público:
-👉 [**literaturamusical-lessons-sample**](https://github.com/flachica/literaturamusical-lessons-sample) (`git@github.com:flachica/literaturamusical-lessons-sample.git`)
+### 🔗 Repositorios del Ecosistema LitMusical
+
+| Repositorio | Tipo | Descripción | Enlace Web (GitHub) | Comando de Clonación |
+| :--- | :--- | :--- | :--- | :--- |
+| 📱 **LitMusical App** | Aplicación Web | Plataforma PWA principal (*Escuela de Detectives*) | [flachica/literaturamusical-teacher](https://github.com/flachica/literaturamusical-teacher) | `git clone https://github.com/flachica/literaturamusical-teacher.git` |
+| 🧪 **Storage Plugin (Sample)** | Storage Plugin | Repositorio de lecciones de muestra y plantilla didáctica | [flachica/literaturamusical-lessons-sample](https://github.com/flachica/literaturamusical-lessons-sample) | `git clone https://github.com/flachica/literaturamusical-lessons-sample.git` |
 
 ---
 
@@ -114,3 +113,4 @@ Un plugin de almacenamiento de tipo `storage` es un repositorio desacoplado que 
 
 ## 📄 Licencia y Uso
 Proyecto educativo y familiar colaborativo.
+
