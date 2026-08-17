@@ -57,7 +57,9 @@ Al finalizar una sesión o antes de pausar el desarrollo:
 ### ✅ Iniciativas Aprobadas
 - **Frontend SPA Gamificado:** React + Vite con interfaz neón/vibrante tipo "Escuela de Detectives Literarios".
 - **Lyric Highlighter:** Resaltador de versos interactivo con explicaciones adaptadas a 9 años.
-- **Modo Detective Proactivo:** Botón para marcar descubrimien### 🛠️ Protocolo de Carga de Canciones Educativas (Audio Local y Karaoke API)
+- **Modo Detective Proactivo:** Botón para marcar descubrimientos de versos y enviarlos al Buzón Familiar.
+
+### 🛠️ Protocolo de Carga de Canciones Educativas (Audio Local, Deno/Node & Karaoke API)
 Cuando el usuario o la IA soliciten cargar o sincronizar una nueva canción educativa en el catálogo:
 
 1. **Obtención de Letras y Timestamps Oficiales (LRCLIB Karaoke API):**
@@ -67,10 +69,11 @@ Cuando el usuario o la IA soliciten cargar o sincronizar una nueva canción educ
    - Extraer la propiedad `syncedLyrics` que contiene las marcas de tiempo oficiales LRC `[mm:ss.xx]` exactas al milisegundo.
    - Convertir los marcadores `[mm:ss.xx]` a segundos (`tiempoInicio` y `tiempoFin`) para la sincronización perfecta del reproductor HTML5.
 
-2. **Descarga de Audio Local Segura (Audio Puro WebM/M4A & Protección en Git):**
-   - El plugin backend `jsonStoragePlugin` en `vite.config.js` provee `/api/download-audio`.
+2. **Descarga de Audio Local Segura (Audio Puro WebM/M4A & Protección anti-403):**
+   - El plugin backend `jsonStoragePlugin` en `vite.config.js` provee los endpoints `/api/download-audio` y `/api/check-audio`.
+   - **Dependencias del Servidor Backend:** Requiere `yt-dlp` instalado en el sistema con ejecutable `node` (`/usr/bin/node`) o `deno` configurado como motor de JavaScript para resolver el desafío anti-bot de YouTube (`--js-runtimes node:/usr/bin/node`).
    - **Formato de Audio Puro:** Usar siempre `-f "251/249/140/139/ba"` para descargar únicamente corrientes de sonido en `.webm` (Opus) o `.m4a` (AAC) compatibles al 100% con `<audio>` HTML5 y Web Audio API. (Evitar formatos de vídeo `.mp4` 18).
-   - Invocación de `yt-dlp` con banderas de vídeo único y anti-403: `yt-dlp --no-playlist -f "251/249/140/139/ba" -o "public/audio/<id>.<ext>" "<url-o-busqueda>"`.
+   - Invocación de `yt-dlp` con banderas anti-403: `yt-dlp --js-runtimes node:/usr/bin/node --no-playlist --remote-components ejs:github --extractor-args "youtube:player_client=android,mweb" -f "251/249/140/139/ba" -o "public/audio/<id>.<ext>" "<cleanUrl>"`.
    - **Regla Legal e Integridad de Git:** Los archivos de audio (`*.webm`, `*.m4a`, `*.mp3`, `public/audio/*`) **NUNCA deben subirse a Git**. Estrictamente incluidos en `.gitignore`.
 
 3. **Formulario Wizard en 3 Pasos Secuenciales (Ahorro de Espacio Vertical):**

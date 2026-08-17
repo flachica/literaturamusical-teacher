@@ -11,7 +11,13 @@ Antes de comenzar, asegúrate de tener instalado en tu sistema:
 - **Node.js**: v18.0.0 o superior (`node -v`)
 - **npm**: v9.0.0 o superior (`npm -v`)
 - **Git**: Para clonar la aplicación y los plugins de lecciones.
-- *(Opcional)* **yt-dlp + Python 3**: Si deseas descargar y procesar automáticamente audios locales desde enlaces de YouTube desde el panel de administración.
+- **yt-dlp + Node/Deno (Recomendado)**: Herramienta de sistema para la descarga local segura de pistas de audio desde YouTube (`/api/download-audio`).
+
+### 🎵 Plugin Backend de Descarga de Audio (`vite.config.js`)
+El plugin backend `jsonStoragePlugin` integrado en `vite.config.js` expone los endpoints `/api/download-audio` y `/api/check-audio`:
+- **Motor de Extracción:** Ejecuta `yt-dlp` utilizando `node` (`/usr/bin/node`) o `deno` como ejecutable de JavaScript para resolver los desafíos anti-scraping de YouTube (`--js-runtimes node:/usr/bin/node`).
+- **Formato Optimizado:** Extrae solo pistas de audio puro (`.webm` Opus / `.m4a` AAC) compatibles al 100% con HTML5 `<audio>` y Web Audio API.
+- **Soberanía y Privacidad:** El audio descargado se guarda en `public/audio/` y está excluido de Git (`.gitignore`) para garantizar portabilidad legal y liviandad del repositorio.
 
 ---
 
