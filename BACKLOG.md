@@ -1,4 +1,4 @@
-# 📋 BACKLOG DE INICIATIVAS Y VERSIONES - LitMusical (Próxima: Sesión 10)
+# 📋 BACKLOG DE INICIATIVAS Y VERSIONES - LitMusical (Próxima: Lanzamiento v1.0.0)
 
 Documento de seguimiento del desarrollo interactivo de **LitMusical** estructurado mediante la metodología **Impact-Driven Growth (IDG)** para garantizar que cada entrega genere cambios reales de comportamiento (*outcomes*) y valor en el aprendizaje pedagógico.
 
@@ -6,12 +6,12 @@ Documento de seguimiento del desarrollo interactivo de **LitMusical** estructura
 
 ## 📍 ESTADO ACTUAL DEL PROYECTO
 
-* **Sesión Actual**: 🟢 **SESIÓN 10 (COMPLETADA)** | **Próxima**: 🟢 **SESIÓN 11** (Asistente IA Nube `v0.6.0`)
-* **Subversión Alcanzada**: `v0.5.2` (Sistema de Plugins Git `v0.5.1` y Motor Dinámico de Retos e Interacción Trivia `v0.5.2` completados).
-* **Fallo Pendiente de Solucionar (Próxima Sesión)**: Ninguno crítico registrado.
+* **Sesión Actual**: 🟢 **SESIÓN 10 (COMPLETADA)** | **Próxima**: 🟢 **SESIÓN 11** (Lanzamiento Final `v1.0.0`)
+* **Subversión Alcanzada**: `v0.5.3` (Sistema de Plugins Git `v0.5.1`, Motor Dinámico de Retos `v0.5.2` y Limpieza Automática de Sugerencias de Detectives Eliminados `v0.5.3` completados).
+* **Fallo Pendiente de Solucionar (Próxima Sesión)**: Ninguno.
 * **Métrica Clave del Reto (CPVM)**: 
   $$\text{CPVM} = [\text{Retos de figuras literarias resueltos con éxito}] + [\text{por la niña de forma autónoma}]$$
-* **Próxima Iteración**: Asistente Pedagógico con IA Nube (`v0.6.0`).
+* **Próxima Iteración**: Lanzamiento Final Local-First (`v1.0.0`).
 
 ---
 
@@ -152,34 +152,14 @@ Documento de seguimiento del desarrollo interactivo de **LitMusical** estructura
 
 ---
 
-### 🎲 `v0.5.2` - Motor Dinámico de Retos e Interacción Trivia (COMPLETADA CON ÉXITO - SESIÓN 10)
+### 🎲 `v0.5.2` / `v0.5.3` - Motor Dinámico de Retos e Integridad Multi-Detective (COMPLETADA CON ÉXITO - SESIÓN 10)
 
 * [x] **Barajado Aleatorio de Opciones (`quizUtils.js`)**:
   * Algoritmo Fisher-Yates en tiempo de ejecución para evitar la posición fija de la opción correcta.
 * [x] **Consolidación de Figuras y Diccionario RAE desde Plugins**:
   * Lectura dinámica de figuras poéticas y términos difíciles de la RAE traídos desde los repositorios de lecciones.
-
----
-
-### 🤖 `v0.6.0` - Asistente Pedagógico con IA Nube Ligera (PLANIFICADA / PENDIENTE)
-
-> 🧪 **Hipótesis Causal**:
-> **Si** integramos un servicio de IA ultraligero en la nube (ej. API Cloud Gemini Flash) a través del servidor Vite sin requerir GPU o instalación de Ollama en local,
-> **Provocará** que los padres ahorren un 90% del tiempo al crear canciones e integren tutoría personalizada para la niña,
-> **Moviendo** la CPVM al acelerar el crecimiento del catálogo y la resolución autónoma de retos.
-
-* [ ] **Middleware Proxy Backend (`/api/ai/generate-quiz` en `vite.config.js`)**:
-  * Integración ligera que consulta APIs cloud de alta velocidad (Gemini 2.5 Flash / OpenAI compatible) con clave API configurable.
-  * Consumo nulo de recursos GPU/RAM locales.
-* [ ] **Generador de Retos e Historias en 1 Clic (Modo Admin / `SongManager.jsx`)**:
-  * Botón *"🪄 Generar Retos y Trivias con IA"* al importar canciones.
-  * Autogeneración de preguntas de comprensión adaptadas a 9 años, opciones A/B/C y explicaciones didácticas del verso.
-* [ ] **Tutor Didáctico "El Búho Sabio" 🦉 (Modo Detective)**:
-  * Asistente interactivo que ofrece pistas y explicaciones amigables cuando la niña duda o falla una pregunta de comprensión.
-* [ ] **Asistente de Verificación en el Buzón Familiar**:
-  * Evaluación previa automática para guiar a los padres al revisar y aprobar sugerencias de la niña.
-* [ ] **Fallback Offline**:
-  * Si no hay conexión o API Key, la aplicación permite la edición manual o usa retos por defecto sin bloquear el flujo.
+* [x] **Limpieza de Sugerencias de Detectives Eliminados**:
+  * Eliminación automática de sugerencias y descubrimientos del Buzón Familiar asociadas a detectives eliminados.
 
 ---
 
@@ -193,5 +173,6 @@ Documento de seguimiento del desarrollo interactivo de **LitMusical** estructura
 ## 🏛️ MEMORIA DE DECISIONES DE ARQUITECTURA (IDG)
 1. **Persistencia Local-First y Privacidad de Progreso**: LocalStorage es la base de datos de estado inmediato. Los ficheros JSON de disco (`songs_catalog.json` y `figuras_catalog.json`) se sincronizan en Git para persistir el catálogo de canciones y diccionario de figuras. Sin embargo, los datos dinámicos de uso (`user_progress.json` y `detectives.json`) se escriben localmente en el servidor de desarrollo pero están excluidos de Git para que cada entorno sea independiente y el progreso no se comparta de forma global ni ensucie el control de versiones.
 2. **Audio Autogenerado**: Para evitar subir archivos de sonido pesados a Git, todos los efectos sonoros de recompensa de la v0.4.0 se sintetizan dinámicamente usando la **Web Audio API** del navegador (osciladores y envolventes de volumen).
-3. **No Spotify**: Descartada para evitar barreras de autenticación OAuth e IDs de tracks de terceros, garantizando que el juego sea offline/local-first y duradero.
+3. **Descarte de Middleware Generador de IA (`v0.6.0`)**: Descartado definitivamente para evitar sobreingeniería. La arquitectura de plugins (repositorios JSON) permite que las lecciones sean generadas directamente por un LLM fuera de banda, y la UI (`StanzaEditorModal.jsx`, `FigureCatalog.jsx`) ya cuenta con edición visual completa en caliente.
+4. **No Spotify**: Descartada para evitar barreras de autenticación OAuth e IDs de tracks de terceros, garantizando que el juego sea offline/local-first y duradero.
 

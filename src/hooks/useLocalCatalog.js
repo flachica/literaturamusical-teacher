@@ -401,7 +401,29 @@ export default function useLocalCatalog(cancionActual, setCancionActual) {
       saveDetectives(listaActualizada);
       return listaActualizada;
     });
+
+    // Limpiar sugerencias del buzón familiar pertenecientes al detective eliminado
+    setSugerencias(prev => {
+      const listaFiltrada = prev.filter(s => s.detectiveId !== id);
+      saveSuggestions(listaFiltrada);
+      return listaFiltrada;
+    });
   };
+
+  // Limpieza automática de sugerencias huérfanas (de detectives eliminados previamente)
+  useEffect(() => {
+    if (Array.isArray(detectives)) {
+      const idsValidos = new Set(detectives.map(d => d.id));
+      setSugerencias(prev => {
+        const filtradas = prev.filter(s => s.detectiveId && idsValidos.has(s.detectiveId));
+        if (filtradas.length !== prev.length) {
+          saveSuggestions(filtradas);
+          return filtradas;
+        }
+        return prev;
+      });
+    }
+  }, [detectives]);
 
   // Resetear el progreso de un detective específico (o el activo por defecto)
   const handleResetProgreso = (id) => {
