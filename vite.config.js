@@ -266,22 +266,20 @@ function jsonStoragePlugin() {
 
           if (req.method === 'GET') {
             res.setHeader('Content-Type', 'application/json')
-            let localFigures = []
-            if (fs.existsSync(figurasFilePath)) {
-              try { localFigures = JSON.parse(fs.readFileSync(figurasFilePath, 'utf8')) } catch (_) {}
-            }
             const activeStorageDir = getActiveStoragePluginDir()
-            let pluginFigures = []
             if (activeStorageDir) {
+              let pluginFigures = []
               const fPath = path.join(activeStorageDir, 'figures', 'figuras_catalog.json')
               if (fs.existsSync(fPath)) {
                 try { pluginFigures.push(...JSON.parse(fs.readFileSync(fPath, 'utf8'))) } catch (_) {}
               }
+              return res.end(JSON.stringify(pluginFigures))
             }
-            const figureMap = new Map()
-            localFigures.forEach(f => figureMap.set(f.id, f))
-            pluginFigures.forEach(f => figureMap.set(f.id, f))
-            return res.end(JSON.stringify(Array.from(figureMap.values())))
+            let localFigures = []
+            if (fs.existsSync(figurasFilePath)) {
+              try { localFigures = JSON.parse(fs.readFileSync(figurasFilePath, 'utf8')) } catch (_) {}
+            }
+            return res.end(JSON.stringify(localFigures))
           }
 
           if (req.method === 'POST') {
@@ -319,13 +317,9 @@ function jsonStoragePlugin() {
 
           if (req.method === 'GET') {
             res.setHeader('Content-Type', 'application/json')
-            let localSongs = []
-            if (fs.existsSync(songsFilePath)) {
-              try { localSongs = JSON.parse(fs.readFileSync(songsFilePath, 'utf8')) } catch (_) {}
-            }
             const activeStorageDir = getActiveStoragePluginDir()
-            let pluginSongs = []
             if (activeStorageDir) {
+              let pluginSongs = []
               const sDir = path.join(activeStorageDir, 'songs')
               if (fs.existsSync(sDir)) {
                 for (const sf of fs.readdirSync(sDir).filter(f => f.endsWith('.json'))) {
@@ -336,11 +330,13 @@ function jsonStoragePlugin() {
                   } catch (_) {}
                 }
               }
+              return res.end(JSON.stringify(pluginSongs))
             }
-            const songMap = new Map()
-            localSongs.forEach(s => songMap.set(s.id, s))
-            pluginSongs.forEach(s => songMap.set(s.id, s))
-            return res.end(JSON.stringify(Array.from(songMap.values())))
+            let localSongs = []
+            if (fs.existsSync(songsFilePath)) {
+              try { localSongs = JSON.parse(fs.readFileSync(songsFilePath, 'utf8')) } catch (_) {}
+            }
+            return res.end(JSON.stringify(localSongs))
           }
 
           if (req.method === 'POST') {

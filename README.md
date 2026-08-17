@@ -21,5 +21,15 @@
 
 ---
 
+## 🔌 Plugins de Almacenamiento y Lecciones (Storage Plugins)
+
+LitMusical soporta repositorios desacoplados de lecciones de tipo `storage` para sincronizar canciones, versos sincronizados, figuras literarias y definiciones RAE.
+
+- **Repositorio de Ejemplo / Plantilla de Muestra:** Existe un repositorio de muestra pública para crear y publicar catálogos vacíos o nuevos conjuntos de lecciones:
+  👉 [**literaturamusical-lessons-sample**](https://github.com/flachica/literaturamusical-lessons-sample) (`git@github.com:flachica/literaturamusical-lessons-sample.git`)
+
+---
+
 ## 📄 Licencia y Uso
 Proyecto educativo y familiar colaborativo.
+
