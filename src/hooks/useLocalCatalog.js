@@ -111,14 +111,14 @@ export default function useLocalCatalog(cancionActual, setCancionActual) {
     fetch(`/api/songs?t=${Date.now()}`)
       .then(res => res.json())
       .then(diskSongs => {
-        if (Array.isArray(diskSongs) && diskSongs.length > 0) {
+        if (Array.isArray(diskSongs)) {
           try { localStorage.setItem('litmusical_songs_catalog_v1', JSON.stringify(diskSongs)); } catch (_) {}
           setCanciones(diskSongs);
           comprobarDisponibilidadAudios(diskSongs);
           if (setCancionActual) {
             setCancionActual(prev => {
               const match = diskSongs.find(s => s.id === prev?.id);
-              return match || diskSongs[0];
+              return match || diskSongs[0] || null;
             });
           }
         }
