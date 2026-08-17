@@ -97,6 +97,31 @@ Cuando el usuario o la IA soliciten cargar o sincronizar una nueva canción educ
    - Antes de realizar cualquier conmutación de origen de datos, prueba o vaciado de prueba, la IA o desarrollador **DEBE respaldar la carpeta física completa `public/data/` en `backups/data_backup/`**.
    - Se debe garantizar siempre la existencia de una copia íntegra en disco en `backups/data_backup/` antes de ejecutar cualquier comando destructivo sobre `.json`.
 
+### 🔄 Protocolo Paso a Paso para Probar Plugins Storage de Terceros / Otra Persona
+
+Cuando el usuario diga *"Haz una copia que voy a probar el plugin storage de otra persona"*, cualquier IA DEBE seguir estrictamente estos pasos:
+
+1. **Paso 1: Copia de Seguridad Completa del Plugin Activo:**
+   - Copiar la carpeta completa del plugin activo actual (ej. `plugins/literaturamusical-lessons`) a `plugins_backup/literaturamusical-lessons`.
+   - Respaldar los archivos de `public/data/` en `backups/data_backup/`.
+   - Confirmar que los 6 directorios (`songs/`, `figures/`, `dictionary/`, `detectives/`, `progress/`, `suggestions/`) estén resguardados.
+
+2. **Paso 2: Despejar la Carpeta `plugins/`:**
+   - Mover la carpeta del plugin original fuera de `plugins/` (hacia `plugins_backup/`) para evitar colisiones entre múltiples plugins de tipo `storage`.
+
+3. **Paso 3: Clonar/Instalar el Plugin de Terceros:**
+   - Clonar o copiar el repositorio del tercero en `plugins/<nombre-plugin-tercero>`.
+   - Verificar que su `manifest.json` tenga `"type": "storage"`.
+
+4. **Paso 4: Preservar o Asignar el Progreso de Detectives:**
+   - **Si se desea mantener el perfil del detective en la prueba:** Copiar `detectives/detectives.json` y `progress/user_progress.json` del resguardo a `plugins/<nombre-plugin-tercero>/detectives/` y `plugins/<nombre-plugin-tercero>/progress/`.
+   - **Si se requiere probar desde 0:** Dejar `detectives/detectives.json` en `[]` en el nuevo plugin.
+
+5. **Paso 5: Restaurar el Entorno Original al Finalizar:**
+   - Retirar el plugin del tercero de `plugins/`.
+   - Mover la carpeta original de vuelta desde `plugins_backup/literaturamusical-lessons` a `plugins/literaturamusical-lessons`.
+   - Copiar los archivos de `backups/data_backup/` a `public/data/`.
+
 ### ❌ Iniciativas Descartadas
 - **Integración con Spotify:** Descartada definitivamente para evitar dependencias de API o cuentas externas.
 - **Addon de Odoo:** Descartada definitivamente para priorizar una arquitectura ligera, portable y local-first.
