@@ -39,7 +39,7 @@ export default function ModoDetectiveGuiado({
   const estadoAudio = audioStatus?.[cancion?.id] || 'vacio';
   const tieneAudio = cancion?.audioPreviewUrl && estadoAudio !== 'perdido' && estadoAudio !== 'vacio';
 
-  const [versoActual, setVersoActual] = useState(cancion.versos[0]);
+  const [versoActual, setVersoActual] = useState(cancion?.versos?.[0] || null);
   const [palabraRaeActiva, setPalabraRaeActiva] = useState(null);
   const [opcionComprension, setOpcionComprension] = useState(null);
   const [opcionFigura, setOpcionFigura] = useState(null);

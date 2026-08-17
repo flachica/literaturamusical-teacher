@@ -3,7 +3,7 @@ import { Sparkles, HelpCircle, Bot, CheckCircle2, ChevronRight, Bookmark } from 
 import { FIGURAS_LITERARIAS } from '../data/initialData';
 
 export default function LyricViewer({ cancion, modoIA, onSumarPuntos }) {
-  const [versoSeleccionado, setVersoSeleccionado] = useState(cancion.versos[0]);
+  const [versoSeleccionado, setVersoSeleccionado] = useState(cancion?.versos?.[0] || null);
   const [explicacionIA, setExplicacionIA] = useState(null);
   const [cargandoIA, setCargandoIA] = useState(false);
 
