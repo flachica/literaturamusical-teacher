@@ -108,6 +108,8 @@ Cuando el usuario o la IA soliciten cargar o sincronizar una nueva canción educ
 - **v0.5.1 / v0.5.2 / v0.5.3:** Sistema de Plugins Git (`plugins/literaturamusical-lessons/`), Motor Dinámico de Retos (`quizUtils.js` con barajado Fisher-Yates), Editor de Estrofas (`StanzaEditorModal.jsx`) y Limpieza Automática de Sugerencias de Detectives Eliminados. [COMPLETADO CON ÉXITO - SESIÓN 10]
 - **v0.6.0:** Generador Didáctico de Retos, Plugins decoupled y Edición de Estrofas en Caliente. [COMPLETADO CON ÉXITO - SESIÓN 10]
 - **v1.0.0:** Lanzamiento Final Local-First (Empaquetado offline PWA `manifest.json` + `sw.js` y módulo `BackupManager.jsx` para exportar e importar copias de seguridad JSON). [COMPLETADO CON ÉXITO - SESIÓN 10]
+- **Soporte de Plugins Storage Intercambiables:** Desacoplamiento en `vite.config.js` para detectar dinámicamente el plugin activo de tipo `"storage"` (regla de uno y solo un plugin storage activo) y creación del repositorio público de prueba vacía `literaturamusical-lessons-sample`.
+
 
 ---
 
