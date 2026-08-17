@@ -46,5 +46,4 @@ public/data/*_backup.json
 
 # Plugins y repositorios de lecciones externos
 plugins/
-plugins_backup/
-
+backups/
