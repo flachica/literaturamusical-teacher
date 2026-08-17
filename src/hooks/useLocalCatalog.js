@@ -138,7 +138,7 @@ export default function useLocalCatalog(cancionActual, setCancionActual) {
     fetch('/api/detectives')
       .then(res => res.json())
       .then(diskDetectives => {
-        if (Array.isArray(diskDetectives)) {
+        if (Array.isArray(diskDetectives) && diskDetectives.length > 0) {
           setDetectives(diskDetectives);
         }
       })

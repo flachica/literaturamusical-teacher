@@ -5,9 +5,9 @@ const SONGS_KEY = 'litmusical_songs_catalog_v1';
 
 // Initial default progress
 export const DEFAULT_PROGRESS = {
-  puntos: 0,
-  nivel: 1,
-  estrellas: 0
+  puntos: 450,
+  nivel: 3,
+  estrellas: 5
 };
 
 /**
@@ -216,7 +216,7 @@ export function loadDetectives() {
     const saved = localStorage.getItem(DETECTIVES_KEY);
     if (saved !== null) {
       const parsed = JSON.parse(saved);
-      if (Array.isArray(parsed)) {
+      if (Array.isArray(parsed) && parsed.length > 0) {
         return parsed;
       }
     }
@@ -224,7 +224,18 @@ export function loadDetectives() {
     console.error('Error cargando detectives de LocalStorage:', err);
   }
 
-  return [];
+  const defaultDetective = {
+    id: 'detective_valeria',
+    nombre: 'Valeria',
+    puntos: DEFAULT_PROGRESS.puntos,
+    nivel: DEFAULT_PROGRESS.nivel,
+    estrellas: DEFAULT_PROGRESS.estrellas,
+    avatar: '🕵️‍♀️',
+    activo: true
+  };
+  const lista = [defaultDetective];
+  saveDetectives(lista);
+  return lista;
 }
 
 /**
