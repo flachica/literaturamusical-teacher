@@ -1,4 +1,4 @@
-# 📋 BACKLOG DE INICIATIVAS Y VERSIONES - LitMusical (Próxima: Lanzamiento v1.0.0)
+# 📋 BACKLOG DE INICIATIVAS Y VERSIONES - LitMusical (Versión v1.0.0 Final Alanzada)
 
 Documento de seguimiento del desarrollo interactivo de **LitMusical** estructurado mediante la metodología **Impact-Driven Growth (IDG)** para garantizar que cada entrega genere cambios reales de comportamiento (*outcomes*) y valor en el aprendizaje pedagógico.
 
@@ -6,12 +6,12 @@ Documento de seguimiento del desarrollo interactivo de **LitMusical** estructura
 
 ## 📍 ESTADO ACTUAL DEL PROYECTO
 
-* **Sesión Actual**: 🟢 **SESIÓN 10 (COMPLETADA)** | **Próxima**: 🟢 **SESIÓN 11** (Lanzamiento Final `v1.0.0`)
-* **Subversión Alcanzada**: `v0.5.3` (Sistema de Plugins Git `v0.5.1`, Motor Dinámico de Retos `v0.5.2` y Limpieza Automática de Sugerencias de Detectives Eliminados `v0.5.3` completados).
-* **Fallo Pendiente de Solucionar (Próxima Sesión)**: Ninguno.
+* **Sesión Actual**: 🟢 **SESIÓN 10 (CERRADA - HITO v1.0.0 ALCANZADO)**
+* **Subversión Alcanzada**: `v1.0.0` (Sistema de Plugins Git `v0.5.1`, Motor Dinámico de Retos `v0.5.2`, Limpieza de Detectives `v0.5.3` y Soporte Offline PWA + Backups JSON `v1.0.0` completados).
+* **Fallo Pendiente de Solucionar**: Ninguno.
 * **Métrica Clave del Reto (CPVM)**: 
   $$\text{CPVM} = [\text{Retos de figuras literarias resueltos con éxito}] + [\text{por la niña de forma autónoma}]$$
-* **Próxima Iteración**: Lanzamiento Final Local-First (`v1.0.0`).
+* **Estado Final**: Aplicación PWA Local-First completa con empaquetado offline, catálogo dinámico, edición en caliente y copias de seguridad JSON.
 
 ---
 
@@ -163,16 +163,17 @@ Documento de seguimiento del desarrollo interactivo de **LitMusical** estructura
 
 ---
 
-### 🚀 `v1.0.0` - Lanzamiento Final Local-First (PLANIFICADA)
+### 🚀 `v1.0.0` - Lanzamiento Final Local-First (COMPLETADA CON ÉXITO - SESIÓN 10)
 
-* [ ] **Empaquetado Offline PWA/Desktop**: Compilación y empaquetado para uso completamente offline.
-* [ ] **Gestión de Backups JSON**: Exportación e importación completa del estado de la aplicación.
+* [x] **Empaquetado Offline PWA/Desktop**: Manifiesto PWA (`manifest.json`) y Service Worker (`sw.js`) para soporte y caché offline.
+* [x] **Gestión de Backups JSON**: Módulo `BackupManager.jsx` integrado en Modo Admin para exportación e importación completa en un clic.
 
 ---
 
 ## 🏛️ MEMORIA DE DECISIONES DE ARQUITECTURA (IDG)
 1. **Persistencia Local-First y Privacidad de Progreso**: LocalStorage es la base de datos de estado inmediato. Los ficheros JSON de disco (`songs_catalog.json` y `figuras_catalog.json`) se sincronizan en Git para persistir el catálogo de canciones y diccionario de figuras. Sin embargo, los datos dinámicos de uso (`user_progress.json` y `detectives.json`) se escriben localmente en el servidor de desarrollo pero están excluidos de Git para que cada entorno sea independiente y el progreso no se comparta de forma global ni ensucie el control de versiones.
 2. **Audio Autogenerado**: Para evitar subir archivos de sonido pesados a Git, todos los efectos sonoros de recompensa de la v0.4.0 se sintetizan dinámicamente usando la **Web Audio API** del navegador (osciladores y envolventes de volumen).
-3. **Descarte de Middleware Generador de IA (`v0.6.0`)**: Descartado definitivamente para evitar sobreingeniería. La arquitectura de plugins (repositorios JSON) permite que las lecciones sean generadas directamente por un LLM fuera de banda, y la UI (`StanzaEditorModal.jsx`, `FigureCatalog.jsx`) ya cuenta con edición visual completa en caliente.
-4. **No Spotify**: Descartada para evitar barreras de autenticación OAuth e IDs de tracks de terceros, garantizando que el juego sea offline/local-first y duradero.
+3. **Simplificación Didáctica sin Generator IA (`v0.6.0`)**: Descartado definitivamente el middleware redundante de IA para priorizar el sistema de plugins JSON fuera de banda (generables por LLM) y la edición visual en caliente (`StanzaEditorModal.jsx`).
+4. **Offline PWA y Backups JSON**: Incorporado manifiesto PWA, caché offline de navegador y panel de backups JSON para asegurar portabilidad y soberanía de datos del usuario.
+5. **No Spotify**: Descartada para evitar barreras de autenticación OAuth e IDs de tracks de terceros, garantizando que el juego sea offline/local-first y duradero.
 

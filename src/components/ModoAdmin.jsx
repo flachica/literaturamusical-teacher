@@ -4,6 +4,7 @@ import FigureCatalog from './FigureCatalog';
 import ConfirmModal from './ConfirmModal';
 import DetectiveProfileManager from './admin/DetectiveProfileManager';
 import FamilySuggestions from './FamilySuggestions';
+import BackupManager from './admin/BackupManager';
 
 export default function ModoAdmin({
   canciones,
@@ -25,7 +26,8 @@ export default function ModoAdmin({
   sugerencias = [],
   onAprobarSugerencia,
   onMarcarCenaSugerencia,
-  onEliminarSugerencia
+  onEliminarSugerencia,
+  onRestaurarBackup
 }) {
   const [mostrarConfirmReset, setMostrarConfirmReset] = useState(false);
   const [detectiveAReiniciar, setDetectiveAReiniciar] = useState(null);
@@ -133,6 +135,15 @@ export default function ModoAdmin({
             onAprobarSugerencia={onAprobarSugerencia}
             onMarcarCenaSugerencia={onMarcarCenaSugerencia}
             onEliminarSugerencia={onEliminarSugerencia}
+          />
+
+          {/* Gestión de Copias de Seguridad (v1.0.0) */}
+          <BackupManager
+            detectives={detectives}
+            canciones={canciones}
+            figuras={figuras}
+            sugerencias={sugerencias}
+            onRestaurarBackup={onRestaurarBackup}
           />
 
           {/* Sección de Gestión Multidetective */}

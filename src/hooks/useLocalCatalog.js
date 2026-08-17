@@ -449,6 +449,25 @@ export default function useLocalCatalog(cancionActual, setCancionActual) {
     setCanciones(nuevoCat);
   };
 
+  const handleRestaurarBackup = ({ detectives: dList, canciones: cList, figuras: fList, sugerencias: sList }) => {
+    if (Array.isArray(dList) && dList.length > 0) {
+      setDetectives(dList);
+      saveDetectives(dList);
+    }
+    if (Array.isArray(cList)) {
+      setCanciones(cList);
+      saveSongsCatalog(cList);
+    }
+    if (Array.isArray(fList)) {
+      setFiguras(fList);
+      saveFiguresCatalog(fList);
+    }
+    if (Array.isArray(sList)) {
+      setSugerencias(sList);
+      saveSuggestions(sList);
+    }
+  };
+
   return {
     canciones,
     setCanciones,
@@ -472,6 +491,7 @@ export default function useLocalCatalog(cancionActual, setCancionActual) {
     handleSumarPuntos,
     handleResetProgreso,
     handleGuardarCanciones,
+    handleRestaurarBackup,
     sugerencias,
     handleEnviarSugerencia,
     handleAprobarSugerencia,

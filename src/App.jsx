@@ -42,6 +42,7 @@ export default function App() {
     handleSumarPuntos,
     handleResetProgreso,
     handleGuardarCanciones,
+    handleRestaurarBackup,
     sugerencias,
     handleEnviarSugerencia,
     handleAprobarSugerencia,
@@ -267,6 +268,7 @@ export default function App() {
           onAprobarSugerencia={handleAprobarSugerencia}
           onMarcarCenaSugerencia={handleMarcarCenaSugerencia}
           onEliminarSugerencia={handleEliminarSugerencia}
+          onRestaurarBackup={handleRestaurarBackup}
         />
       )}
 
