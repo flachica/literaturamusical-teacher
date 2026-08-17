@@ -132,12 +132,14 @@ export function loadSongsCatalog() {
 export function saveSongsCatalog(songs) {
   try {
     localStorage.setItem(SONGS_KEY, JSON.stringify(songs));
-    // Persistir directamente en el fichero JSON del disco duro (public/data/songs_catalog.json)
-    fetch('/api/songs', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(songs)
-    }).catch(err => console.warn('Aviso: Servidor estático sin API de fichero en disco:', err.message));
+    // Persistir en el fichero JSON del disco únicamente si hay canciones válidas
+    if (Array.isArray(songs) && songs.length > 0) {
+      fetch('/api/songs', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(songs)
+      }).catch(err => console.warn('Aviso: Servidor estático sin API de fichero en disco:', err.message));
+    }
   } catch (err) {
     console.error('Error guardando catálogo de canciones:', err);
   }
