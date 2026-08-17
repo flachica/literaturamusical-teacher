@@ -85,6 +85,18 @@ Cuando el usuario o la IA soliciten cargar o sincronizar una nueva canción educ
 4. **Componente de Confirmación Flotante (`ConfirmModal.jsx`):**
    - Sin diálogos nativos del navegador (`window.confirm`). Diálogos emergentes integrados con estética dark-glassmorphism.
 
+### 🛡️ Regla de Oro: Preservación del Progreso del Jugador y Protocolo de Copias de Seguridad
+
+1. **Aislamiento de Perfiles de Jugador vs. Plugins Storage:**
+   - La capa de almacenamiento de lecciones (`songs/`, `figures/`, `dictionary/`) en `plugins/` es intercambiable y dinámica.
+   - Los datos de los jugadores/detectives (`detectives.json` y `user_progress.json`) son **estrictamente independientes**. Cambiar, alternar o probar plugins de lecciones **NUNCA DEBE borrar, reiniciar o sobrescribir los perfiles de los detectives ni sus puntos acumulados**.
+   - `saveSongsCatalog()` y `saveDetectives()` NUNCA deben enviar peticiones `POST` que sobrescriban el disco con arreglos vacíos `[]` al inicializar componentes.
+
+2. **Protocolo Estricto de Respaldos (Carpeta `backups/data_backup/`):**
+   - Prohibido el uso de archivos de extensión `.bak` sueltos para pruebas.
+   - Antes de realizar cualquier conmutación de origen de datos, prueba o vaciado de prueba, la IA o desarrollador **DEBE respaldar la carpeta física completa `public/data/` en `backups/data_backup/`**.
+   - Se debe garantizar siempre la existencia de una copia íntegra en disco en `backups/data_backup/` antes de ejecutar cualquier comando destructivo sobre `.json`.
+
 ### ❌ Iniciativas Descartadas
 - **Integración con Spotify:** Descartada definitivamente para evitar dependencias de API o cuentas externas.
 - **Addon de Odoo:** Descartada definitivamente para priorizar una arquitectura ligera, portable y local-first.

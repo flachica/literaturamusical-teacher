@@ -190,5 +190,7 @@ Documento de seguimiento del desarrollo interactivo de **LitMusical** estructura
 4. **Offline PWA y Backups JSON (`v1.0.0`)**: Incorporado manifiesto PWA, caché offline de navegador y panel de backups JSON para asegurar portabilidad y soberanía de datos del usuario.
 5. **No Spotify**: Descartada para evitar barreras de autenticación OAuth e IDs de tracks de terceros, garantizando que el juego sea offline/local-first y duradero.
 6. **Plugins Intercambiables de Tipo Storage**: El sistema admite plugins de tipo `"storage"`. Se permite estrictamente **uno y solo un plugin activo de tipo storage** a la vez en la app base. La persistencia backend en `vite.config.js` detecta dinámicamente el plugin storage instalado en `plugins/` sin hardcodear nombres de carpetas en el código de la aplicación principal.
+7. **Protocolo Estricto de Copias de Seguridad Físicas y Preservación de Progreso**: La alternancia o prueba de plugins de lecciones (almacenamiento de canciones) es completamente independiente del progreso de los detectives del jugador (`detectives.json` y `user_progress.json`). Queda estrictamente prohibido el uso de extensiones temporales `.bak` para pruebas; cualquier operación de conmutación o prueba de origen de datos debe respaldar previamente la carpeta completa `public/data/` en el directorio físico `backups/data_backup/` para evitar reseteos accidentales.
+
 
 
